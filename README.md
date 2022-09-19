@@ -18,7 +18,7 @@ Update packages of existing environment
 see imported packages:
     'conda list'
 
-Activate the environment to export:
+Activate the environment:
     'conda activate <env_name>' or 'activate <env_name>'
 
 Deactivate your conda environment:
