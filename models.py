@@ -110,6 +110,7 @@ class User:
         user = self.get_by_email(email)
         if user:
             return 'duplicateuser'
+        print("heelo")
         new_user = user_collection.insert_one(
             {
                 "firstname": firstname,
@@ -123,7 +124,7 @@ class User:
 
     def get_all(self):
         """Get all users"""
-        users = db.users.find({"active": True})
+        users = db.user.find({"active": True})
         return [{**user, "_id": str(user["_id"])} for user in users]
 
     def get_by_id(self, user_id):
@@ -139,7 +140,7 @@ class User:
 
     def get_by_email(self, email):
         """Get a user by email"""
-        user = db.users.find_one({"email": email})
+        user = db.user.find_one({"email": email})
         if not user:
             return
         user["_id"] = str(user["_id"])
