@@ -1,1 +1,0 @@
-cluster = MongoClient('localhost',27017)

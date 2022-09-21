@@ -91,14 +91,18 @@ def authControllers(server):
     def register():
         try:
             user=request.json
+            
             if not user:
                 return {
                     "message": "Please provide user details",
                     "data": None,
                     "error": "Bad request"
                 }, 400
+            
             is_validated = validate_user(**user)
+            print(is_validated)
             if is_validated is not True:
+               
                 return dict(message='Invalid data', data=None, error=is_validated), 400
             user = User().create(**user)
        

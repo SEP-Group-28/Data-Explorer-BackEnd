@@ -110,7 +110,7 @@ class User:
         user = self.get_by_email(email)
         if user:
             return 'duplicateuser'
-        new_user = db.users.insert_one(
+        new_user = user_collection.insert_one(
             {
                 "firstname": firstname,
                 "lastname": lastname,
