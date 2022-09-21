@@ -7,7 +7,7 @@ load_dotenv()
 import jwt
 import os
 import utils.token as token
-from models import User
+from models.models import User
 from utils.validate import validate_user,validate_email_and_password
 def authControllers(server):
     
@@ -25,15 +25,17 @@ def authControllers(server):
             # form_data=request.form
             # Email= form_data['Email']
             # Password=form_data['Password']
+            print(is_validated)
             if is_validated is not True:
+                
                 return dict(message='Invalid data', data=None, error=is_validated), 400
             user = User().login(
                 data["email"],
                 data["password"]
             )
-            
+            print(user)
             if user=='wrong_email':
-                return jsonify({ "message": "Email :${email} does not exist...".format(email=data['email'])}),404
+                return jsonify({ "message": "Email :{email} does not exist...".format(email=data['email'])}),404
             if user=='wrong_password':
                 return jsonify({ "message": "Password is incorrect..." }),401
             
@@ -53,15 +55,19 @@ def authControllers(server):
                     # }})
                     result=User().update(ObjectId(user['_id']),{'refresh_token':refresh_token})
                     print(result)
-                    response= make_response(jsonify({
+                    response= make_response({
                         "message": "Login successful",
                         "access_token": access_token,
                         
-                    }),200)
-                    response.set_cookie('jwt',refresh_token)
+                    },200)
+                    # response.access_control_allow_credentials
+                    response.set_cookie('jwt',refresh_token,httponly=True)
+                    
+                    
                     print(response)
                     return response
                 except Exception as e:
+                    print(e)
                     return {
                     "error": "Something went wrong",
                     "message": str(e)
@@ -91,6 +97,7 @@ def authControllers(server):
     @server.route("/auth/register",methods=["POST"])
     def register():
         try:
+            print('jwt',request.cookies.get('jwt'))
             user=request.json
             
             if not user:
@@ -101,6 +108,7 @@ def authControllers(server):
                 }, 400
             
             is_validated = validate_user(**user)
+            print(is_validated)
             if is_validated is not True:
                
                 return jsonify(message='Invalid data', data=None, error=is_validated), 400
@@ -116,7 +124,7 @@ def authControllers(server):
            
             if(userModel=='duplicateuser'):
                 print("Email :{email} already exists...".format(email=user['email']))
-                return dict(message= "Email :{email} already exists...".format(email=user['email'])),409
+                return {"message": "Email :{email} already exists...".format(email=user['email'])},409
             
             # Password='kol'
             # print('d')
@@ -134,7 +142,7 @@ def authControllers(server):
                 # })
             return {
             "message": "Successfully created new user",
-            "data": user
+            "data": userModel
         }, 201
             
         except Exception as e:
@@ -142,7 +150,7 @@ def authControllers(server):
             return jsonify({ "message": "Internal server error","status":500 })
             
 
-    @server.route('/new-token',methods=['GET','POST'])
+    @server.route('/auth/new-token',methods=['GET','POST'])
     def newaccesstoken():
         print("requesting new access token")
 
@@ -158,16 +166,13 @@ def authControllers(server):
         
 
         refresh_token = cookies['jwt']
-
-        auth = user_collection.find_one({
-            'refresh_token':refresh_token
-        })
+        auth= User().get_by_refreshtoken(refresh_token)
 
         if not(auth) :
             print("invalid refresh token :", refresh_token)
             return jsonify({ "message": "Invalid token" ,"status":403})
         
-
+        print('kk')
         authObject= {
             "id": str(auth['_id']),
             "role":os.getenv('USER_ROLE'),
