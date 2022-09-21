@@ -124,13 +124,13 @@ class User:
 
     def get_all(self):
         """Get all users"""
-        users = db.user.find({"active": True})
+        users = user_collection.find({"active": True})
         return [{**user, "_id": str(user["_id"])} for user in users]
 
     def get_by_id(self, user_id):
         """Get a user by id"""
         # user = db.users.find_one({"_id": bson.ObjectId(user_id), "active": True})
-        user = db.users.find_one({"_id": bson.ObjectId(user_id)})
+        user = user_collection.find_one({"_id": bson.ObjectId(user_id)})
 
         if not user:
             return
@@ -140,7 +140,14 @@ class User:
 
     def get_by_email(self, email):
         """Get a user by email"""
-        user = db.user.find_one({"email": email})
+        user = user_collection.find_one({"email": email})
+        if not user:
+            return
+        user["_id"] = str(user["_id"])
+        return user
+    def get_by_refreshtoken(self, refreshtoken):
+        """Get a user by refreshtoken"""
+        user = user_collection.find_one({"refreshtoken": refreshtoken})
         if not user:
             return
         user["_id"] = str(user["_id"])
@@ -149,7 +156,7 @@ class User:
     def update(self, user_id, data={}):
         """Update a user"""
         
-        user = db.users.update_one(
+        user = user_collection.update_one(
             {"_id": bson.ObjectId(user_id)},
             {
                 "$set": data
@@ -158,17 +165,17 @@ class User:
         user = self.get_by_id(user_id)
         return user
 
-    def delete(self, user_id):
-        """Delete a user"""
+    # def delete(self, user_id):
+    #     """Delete a user"""
 
-        Books().delete_by_user_id(user_id)
-        user = db.users.delete_one({"_id": bson.ObjectId(user_id)})
-        user = self.get_by_id(user_id)
-        return user
+    #     Books().delete_by_user_id(user_id)
+    #     user = db.users.delete_one({"_id": bson.ObjectId(user_id)})
+    #     user = self.get_by_id(user_id)
+    #     return user
 
     def disable_account(self, user_id):
         """Disable a user account"""
-        user = db.users.update_one(
+        user = user_collection.update_one(
             {"_id": bson.ObjectId(user_id)},
             {"$set": {"active": False}}
         )

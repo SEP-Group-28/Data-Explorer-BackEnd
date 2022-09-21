@@ -1,21 +1,16 @@
 
 from datetime import datetime
-import email
-import json
-import jwt
 from flask import Flask,render_template,request,jsonify,make_response
 from flask_cors import CORS
 # from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid  import ObjectId
-import bcrypt
 from dotenv import load_dotenv
 load_dotenv()
 import os
-import utils.token as token
-from authController import authControllers
-from userController import userControllers
-
+from controllers.authController import authControllers
+from controllers.userController import userControllers
+from config.allowedOrigins import allowedOrigins
 # import utils.validation as validate
 
 server = Flask(__name__)
@@ -24,7 +19,8 @@ server = Flask(__name__)
 
 # mongo = PyMongo(server)
 
-CORS(server)
+CORS(server,supports_credentials=True,origins=allowedOrigins)
+
 authControllers(server)
 userControllers(server)
 
