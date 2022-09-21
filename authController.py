@@ -31,11 +31,12 @@ def authControllers(server):
                 data["email"],
                 data["password"]
             )
+            
             if user=='wrong_email':
                 return jsonify({ "message": "Email :${email} does not exist...".format(email=data['email'])}),404
             if user=='wrong_password':
-                return jsonify({ "message": "Password is incorrect..." }),400
-
+                return jsonify({ "message": "Password is incorrect..." }),401
+            
             if user:
                 try:
                     authObject= {
@@ -100,11 +101,10 @@ def authControllers(server):
                 }, 400
             
             is_validated = validate_user(**user)
-            print(is_validated)
             if is_validated is not True:
                
-                return dict(message='Invalid data', data=None, error=is_validated), 400
-            user = User().create(**user)
+                return jsonify(message='Invalid data', data=None, error=is_validated), 400
+            userModel = User().create(**user)
        
 
             # form_data=request.json
@@ -114,9 +114,9 @@ def authControllers(server):
             # Password:form_data['Password']
 
            
-            if(user=='duplicateuser'):
+            if(userModel=='duplicateuser'):
                 print("Email :{email} already exists...".format(email=user['email']))
-                return jsonify({ "message": "Email :{email} already exists...".format(email=user['email'])}),409
+                return dict(message= "Email :{email} already exists...".format(email=user['email'])),409
             
             # Password='kol'
             # print('d')

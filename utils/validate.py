@@ -89,9 +89,9 @@ def validate_email_and_password(email, password):
         return {
             'email': 'Email is invalid'
         }
-    if not validate_password(password):
-        return {
-            'password': 'Password is invalid, Should be atleast 8 characters with \
-                upper and lower case letters, numbers and special characters'
-        }
+    # if not validate_password(password):
+    #     return {
+    #         'password': 'Password is invalid, Should be atleast 8 characters with \
+    #             upper and lower case letters, numbers and special characters'
+    #     }
     return True
