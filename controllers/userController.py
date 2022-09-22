@@ -1,7 +1,7 @@
 
 from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request
-from models import User
+from models.models import User
 from middlewares.verifyRoles import verifyRole
 from dotenv import load_dotenv
 load_dotenv()
