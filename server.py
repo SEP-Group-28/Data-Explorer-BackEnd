@@ -8,21 +8,35 @@ from bson.objectid  import ObjectId
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from controllers.authController import authControllers
-from controllers.userController import userControllers
+
+from controllers.authController import authController
+from controllers.userController import userController
 from config.allowedOrigins import allowedOrigins
+from controllers.cryptoController import cryptoController
+from controllers.stockController import stockController
+from apscheduler.schedulers.background import BackgroundScheduler
 # import utils.validation as validate
 
 server = Flask(__name__)
+scheduler = BackgroundScheduler()
 
+# pub_sub_model()
+# scheduler.addjob(get_live_data)
+# scheduler.addjob(save_live_data)
+# scheduler.addjob(check_notifications)
+
+# scheduler.start()
 # server.config["MONGO_URI"]='mongodb://localhost:27017/TestDB'
 
 # mongo = PyMongo(server)
 
 CORS(server,supports_credentials=True,origins=allowedOrigins)
 
-authControllers(server)
-userControllers(server)
+
+authController(server)
+userController(server)
+cryptoController(server)
+stockController(server)
 
 
 # @server.route("/members")
