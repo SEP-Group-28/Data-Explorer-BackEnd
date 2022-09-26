@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 
-def userControllers(server):
+def userController(server):
     @server.route("/user/<id>", methods=["GET"])
     @verifyRole([os.getenv('USER_ROLE')])
     @verifyJWT

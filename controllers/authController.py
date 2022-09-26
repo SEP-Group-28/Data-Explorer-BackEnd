@@ -9,8 +9,8 @@ import os
 import utils.token as token
 from models.models import User
 from utils.validate import validate_user,validate_email_and_password
-def authControllers(server):
-    
+def authController(server):
+    print('check')
     @server.route("/auth/login",methods=["POST"])
     def login():
         try:
@@ -48,7 +48,7 @@ def authControllers(server):
                     access_token=token.getAccessToken(authObject)
                     refresh_token=token.getRefreshToken(authObject)
                     
-                    print(refresh_token)
+                    print('dfdfd',refresh_token)
                    
                     # result =user_collection.update_one({'_id':ObjectId(auth['_id'])},{'$set' :{
                     # 'refresh_token':refresh_token

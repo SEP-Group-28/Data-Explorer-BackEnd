@@ -4,17 +4,10 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify
-load_dotenv()
-
-DATABASE_URL=os.getenv('DATABASE_URL') 
-# cluster= MongoClient(DATABASE_URL) #use for remote server
-
-cluster = MongoClient(DATABASE_URL,27017)  
-#use for localhost (mongodb compass)
-db=cluster.TestDB
+from db_con import connectdb as db_con
+db=db_con().TestDB
 record_collection =db.record
 user_collection=db.user
-
 # class Books:
 #     """Books Model"""
 #     def __init__(self):
