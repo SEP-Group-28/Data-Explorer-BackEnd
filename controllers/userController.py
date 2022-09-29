@@ -1,15 +1,15 @@
 
 from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request
-from models.models import User
+from models.user import User
 from middlewares.verifyRoles import verifyRole
 from dotenv import load_dotenv
 load_dotenv()
 import os
 
-def userControllers(server):
+def userController(server):
     @server.route("/user/<id>", methods=["GET"])
-    @verifyRole([os.getenv('USER_ROLE')])
+    # @verifyRole([os.getenv('USER_ROLE')])
     @verifyJWT
     def get_current_user(id):
         try:
@@ -33,7 +33,7 @@ def userControllers(server):
     
 
     @server.route("/user/<id>", methods=["PUT"])
-    @verifyRole([os.getenv('USER_ROLE')])
+    # @verifyRole([os.getenv('USER_ROLE')])
     @verifyJWT
     def update_user(id):
         try:
@@ -78,7 +78,7 @@ def userControllers(server):
     #             "data": None
     #         }), 400
     @server.route("/admin/users", methods=["GET"])
-    @verifyRole([os.getenv('ADMIN_ROLE')])
+    # @verifyRole([os.getenv('ADMIN_ROLE')])
     @verifyJWT
     def get_all_users():
         try:

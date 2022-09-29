@@ -24,10 +24,10 @@ def verifyRole(*allowedRoles):
             if(userRole in allowedRoles):
                 isAllow=True
 
-            print("allowedRoles", allowedRoles)
-            print("user role", userRole)
+#print("allowedRoles", allowedRoles)
+#print("user role", userRole)
             if not(isAllow):
-                print("not allowed role")
+#print("not allowed role")
                 return jsonify({
                 "message": "Unauthorized request user not allowed"
             }),401
