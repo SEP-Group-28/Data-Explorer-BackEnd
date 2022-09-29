@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 
-print(os.getenv('ACCESS_TOKEN_SECRET'))
+#print(os.getenv('ACCESS_TOKEN_SECRET'))
 def getAccessToken(auth):
     return jwt.encode(
         payload={    

@@ -13,14 +13,14 @@ def verifyJWT(f):
     def decorated(*args, **kwargs):
        
 
-        print('JWT verification...')
+#print('JWT verification...')
 
         authHeader = request.headers['authorization'] or request.headers['Authorization']
-        print('authHeader', authHeader)
+#print('authHeader', authHeader)
 
 
         if (not('Bearer ' in authHeader)) :
-            print('Invalid token VERIFYJWT : ', authHeader)
+#print('Invalid token VERIFYJWT : ', authHeader)
             return jsonify({
                 "message": "Unauthorized"
             }),401
@@ -33,7 +33,7 @@ def verifyJWT(f):
                 "data": None,
                 "error": "Unauthorized"
             }), 401
-        print(os.getenv('ACCESS_TOKEN_SECRET'))
+#print(os.getenv('ACCESS_TOKEN_SECRET'))
         try:
             decoded_data=jwt.decode(token,
             os.getenv('ACCESS_TOKEN_SECRET'),algorithms=['HS256'])
@@ -53,8 +53,8 @@ def verifyJWT(f):
                 "error": str(e)
             }),403
         
-        print('JWT verified...')
-        print("decoded :", decoded_data)
+#print('JWT verified...')
+#print("decoded :", decoded_data)
        
              
         return f( *args, **kwargs)
