@@ -1,9 +1,7 @@
 import json
 import time
-from Dbconnection import connectdb as db_con
+from dbconnection import connectdb as db_con
 from datetime import timezone, datetime
-
-
 
 db=db_con().TestDB
 
@@ -24,11 +22,11 @@ def insert_1day_interval_stock_data_to_database(stock_text_list):
             unix_timestamp = int(datetime(int(Date[0]), int(Date[1]), int(Date[2])).replace(tzinfo=timezone.utc).timestamp()*1000)
             data[0] = unix_timestamp
             candledata.append(data[:6])
-        file.close()
-        db[filename.split('.')[0]].insert_one({
-            "interval": "1d",
-            "data": candledata
-        })
+        # file.close()
+        # db[filename.split('.')[0]].insert_one({
+        #     "interval": "1d",
+        #     "data": candledata
+        # })
 
 def insert_1hour_to_db(list):
     for i in list:
