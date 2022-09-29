@@ -112,41 +112,41 @@ def cryptoController(server):
         }), 400
 
 
-    @server.route('/getcrypto',methods=['GET'])
-    def get_crypto():
-        try:
-            # data=request.json
-            # if not data:
-            #     return {
-            #         "message": "Please provide crypto details",
-            #         "data": None,
-            #         "error": "Bad request"
-            #     }, 400 
-            crypto=Crypto().getCrypto()
-            if(crypto):
-                return jsonify({
-                "message": "successfully retrieved crypto",
-                "data": crypto
-            })
-            return jsonify({
-                "message": "failed to get crypto details",
-                "data": None
-        }), 400
-        except Exception as e:
-            return jsonify({
-                "message": "failed to get crypto details",
-                "error": str(e),
-                "data": None
-        }), 400
+    # @server.route('/getcrypto',methods=['GET'])
+    # def get_crypto():
+    #     try:
+    #         # data=request.json
+    #         # if not data:
+    #         #     return {
+    #         #         "message": "Please provide crypto details",
+    #         #         "data": None,
+    #         #         "error": "Bad request"
+    #         #     }, 400 
+    #         crypto=Crypto().getCrypto()
+    #         if(crypto):
+    #             return jsonify({
+    #             "message": "successfully retrieved crypto",
+    #             "data": crypto
+    #         })
+    #         return jsonify({
+    #             "message": "failed to get crypto details",
+    #             "data": None
+    #     }), 400
+    #     except Exception as e:
+    #         return jsonify({
+    #             "message": "failed to get crypto details",
+    #             "error": str(e),
+    #             "data": None
+    #     }), 400
 
     @server.route('/getcryptolist',methods=['GET'])
     def get_crypto_list():
         try:
-            crypto_list=Crypto().getCryptoList()
+            crypto_list=Crypto().getCryptoListFromMarket()
             if(crypto_list):
                 return jsonify({
                 "message": "successfully retrieved crypto list",
-                "data": crypto_list
+                "data": crypto_list['list']
             })
             return jsonify({
                 "message": "failed to get crypto list",
