@@ -73,7 +73,7 @@ def validate_user(**args):
     #             upper and lower case letters, numbers and special characters'
     #     }
     if not validate_password(args.get('password'),'[A-Z]'):
-        print(args.get('password'))
+#print(args.get('password'))
         return {
         'password':"Password must contain at least one uppercase letter"
         }
