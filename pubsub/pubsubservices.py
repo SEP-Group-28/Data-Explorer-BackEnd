@@ -20,14 +20,14 @@ def get_history(symbl,interval):
     return(crypto_brokers[symbl][interval].get_historical_data(symbl,interval))
 
 def start_pub_sub_model():
-    fetched_crypto_data_list=Crypto.getCryptoList({'type':'crypto'})
+    fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({'type':'crypto'})
     # symbl_set = db_action("read_one",[{"type":"crypto"},"symbols"],"admin")
-    print('crypto_list:---------',crypto_list)
-    for crypto in fetched_crypto_data_list:
+    print('crypto_list:---------',fetched_crypto_list_from_market)
+    for crypto in fetched_crypto_list_from_market['list']:
 
         if (crypto not in crypto_list):
             print(crypto)
-            crypto_list.append(crypto['name'])
+            crypto_list.append(crypto)
 
     for crypto in crypto_list:
         crypto_broker_list= {"1d":Crypto_Broker(),"1h":Crypto_Broker(),"30m":Crypto_Broker(),"15m":Crypto_Broker(),"1m":Crypto_Broker(),"15s":Crypto_Broker()}

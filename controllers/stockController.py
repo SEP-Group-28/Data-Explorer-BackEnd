@@ -14,7 +14,7 @@ import os
 def stockController(server):
     @server.route('/history/<stock>/<interval>',methods=['GET'])
     def seed_history(stock,interval):
-        stockdata = Stock().get_stock_data(stock, interval)
+        stockdata = Stock().getStockDataList(stock, interval)
         json_format_stock_data = json.dumps(stockdata)
         return json_format_stock_data
 
@@ -23,11 +23,11 @@ def stockController(server):
     @server.route('/getstocklist',methods=['GET'])
     def get_stock_list():
         try:
-            stock_list=Stock().getStockList()
+            stock_list=Stock().getStockListFromMarket()
             if(stock_list):
                 return jsonify({
                 "message": "successfully retrieved stock list",
-                "data": stock_list
+                "data": stock_list['list']
             })
             return jsonify({
                 "message": "failed to get stock list",
@@ -40,22 +40,22 @@ def stockController(server):
                 "data": None
         }), 400
 
-    @server.route('/getstock',methods=['GET'])
-    def get_stock():
-        try:
-            stock=Stock().getStock()
-            if(stock):
-                return jsonify({
-                "message": "successfully retrieved stock ",
-                "data": stock
-            })
-            return jsonify({
-                "message": "failed to get stock",
-                "data": None
-        }), 400
-        except Exception as e:
-            return jsonify({
-                "message": "failed to get stock",
-                "error": str(e),
-                "data": None
-        }), 400
+    # @server.route('/getstock',methods=['GET'])
+    # def get_stock():
+    #     try:
+    #         stock=Stock().getStock()
+    #         if(stock):
+    #             return jsonify({
+    #             "message": "successfully retrieved stock ",
+    #             "data": stock
+    #         })
+    #         return jsonify({
+    #             "message": "failed to get stock",
+    #             "data": None
+    #     }), 400
+    #     except Exception as e:
+    #         return jsonify({
+    #             "message": "failed to get stock",
+    #             "error": str(e),
+    #             "data": None
+    #     }), 400

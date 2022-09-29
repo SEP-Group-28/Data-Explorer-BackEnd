@@ -7,10 +7,10 @@ crypto_list= []
 def start_streaming():
 
     client =FtxClientWs()
-    data=Crypto.getCryptoList({"type":"crypto"})
-    for crypto in data:
+    fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({"type":"crypto"})
+    for crypto in  fetched_crypto_list_from_market['list']:
         if (crypto not in crypto_list):
-            crypto_list.append(crypto['name'])
+            crypto_list.append(crypto)
 
     for crypto in crypto_list:
         print(crypto)
