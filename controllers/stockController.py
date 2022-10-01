@@ -12,9 +12,11 @@ import os
 
 
 def stockController(server):
-    @server.route('/history/<stock>/<interval>',methods=['GET'])
+    @server.route('/stockhistory/<stock>/<interval>',methods=['GET'])
     def seed_history(stock,interval):
+        print("Arrived............",stock)
         stockdata = Stock().getStockDataList(stock, interval)
+        print("hellllllo")
         json_format_stock_data = json.dumps(stockdata)
         return json_format_stock_data
 
@@ -30,6 +32,7 @@ def stockController(server):
                 "data": stock_list['list']
             })
             return jsonify({
+                
                 "message": "failed to get stock list",
                 "data": None
             }), 400
