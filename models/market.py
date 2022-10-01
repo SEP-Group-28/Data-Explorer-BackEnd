@@ -8,9 +8,10 @@ market_collection=db.market
 
 
 class Market:
-    def __init__(self,brand,name=''):
+    def __init__(self,brand):
+        
         self.brand=brand
-        self.name=name
+       
     
     def readHistory():
         raise NotImplementedError
@@ -23,8 +24,8 @@ class Market:
 
 
 class Stock(Market):
-    def __init__(self,brand,name):
-        super().__init__('Stock',name)
+    def __init__(self):
+        super().__init__('Stock')
 
     def readHistory():
         pass
@@ -33,11 +34,13 @@ class Stock(Market):
         pass
 
     def getStockDataList(self,stock,interval):
+        print("gfttcghcghcgh",stock,interval)
         stock_collection=stock
-        stock_data=db[stock_collection].find({'type':interval})
-        if not stock_data:
+        stock_data=db[stock_collection].find_one({'interval':interval})
+        print()
+        if not stock_data["data"]:
             return
-        return stock_data
+        return stock_data["data"]
         
     # def getStock(self):
     #     stock_data=market_collection.find_one({'type':'stock'})
@@ -133,8 +136,10 @@ class Stock(Market):
         })
     
 class Crypto(Market):
-    def __init__(self,brand,name):
-        super().__init__('Crypto',name)
+    
+    def __init__(self):
+        super().__init__('Crypto')
+        
 
     # def readHistory(self,data):
     #     cryptoname= data['cryptoname']
@@ -164,7 +169,9 @@ class Crypto(Market):
     #     return crypto
     
     def getCryptoListFromMarket(self):
+        
         crypto_list=market_collection.find_one({'type':'crypto'})
+        
         if not crypto_list:
             return
         return crypto_list
