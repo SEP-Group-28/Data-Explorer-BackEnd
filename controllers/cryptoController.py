@@ -153,6 +153,7 @@ def cryptoController(server):
                 "data": None
         }), 400
         except Exception as e:
+            print(e)
             return jsonify({
                 "message": "failed to get crypto list",
                 "error": str(e),
