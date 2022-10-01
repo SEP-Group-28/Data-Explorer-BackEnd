@@ -4,13 +4,14 @@ from flask import jsonify,request
 from models.user import User
 from middlewares.verifyRoles import verifyRole
 from dotenv import load_dotenv
+from io import BufferedReader
 load_dotenv()
 import os
 
 def userController(server):
-    @server.route("/user/<id>", methods=["GET"])
+    @server.route("/api/user/<id>", methods=["GET"])
     # @verifyRole([os.getenv('USER_ROLE')])
-    @verifyJWT
+    # @verifyJWT
     def get_current_user(id):
         try:
             user=User().get_by_id(id)
@@ -32,18 +33,20 @@ def userController(server):
     
     
 
-    @server.route("/user/<id>", methods=["PUT"])
+    @server.route("/api/user/update-profile/<id>", methods=["POST"])
     # @verifyRole([os.getenv('USER_ROLE')])
-    @verifyJWT
+    # @verifyJWT
     def update_user(id):
         try:
-            user = request.json
+            data = request.json
+            print(data)
+    
             # if user.get("name"):
-            user = User().update(id, user)
-            if(user):
+            userdata = User().update(id, data)
+            if(userdata):
                 return jsonify({
                     "message": "successfully updated account",
-                    "data": user
+                    "data": userdata
                 }), 201
             return jsonify({
                 "message": "failed to update account",
@@ -77,24 +80,49 @@ def userController(server):
     #             "error": str(e),
     #             "data": None
     #         }), 400
-    @server.route("/admin/users", methods=["GET"])
+   
+    @server.route("/api/user/update-photo/<id>", methods=["POST"])
     # @verifyRole([os.getenv('ADMIN_ROLE')])
-    @verifyJWT
-    def get_all_users():
+    # @verifyJWT
+    def update_user_photo(id):
         try:
-            user=User().get_all
-            if(user):
+            print('susafsaff')
+            rquest=request
+            print('request',request)
+            photodetails=request.files.get('Image')
+            print('filename :::',photodetails.filename)
+            photodetails.name=photodetails.filename
+            photodetails=BufferedReader(photodetails)
+            print('photo',photodetails)
+        
+            if not photodetails:
+                return {
+                    "message": "Please provide image details",
+                    "data": None,
+                    "error": "Bad request"
+                }, 400
+            
+            upload_result=User().update_photo(photodetails)
+            print('success',upload_result)
+            if len(upload_result)!=0:
+                print('hi',upload_result['url'])
+                user_id=User().update(id,{'imagepath':upload_result['url']})
+                if(user_id):
+                    return jsonify({
+                    "message": "successfully updated profile picture",
+                    "data": user_id
+                })
                 return jsonify({
-                "message": "successfully retrieved users",
-                "data": user
-            })
+                    'message':"failed to upload",
+                    'data':None
+                })
             return jsonify({
-                "message": "failed to get users",
+                "message": "failed to update photo",
                 "data": None
         }), 400
         except Exception as e:
             return jsonify({
-                "message": "failed to get users",
+                "message": "failed to update photo",
                 "error": str(e),
                 "data": None
         }), 400

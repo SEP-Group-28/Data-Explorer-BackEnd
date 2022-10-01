@@ -82,7 +82,7 @@ def cryptoController(server):
                 while True:   
                     
                     msg = messages.get()
-                    print('listened',cryptoname,msg)
+                    print('listened',interval,cryptoname,msg)
                     # encoded=str(msg).encode()
                     # print('encoded ',msg)
                     yield msg

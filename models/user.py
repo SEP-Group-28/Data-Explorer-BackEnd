@@ -1,13 +1,17 @@
 """Application Models"""
 import bson, os
 from dotenv import load_dotenv
+load_dotenv()
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify
 from dbconnection import connectdb as db_con
+import cloudinary.uploader
 db=db_con().TestDB
 record_collection =db.record
 user_collection=db.user
+
+
 
 class User:
     """User Model"""
@@ -33,7 +37,8 @@ class User:
 
     def get_all(self):
         """Get all users"""
-        users = user_collection.find({"active": True})
+        
+        users = user_collection.find()
         return [{**user, "_id": str(user["_id"])} for user in users]
 
     def get_by_id(self, user_id):
@@ -73,6 +78,41 @@ class User:
         )
         user = self.get_by_id(user_id)
         return user
+    
+    def update_photo(self, photodetails):
+        """Update user photo"""
+        print('update user came')
+       
+        try:
+            cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), api_key=os.getenv('CLOUDINARY_API_KEY'), 
+            api_secret=os.getenv('CLOUDINARY_API_SECRET'))
+            upload_result = None
+          
+            file_to_upload = photodetails
+            print(file_to_upload)
+            # app.logger.info('%s file_to_upload', file_to_upload)
+            if file_to_upload:
+                
+                upload_result = cloudinary.uploader.upload(file_to_upload)
+                # app.logger.info(upload_result)
+                print('upload_result',upload_result)
+                return upload_result
+            return 
+        except Exception as e:
+            print(e)
+        
+
+
+        
+        # user = user_collection.update_one(
+        #     {"_id": bson.ObjectId(user_id)},
+        #     {
+        #         "$set": data
+        #     }
+        # )
+        # user = self.get_by_id(user_id)
+        # return user
+    
 
     # def delete(self, user_id):
     #     """Delete a user"""
