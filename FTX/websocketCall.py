@@ -14,11 +14,12 @@ def start_streaming():
     
 
     for crypto in crypto_list:
-        print(crypto)
+    # crypto='SOL/USDT'
         client._subscribe({'channel': 'trades', 'market': crypto})
         trades=client._trades[crypto]
         # print('trades',id(trades))
         start_listen_for_each_crypto_interval(client,crypto,trades)
+        print('starteed')
 
 def start_listen_for_each_crypto_interval(client, crypto,trades):
 

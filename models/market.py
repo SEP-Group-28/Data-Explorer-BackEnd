@@ -205,6 +205,7 @@ class Crypto(Market):
     def insertCryptoDataList(interval,collection,new_data):
         crypto_collection=collection
         result=db[crypto_collection].insert_one({'interval':interval,'data':new_data})
+        print('inserted db',result)
         if not result:
             return
         return result
