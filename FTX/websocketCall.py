@@ -11,6 +11,7 @@ def start_streaming():
     for crypto in  fetched_crypto_list_from_market['list']:
         if (crypto not in crypto_list):
             crypto_list.append(crypto)
+    
 
     for crypto in crypto_list:
         print(crypto)

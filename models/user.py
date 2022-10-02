@@ -17,6 +17,20 @@ class User:
     """User Model"""
     def __init__(self):
         return
+    def changeactivation(self,user_id,founduser):
+        # print('founduser',founduser)
+        if(founduser['active']=='1'):
+            activation='0'
+        elif(founduser['active']=='0'):
+            activation='1'
+        user = user_collection.update_one(
+            {"_id": bson.ObjectId(user_id)},
+            {
+                "$set": {'active':activation}
+            }
+        )
+        user = self.get_by_id(user_id)
+        return user
 
     def create(self, firstname="",lastname="", email="", password=""):
         """Create a new user"""
@@ -35,11 +49,27 @@ class User:
         )
         return self.get_by_id(new_user.inserted_id)
 
-    def get_all(self):
-        """Get all users"""
-        
-        users = user_collection.find()
-        return [{**user, "_id": str(user["_id"])} for user in users]
+    def get_all(self,skip,take):
+        try:
+            """Get all users"""
+            print('checlllll')
+            users = user_collection.find().skip(skip).limit(take)
+            print('looooooo')
+            edited_list= [{"firstname":user['firstname'],'lastname':user['lastname'],'email':user['email'], "_id": str(user["_id"]),'active':user['active']} for user in users]
+            # print(edited_list)
+            return edited_list
+                
+        except Exception as e:
+            print(e)
+    def get_total_count(self):
+        try:
+            print('\nkdksfks')
+            items=user_collection.estimated_document_count()
+            print('items',items)
+            return items
+        except Exception as e:
+            print(e)
+
 
     def get_by_id(self, user_id):
         """Get a user by id"""

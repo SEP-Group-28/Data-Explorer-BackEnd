@@ -57,6 +57,7 @@ def cryptoController(server):
     @server.route('/present/<market>/<interval>',methods=['GET'])
     def take_present_data(market,interval):
         try:
+            print('trying')
 #print('Market',market)
 #print('Interval',interval)
             

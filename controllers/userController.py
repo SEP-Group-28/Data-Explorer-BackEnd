@@ -126,3 +126,30 @@ def userController(server):
                 "error": str(e),
                 "data": None
         }), 400
+
+    @server.route('/api/user/change-active',methods=['POST'])
+    def changeactive():
+        try:
+            data=request.json
+            print(data)
+            userid=data['user_id']
+            userdetails=User().get_by_id(userid)
+            if not(userdetails):
+                 return {
+                    'message':"failed to change activation",
+                    'data':None
+                },404
+            result=User().changeactivation(userid,userdetails)
+            print('result',result)
+            return {
+                    'message':"Successfully changed activation",
+                    'data':result
+                },200
+
+        except Exception as e:
+            return jsonify({
+                "message": "failed to change activation",
+                "error": str(e),
+                "data": None
+        }), 400
+            print(e)
