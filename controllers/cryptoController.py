@@ -63,6 +63,8 @@ def cryptoController(server):
             
             market=market+'/USDT'
             
+            print('accepting market',market)
+            print('accepting intterval',interval)
 #print('newmarket',market)
             # data=request.json
             # if not data:
