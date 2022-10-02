@@ -57,7 +57,7 @@ class Crypto_Broker:
             history_data = crypto_data_list['data']
         
             for dec_set in self.db_push_queue:
-                print('history data length',len(history_data[-1]))
+                # print('history data length',len(history_data[-1]))
                 if(len(history_data[-1])==0):
                     history_data.append(dec_set)
                 elif (history_data[-1][0]<dec_set[0]):
@@ -79,6 +79,7 @@ class Crypto_Broker:
             trade_data_time=trade_data[0]
             if (last_history_data_time<trade_data_time):  ##Additional protection to certify data 
                 history_data.append(trade_data)   
+        # print('history data requesting',history_data)
         return(history_data)
 
 def format_sse(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message

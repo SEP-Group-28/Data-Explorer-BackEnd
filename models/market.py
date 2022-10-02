@@ -55,7 +55,7 @@ class Stock(Market):
         return stock_list_data
 
 
-    def insert_1day_interval_stock_data_to_database(stock_text_list,path):
+    def insert_1day_interval_stock_data_to_database(self,stock_text_list,path):
         for filename in stock_text_list:
             print(filename)
             filepath = path + filename
@@ -71,12 +71,12 @@ class Stock(Market):
                 data[0] = unix_timestamp
                 candledata.append(data[:6])
             file.close()
-            db[filename.split('.')[0]].insert_one({
+            db[(filename.split('.')[0]).upper()].insert_one({
                 "interval": "1d",
                 "data": candledata
             })
 
-    def insert_1hour_interval_stock_data_to_database(stock_text_list,path):
+    def insert_1hour_interval_stock_data_to_database(self,stock_text_list,path):
         for filename in stock_text_list:
             filepath =  path+ filename
             file = open(filepath, "r")
@@ -92,14 +92,14 @@ class Stock(Market):
             
             file.close() 
             
-            db[filename.split('.')[0]].insert_one({
+            db[(filename.split('.')[0]).upper()].insert_one({
                 "interval": "1h",
                 "data": candledata
             })
        
 
 
-    def insert_5min_interval_stock_data_to_database(stock_text_list,path):
+    def insert_5min_interval_stock_data_to_database(self,stock_text_list,path):
         for filename in stock_text_list:
             filepath =  path+ filename
             file = open(filepath, "r")
@@ -115,7 +115,7 @@ class Stock(Market):
             
             file.close()
         
-            db[filename.split('.')[0]].insert_one({
+            db[(filename.split('.')[0]).upper()].insert_one({
                 "interval": "5m",
                 "data": candledata
             })
@@ -124,7 +124,7 @@ class Stock(Market):
 
     def delete_each_stock_collection_in_database(stock_text_list):
         for filename in stock_text_list:
-            db[filename.split('.')[0]].drop()
+            db[(filename.split('.')[0]).upper()].drop()
 
     def delete_one_stock_collection_in_database(stockname):
             db[stockname].drop()

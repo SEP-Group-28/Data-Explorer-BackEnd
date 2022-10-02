@@ -337,12 +337,13 @@ class FtxClientWs(WebsocketManager):
         scheduler.configure(timezone='utc')
 #print(interval)
         interval=interval
+
         scheduler.add_job(on_calc_candle, trigger='cron', second='*/1',args=[interval,ASSET,RES])
-        if(interval=='15s'):
-            scheduler.add_job(candle_close, trigger='cron', second='0, 15, 30, 45',args=['15s',ASSET,RES])
-        elif(interval=='1m'):
+        if(interval=='1m'):
 #print('printing 1m')
             scheduler.add_job(candle_close, trigger='cron', minute='0-59',args=['1m',ASSET,RES])
+        elif(interval=='5m'):
+            scheduler.add_job(candle_close, trigger='cron', minute='*/5',args=['5m',ASSET,RES])
         elif(interval=='15m'):
             scheduler.add_job(candle_close, trigger='cron', minute='0, 15, 30, 45',args=['15m',ASSET,RES])
         elif(interval=='30m'):
