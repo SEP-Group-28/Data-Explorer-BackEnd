@@ -65,6 +65,19 @@ def userController(server):
                 "data": None
         }), 400
     
+    @server.route("/api/user/updatePassword/<id>", methods=["POST"])
+    
+    def updatePassword(id):
+        try:
+            data = request.json
+            print(data)
+        except Exception as e:
+            return jsonify({
+                "message": "failed to update pssword",
+                "error": str(e),
+                "data": None
+                }), 400
+    
     # @server.route("/user/<id>", methods=["DELETE"])
     # @verifyJWT
     # def disable_user(id):
