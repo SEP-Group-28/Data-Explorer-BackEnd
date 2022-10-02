@@ -11,14 +11,14 @@ def start_streaming():
     for crypto in  fetched_crypto_list_from_market['list']:
         if (crypto not in crypto_list):
             crypto_list.append(crypto)
+    
 
-    # for crypto in crypto_list:
-    print(crypto)
-    crypto='SOL/USDT'
-    client._subscribe({'channel': 'trades', 'market': crypto})
-    trades=client._trades[crypto]
-    # print('trades',id(trades))
-    start_listen_for_each_crypto_interval(client,crypto,trades)
+    for crypto in crypto_list:
+        print(crypto)
+        client._subscribe({'channel': 'trades', 'market': crypto})
+        trades=client._trades[crypto]
+        # print('trades',id(trades))
+        start_listen_for_each_crypto_interval(client,crypto,trades)
 
 def start_listen_for_each_crypto_interval(client, crypto,trades):
 

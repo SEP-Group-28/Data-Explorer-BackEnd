@@ -57,6 +57,7 @@ def cryptoController(server):
     @server.route('/present/<market>/<interval>',methods=['GET'])
     def take_present_data(market,interval):
         try:
+            print('trying')
 #print('Market',market)
 #print('Interval',interval)
             market=market+'/USDT'
@@ -71,7 +72,7 @@ def cryptoController(server):
             # cryptocurrency=Crypto('Crypto',data['cryptoname'])
             # cryptoname= data['cryptoname']
             # interval=data['interval']
-            cryptocurrency=Crypto('Crypto',market)
+            # cryptocurrency=Crypto('Crypto',market)
             cryptoname= market
 #print('cryptoname',cryptoname)
             interval=interval
