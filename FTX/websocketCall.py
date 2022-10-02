@@ -14,23 +14,26 @@ def start_streaming():
     
 
     for crypto in crypto_list:
-        print(crypto)
+    # crypto='SOL/USDT'
         client._subscribe({'channel': 'trades', 'market': crypto})
         trades=client._trades[crypto]
         # print('trades',id(trades))
         start_listen_for_each_crypto_interval(client,crypto,trades)
+        print('starteed')
 
 def start_listen_for_each_crypto_interval(client, crypto,trades):
 
-    fifteen_sec_interval_socket = Thread(target=client.start_interval_socket, args=(crypto,'15s',trades))
+   
     one_min_interval_socket = Thread(target=client.start_interval_socket, args=(crypto,'1m',trades))
+    five_min_interval_socket = Thread(target=client.start_interval_socket, args=(crypto,'5m',trades))
     fifteen_min_interval_socket=Thread(target=client.start_interval_socket, args=(crypto,'15m',trades))
     thirty_min_interval_socket=Thread(target=client.start_interval_socket, args=(crypto,'30m',trades))
     one_hour_interval_socket=Thread(target=client.start_interval_socket, args=(crypto,'1h',trades))
     one_day_interval_socket=Thread(target=client.start_interval_socket, args=(crypto,'1d',trades))
 
-    fifteen_sec_interval_socket.start()
+    
     one_min_interval_socket.start()
+    five_min_interval_socket.start()
     fifteen_min_interval_socket.start()
     thirty_min_interval_socket.start()
     one_hour_interval_socket.start()

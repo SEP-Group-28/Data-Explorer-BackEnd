@@ -46,7 +46,7 @@ class Crypto_Broker:
 
 
 
-        if len(self.db_push_queue)<=10:  
+        if len(self.db_push_queue)<10:  
             if(candle_closed==True): #add trade data in relevant interval
                 self.db_push_queue.append(send_msg)
     
@@ -54,14 +54,17 @@ class Crypto_Broker:
       
             crypto_data_list=Crypto.getCryptoDataList(interval,cryptoname)
        
-            new_data = crypto_data_list['data']
+            history_data = crypto_data_list['data']
         
             for dec_set in self.db_push_queue:
-                if (crypto_data_list['data'][-1][0]<dec_set[0]):
-                    new_data.append(dec_set)
+                # print('history data length',len(history_data[-1]))
+                if(len(history_data[-1])==0):
+                    history_data.append(dec_set)
+                elif (history_data[-1][0]<dec_set[0]):
+                    history_data.append(dec_set)
             Crypto.removeCryptoDataList(interval,cryptoname)
 
-            Crypto.insertCryptoDataList(interval,cryptoname,new_data)
+            Crypto.insertCryptoDataList(interval,cryptoname,history_data)
 
             self.db_push_queue = []
     
@@ -76,6 +79,7 @@ class Crypto_Broker:
             trade_data_time=trade_data[0]
             if (last_history_data_time<trade_data_time):  ##Additional protection to certify data 
                 history_data.append(trade_data)   
+        # print('history data requesting',history_data)
         return(history_data)
 
 def format_sse(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message
