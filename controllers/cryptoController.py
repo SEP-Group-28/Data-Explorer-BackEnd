@@ -59,7 +59,9 @@ def cryptoController(server):
         try:
 #print('Market',market)
 #print('Interval',interval)
+            
             market=market+'/USDT'
+            
 #print('newmarket',market)
             # data=request.json
             # if not data:
@@ -71,12 +73,12 @@ def cryptoController(server):
             # cryptocurrency=Crypto('Crypto',data['cryptoname'])
             # cryptoname= data['cryptoname']
             # interval=data['interval']
-            cryptocurrency=Crypto('Crypto',market)
+            # cryptocurrency=Crypto('Crypto',market)
             cryptoname= market
 #print('cryptoname',cryptoname)
             interval=interval
             def stream(cryptoname,interval):
-
+              
                 messages = subscribe_to_socket(cryptoname,interval) 
                 print('messages',messages.get())
                 while True:   

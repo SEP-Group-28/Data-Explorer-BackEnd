@@ -263,6 +263,7 @@ class FtxClientWs(WebsocketManager):
                     break
             
         def candle_close(interval,crypto,RES):
+            print("candle close")
             # global flag
             # global frontier
             if crypto not in Flagdict:
