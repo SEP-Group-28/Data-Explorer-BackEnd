@@ -9,6 +9,7 @@ import os
 import utils.token as token
 from models.user import User
 from utils.validate import validate_user,validate_email_and_password
+
 def authController(server):
 #print('check')
     @server.route("/auth/login",methods=["POST"])

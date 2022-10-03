@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from io import BufferedReader
 load_dotenv()
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def userController(server):
     @server.route("/api/user/<id>", methods=["GET"])
@@ -99,6 +100,7 @@ def userController(server):
     # @verifyJWT
     def update_user_photo(id):
         try:
+            print("user id is checked", id)
             print('susafsaff')
             rquest=request
             print('request',request)
@@ -166,3 +168,49 @@ def userController(server):
                 "data": None
         }), 400
             print(e)
+
+    @server.route('/api/user/update-password-by-user',methods=['POST'])
+    def updatpasswordbyuser():
+        try:
+            data=request.json
+            print('check')
+            print(data)
+            new_password=data['new_password']
+            old_password=data['old_password']
+            user_id=data['user_id']
+            user_model=User()
+            password=user_model.get_password_by_id(user_id)
+            print(password)
+            if not(password):
+                return {
+                'message':"failed to change password",
+                'data':None
+            },404
+            password_match=check_password_hash(password,old_password)
+            # print(user_model.encrypt_password(old_password), user_id)
+            # print(password_match)
+            # print(password==user_model.encrypt_password(old_password))
+            if(password_match==False):
+                return {
+                'message':"Entered Old password is incorrect",
+                'data':None
+            },404
+            encrypted_password=user_model.encrypt_password(new_password)
+            user=user_model.update(user_id,{'password':encrypted_password})
+            if (user):
+                return {
+                'message':"Password update successfully",
+                'data':None
+            },200
+            return {
+                'message':"Password update failed",
+                'data':None
+            },500
+            #need to put validations
+
+        except Exception as e:
+             return {
+                'message':"Password update failed",
+                'data': e
+            },500
+
