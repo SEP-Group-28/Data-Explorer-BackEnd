@@ -10,22 +10,25 @@ import os
 
 def watchlistController(server):
     @server.route('/removemarket', methods=['DELETE'])
-    @verifyJWT
+    # @verifyJWT
     def removemarket(current_user):
         pass
     
         # return remove_from_watch_list(current_user['email'], data['brands'])
 
     @server.route('/addmarket', methods=['POST'])
-    @verifyJWT
+    # @verifyJWT
+    
     def addmarket(current_user):
-        data = json.loads(request.data, strict=False)
+        data=request.json
+        # data = json.loads(request.data, strict=False)
+        
         print(data['brands'])
         # return add_stock_to_watch_list(current_user['email'], data['brands'])
 
 
     @server.route('/viewwatchlist', methods=['GET'])
-    @verifyJWT
+    # @verifyJWT
     def viewwatchlist(current_user):
         return
         return view_watch_list(current_user['email'])

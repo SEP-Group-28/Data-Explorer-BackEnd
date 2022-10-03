@@ -57,7 +57,7 @@ def verifyJWT(f):
 #print("decoded :", decoded_data)
        
              
-        return f( *args, **kwargs)
+        return f(current_user, *args, **kwargs)
   
     return decorated
 

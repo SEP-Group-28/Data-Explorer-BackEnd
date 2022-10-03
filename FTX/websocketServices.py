@@ -75,7 +75,7 @@ class WebsocketManager:
             self._reconnect(ws)
 
     def _reconnect(self, ws):
-        assert ws is not None, '_reconnect should only be called with an existing ws'
+        assert ws is not None, 'reconnect should only be called with an existing ws'
         if ws is self.ws:
             self.ws = None
             ws.close()
@@ -200,7 +200,7 @@ class FtxClientWs(WebsocketManager):
             if (flag==True):
                 trades1.clear()
                 trades1.append(tick)
-                print('aaawa')
+                # print('aaawa')
                 start_time = datetime.utcnow().isoformat() #"almost"
                 # time_      = time.time() #* 1000  with higher precision
                 op         = tick['price']

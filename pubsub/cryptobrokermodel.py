@@ -46,7 +46,7 @@ class Crypto_Broker:
 
 
 
-        if len(self.db_push_queue)<10:  
+        if len(self.db_push_queue)<5:  
             if(candle_closed==True): #add trade data in relevant interval
                 self.db_push_queue.append(send_msg)
     
