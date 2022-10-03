@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from io import BufferedReader
 load_dotenv()
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def userController(server):
     @server.route("/api/user/<id>", methods=["GET"])
@@ -65,6 +66,19 @@ def userController(server):
                 "data": None
         }), 400
     
+    @server.route("/api/user/updatePassword/<id>", methods=["POST"])
+    
+    def updatePassword(id):
+        try:
+            data = request.json
+            print(data)
+        except Exception as e:
+            return jsonify({
+                "message": "failed to update pssword",
+                "error": str(e),
+                "data": None
+                }), 400
+    
     # @server.route("/user/<id>", methods=["DELETE"])
     # @verifyJWT
     # def disable_user(id):
@@ -86,6 +100,7 @@ def userController(server):
     # @verifyJWT
     def update_user_photo(id):
         try:
+            print("user id is checked", id)
             print('susafsaff')
             rquest=request
             print('request',request)
@@ -164,13 +179,17 @@ def userController(server):
             old_password=data['old_password']
             user_id=data['user_id']
             user_model=User()
-            password=user_model.get_by_id(user_id)
+            password=user_model.get_password_by_id(user_id)
+            print(password)
             if not(password):
                 return {
                 'message':"failed to change password",
                 'data':None
             },404
-            password_match=user_model.check_encrypted_password(old_password,password)
+            password_match=check_password_hash(password,old_password)
+            # print(user_model.encrypt_password(old_password), user_id)
+            # print(password_match)
+            # print(password==user_model.encrypt_password(old_password))
             if(password_match==False):
                 return {
                 'message':"Entered Old password is incorrect",
