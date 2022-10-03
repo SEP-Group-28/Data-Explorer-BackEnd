@@ -180,6 +180,8 @@ class User:
     def login(self, email, password):
         """Login a user"""
         user = self.get_by_email(email)
+        # print("db password :", user["password"])
+        # print("entered password:", password)
         if not(user) :
             return 'wrong_email'
         if not check_password_hash(user["password"], password):
