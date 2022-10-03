@@ -30,7 +30,9 @@ def cryptoController(server):
             # history_data=get_history(cryptoname,interval)
             cryptoname= market
             interval=interval
+            print("Checkinggg historyy..........")
             history_data=get_history(cryptoname,interval)
+            print("historyyyy",market,interval,history_data)
             # if not historical_data:
             #     return
             # return historical_data
@@ -60,7 +62,9 @@ def cryptoController(server):
             print('trying')
 #print('Market',market)
 #print('Interval',interval)
+            
             market=market+'/USDT'
+            
             print('accepting market',market)
             print('accepting intterval',interval)
 #print('newmarket',market)
@@ -79,7 +83,7 @@ def cryptoController(server):
 #print('cryptoname',cryptoname)
             interval=interval
             def stream(cryptoname,interval):
-
+              
                 messages = subscribe_to_socket(cryptoname,interval) 
                 print('messages',messages.get())
                 while True:   

@@ -46,7 +46,7 @@ class Crypto_Broker:
 
 
 
-        if len(self.db_push_queue)<10:  
+        if len(self.db_push_queue)<2:  
             if(candle_closed==True): #add trade data in relevant interval
                 self.db_push_queue.append(send_msg)
     
@@ -58,7 +58,7 @@ class Crypto_Broker:
         
             for dec_set in self.db_push_queue:
                 # print('history data length',len(history_data[-1]))
-                if(len(history_data[-1])==0):
+                if(len(history_data)==0):
                     history_data.append(dec_set)
                 elif (history_data[-1][0]<dec_set[0]):
                     history_data.append(dec_set)
