@@ -153,3 +153,45 @@ def userController(server):
                 "data": None
         }), 400
             print(e)
+
+    @server.route('/api/user/update-password-by-user',methods=['POST'])
+    def updatpasswordbyuser():
+        try:
+            data=request.json
+            print('check')
+            print(data)
+            new_password=data['new_password']
+            old_password=data['old_password']
+            user_id=data['user_id']
+            user_model=User()
+            password=user_model.get_by_id(user_id)
+            if not(password):
+                return {
+                'message':"failed to change password",
+                'data':None
+            },404
+            password_match=user_model.check_encrypted_password(old_password,password)
+            if(password_match==False):
+                return {
+                'message':"Entered Old password is incorrect",
+                'data':None
+            },404
+            encrypted_password=user_model.encrypt_password(new_password)
+            user=user_model.update(user_id,{'password':encrypted_password})
+            if (user):
+                return {
+                'message':"Password update successfully",
+                'data':None
+            },200
+            return {
+                'message':"Password update failed",
+                'data':None
+            },500
+            #need to put validations
+
+        except Exception as e:
+             return {
+                'message':"Password update failed",
+                'data': e
+            },500
+

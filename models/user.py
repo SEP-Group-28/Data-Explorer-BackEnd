@@ -81,6 +81,14 @@ class User:
         user["_id"] = str(user["_id"])
         user.pop("password")
         return user
+    def get_password_by_id(self, user_id):
+        """Get password of user by id"""
+        # user = db.users.find_one({"_id": bson.ObjectId(user_id), "active": True})
+        user = user_collection.find_one({"_id": bson.ObjectId(user_id)})
+
+        if not user:
+            return
+        return user['password']
 
     def get_by_email(self, email):
         """Get a user by email"""
@@ -160,6 +168,10 @@ class User:
         )
         user = self.get_by_id(user_id)
         return user
+    def check_encrypted_password(self,entered_password,password):
+        if not check_password_hash(entered_password,password):
+            return False
+        return True
 
     def encrypt_password(self, password):
         """Encrypt password"""
