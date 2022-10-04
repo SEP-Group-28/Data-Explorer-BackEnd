@@ -9,7 +9,7 @@ load_dotenv()
 import os
 
 def watchlistController(server):
-    @server.route('/removemarket', methods=['DELETE'])
+    @server.route('/remove-market', methods=['DELETE'])
     # @verifyJWT
     def removemarket(current_user):
         try:
@@ -61,7 +61,7 @@ def watchlistController(server):
     
         # return remove_from_watch_list(current_user['email'], data['brands'])
 
-    @server.route('/addmarket', methods=['POST'])
+    @server.route('/add-market', methods=['POST'])
     # @verifyJWT
     def addmarket(current_user):
         try:
@@ -98,7 +98,7 @@ def watchlistController(server):
                     },400
 
 
-    @server.route('/viewwatchlist', methods=['GET'])
+    @server.route('/view-watchlist', methods=['GET'])
     # @verifyJWT
     def viewwatchlist(current_user):
         try:

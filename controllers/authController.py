@@ -149,6 +149,10 @@ def authController(server):
             return jsonify({ "message": "Internal server error","status":500 })
             
 
+
+
+            
+
     @server.route('/auth/new-token',methods=['GET','POST'])
     def newaccesstoken():
 #print("requesting new access token")
@@ -192,6 +196,10 @@ def authController(server):
                     "access_token": access_token,
                     "status":200})
         
+
+
+
+
     @server.route("/auth/logout",methods=['GET',"POST"])
     def logout():
         cookies = request.cookies
