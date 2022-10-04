@@ -75,7 +75,7 @@ class WebsocketManager:
             self._reconnect(ws)
 
     def _reconnect(self, ws):
-        assert ws is not None, '_reconnect should only be called with an existing ws'
+        assert ws is not None, 'reconnect should only be called with an existing ws'
         if ws is self.ws:
             self.ws = None
             ws.close()
@@ -140,11 +140,11 @@ class FtxClientWs(WebsocketManager):
         return list(self._trades[market].copy())
 
 
-    def get_ticker(self, market: str) -> Dict:
-        subscription = {'channel': 'ticker', 'market': market}
-        if subscription not in self._subscriptions:
-            self._subscribe(subscription)
-        return self._tickers[market]
+    # def get_ticker(self, market: str) -> Dict:
+    #     subscription = {'channel': 'ticker', 'market': market}
+    #     if subscription not in self._subscriptions:
+    #         self._subscribe(subscription)
+    #     return self._tickers[market]
 
     def _handle_trades_message(self, message: Dict) -> None:
         if (self._flags['get_trades']['aggregate']):
@@ -156,8 +156,8 @@ class FtxClientWs(WebsocketManager):
             self._trades[message['market']].extend(reversed(message['data']))
             # print('appendelse',len(self._trades[message['market']]),self._trades[message['market']])
         
-    def _handle_ticker_message(self, message: Dict) -> None:
-        self._tickers[message['market']] = message['data']
+    # def _handle_ticker_message(self, message: Dict) -> None:
+    #     self._tickers[message['market']] = message['data']
 
 
     def _on_message(self,ws, raw_message) -> None:
@@ -200,7 +200,7 @@ class FtxClientWs(WebsocketManager):
             if (flag==True):
                 trades1.clear()
                 trades1.append(tick)
-                print('aaawa')
+                # print('aaawa')
                 start_time = datetime.utcnow().isoformat() #"almost"
                 # time_      = time.time() #* 1000  with higher precision
                 op         = tick['price']

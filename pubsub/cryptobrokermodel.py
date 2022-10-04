@@ -46,14 +46,14 @@ class Crypto_Broker:
 
 
 
-        if len(self.db_push_queue)<2:  
+        if len(self.db_push_queue)<1:  
             if(candle_closed==True): #add trade data in relevant interval
                 self.db_push_queue.append(send_msg)
     
         else: ##limit database call by using a queue
       
             crypto_data_list=Crypto.getCryptoDataList(interval,cryptoname)
-       
+            print('printing crypto data list',crypto_data_list)
             history_data = crypto_data_list['data']
         
             for dec_set in self.db_push_queue:
@@ -62,10 +62,10 @@ class Crypto_Broker:
                     history_data.append(dec_set)
                 elif (history_data[-1][0]<dec_set[0]):
                     history_data.append(dec_set)
-            Crypto.removeCryptoDataList(interval,cryptoname)
-
-            Crypto.insertCryptoDataList(interval,cryptoname,history_data)
-
+            Crypto.updateCryptoDataList(interval,cryptoname,history_data)
+            # Crypto.removeCryptoDataList(interval,cryptoname)
+            # print('')
+            # Crypto.insertCryptoDataList(interval,cryptoname,history_data)
             self.db_push_queue = []
     
     def get_historical_data(self,cryptoname,interval):

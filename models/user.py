@@ -81,6 +81,15 @@ class User:
         user["_id"] = str(user["_id"])
         user.pop("password")
         return user
+    # def get_watchlist_by_id(self,user_id):
+    #     user = user_collection.find_one({"_id": bson.ObjectId(user_id)})
+    #     if not user:
+    #         return
+    #     if 'watchlist' in user:
+    #         return user['watchlist']
+    #     else: 
+    #         return False
+
     def get_password_by_id(self, user_id):
         """Get password of user by id"""
         # user = db.users.find_one({"_id": bson.ObjectId(user_id), "active": True})
