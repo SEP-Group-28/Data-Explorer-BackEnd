@@ -37,11 +37,12 @@ scheduler = BackgroundScheduler()
 
 # @server.before_first_request
 def activate_job():
-    start_pub_sub_model()
-    scheduler.add_job(start_streaming)
-    scheduler.start()
+    pass
+    # start_pub_sub_model()
+    # scheduler.add_job(start_streaming)
+    # scheduler.start()
 
-activate_job()
+# activate_job()
 authController(server)
 userController(server)
 cryptoController(server)

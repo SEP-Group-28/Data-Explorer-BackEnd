@@ -6,7 +6,7 @@ from functools import wraps
 from dotenv import load_dotenv
 load_dotenv()
 import os
-import models
+from models.user import User
 # import utils.token as token
 def verifyJWT(f):
     @wraps(f)
@@ -15,7 +15,8 @@ def verifyJWT(f):
 
 #print('JWT verification...')
 
-        authHeader = request.headers['authorization'] or request.headers['Authorization']
+        # authHeader = request.headers['authorization'] or request.headers['Authorization']
+        authHeader=request.headers['Authorization']
 #print('authHeader', authHeader)
 
 
@@ -37,7 +38,7 @@ def verifyJWT(f):
         try:
             decoded_data=jwt.decode(token,
             os.getenv('ACCESS_TOKEN_SECRET'),algorithms=['HS256'])
-            current_user=models.User().get_by_id(decoded_data['_id'])
+            current_user=User().get_by_id(decoded_data['_id'])
             
             if current_user is None:
                 return {
