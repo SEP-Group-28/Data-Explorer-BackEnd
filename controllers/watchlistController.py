@@ -1,3 +1,4 @@
+from urllib.request import Request
 from flask import Blueprint, request
 import json
 from models.watchlist import Watchlist
@@ -62,24 +63,32 @@ def watchlistController(server):
         # return remove_from_watch_list(current_user['email'], data['brands'])
 
     @server.route('/add-market', methods=['POST'])
-    # @verifyJWT
+    @verifyJWT
     def addmarket(current_user):
         try:
+            print("add market data....")
             data=request.json
             print(data)
             id=current_user["_id"]
             crypto=data['crypto']
             watchlistmodel=Watchlist()
             watchlist=watchlistmodel.getwatchlist(id)
+            print("watchlist", watchlist)
             if not(watchlist):
+                print("if not watchlist")
                 watchlistmodel.createwatchlist(id)
                 watchlist=watchlistmodel.getwatchlist(id)
+                print("created watchlist", watchlist)
                 # watchlist=getresult['list']
             if crypto not in watchlist:
                 watchlist.append(crypto)
-                updateresult=watchlistmodel.updatewatchlist(id,watchlist)
-                if(updateresult):
-                        updatedwatchlist=watchlistmodel.getwatchlist(id)
+                print("watchlist append", watchlist)
+                watchlistmodel.updatewatchlist(id,watchlist)
+                print("getting watchlist")
+                print("Get watchlist crypto", watchlistmodel.getwatchlist(id))
+                updatedwatchlist=watchlistmodel.getwatchlist(id)
+                print("updateed watchlist", updatedwatchlist)
+                if(updatedwatchlist):
                         return {
                         "message": "Successfully updated watchlist",
                         "data": updatedwatchlist
@@ -99,13 +108,15 @@ def watchlistController(server):
 
 
     @server.route('/view-watchlist', methods=['GET'])
-    # @verifyJWT
+    @verifyJWT
     def viewwatchlist(current_user):
         try:
-            data=request.json
-            print(data)
+            print(current_user)
+            
+            # data=request.form
+            # print(data)
             id=current_user["_id"]
-            crypto=data['crypto']
+            # crypto=data['crypto']
             watchlistmodel=Watchlist()
             try:
                 getresult=watchlistmodel.getwatchlist(id)

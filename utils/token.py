@@ -10,7 +10,7 @@ def getAccessToken(auth):
         payload={    
             "user_id": auth['id'],
             "role": auth['role'],
-            "exp":datetime.utcnow()+timedelta(seconds=60)
+            "exp":datetime.utcnow()+timedelta(seconds=60*60)
         },
          key=os.getenv('ACCESS_TOKEN_SECRET'),
 

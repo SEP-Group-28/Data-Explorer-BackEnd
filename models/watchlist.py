@@ -16,7 +16,8 @@ class Watchlist:
     def getwatchlist(self,id):
         watchlist=watchlist_collection.find_one({'userid':id})
         if not watchlist:
-            return
+            return False
+        print("getwatchlist", watchlist)
         if 'list' in watchlist:
             return watchlist['list']
         return False
@@ -34,6 +35,8 @@ class Watchlist:
         
     def updatewatchlist(self,id,watchlist):
         watchlist=watchlist_collection.update_one({'userid':id},{"$set":{'list':watchlist}})
+        print("updatedwatchlist function", watchlist)
+        print("updated watchlist", watchlist['list'])
         if not watchlist:
             return
         return watchlist['list']

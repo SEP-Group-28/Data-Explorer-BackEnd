@@ -11,7 +11,7 @@ from models.user import User
 def verifyJWT(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-       
+        print("verifying....")
 
 #print('JWT verification...')
 
@@ -21,25 +21,33 @@ def verifyJWT(f):
 
 
         if (not('Bearer ' in authHeader)) :
+            print("in bearer if")
 #print('Invalid token VERIFYJWT : ', authHeader)
             return jsonify({
                 "message": "Unauthorized"
             }),401
    
-        
+        print("out from bearer if")
         token = authHeader.split(' ')[1]
         if not token:
+            print("unauthorized")
             return jsonify({
                 "message": "Authentication Token is missing!",
                 "data": None,
                 "error": "Unauthorized"
             }), 401
 #print(os.getenv('ACCESS_TOKEN_SECRET'))
+        print("out from token if")
+        print("token", token)
         try:
+            print("access token, ", os.getenv('ACCESS_TOKEN_SECRET'))
             decoded_data=jwt.decode(token,
             os.getenv('ACCESS_TOKEN_SECRET'),algorithms=['HS256'])
-            current_user=User().get_by_id(decoded_data['_id'])
             
+            print(decoded_data)
+            print("decoded data", [decoded_data["user_id"]])
+            current_user=User().get_by_id(decoded_data['user_id'])
+            print("user", current_user)
             if current_user is None:
                 return {
                 "message": "Invalid Authentication token!",
@@ -48,6 +56,7 @@ def verifyJWT(f):
             }, 401
 
         except Exception as e:
+            print("exception", e)
             return jsonify({
                 "message": "Something went wrong",
                 "data": None,
