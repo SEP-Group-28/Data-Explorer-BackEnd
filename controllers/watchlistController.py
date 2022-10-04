@@ -11,7 +11,7 @@ import os
 
 def watchlistController(server):
     @server.route('/remove-market', methods=['DELETE'])
-    # @verifyJWT
+    @verifyJWT
     def removemarket(current_user):
         try:
             data=request.json
@@ -83,20 +83,29 @@ def watchlistController(server):
             if crypto not in watchlist:
                 watchlist.append(crypto)
                 print("watchlist append", watchlist)
-                watchlistmodel.updatewatchlist(id,watchlist)
+                updateResult = watchlistmodel.updatewatchlist(id,watchlist)
                 print("getting watchlist")
-                print("Get watchlist crypto", watchlistmodel.getwatchlist(id))
-                updatedwatchlist=watchlistmodel.getwatchlist(id)
-                print("updateed watchlist", updatedwatchlist)
-                if(updatedwatchlist):
+                if (updateResult):
+                    updatedwatchlist=watchlistmodel.getwatchlist(id)
+                    print("updateed watchlist", updatedwatchlist)
+                    if(updatedwatchlist):
                         return {
                         "message": "Successfully updated watchlist",
                         "data": updatedwatchlist
-                    },200
-            return {
+                        },200
+                    return {
                     "message": "Update watchlist fail",
                     "data":None
-                },400
+                    },400
+                return {
+                    "message": "Update watchlist fail",
+                    "data":None
+                    },400
+                # print("Get watchlist crypto", watchlistmodel.getwatchlist(id))    
+            return {
+                    "message": "Crypto type already added",
+                    "data":watchlist
+                },200
 
         except Exception as e:
             print(e)
@@ -123,7 +132,7 @@ def watchlistController(server):
                 if getresult :
                     return {
                             "message": "Successfully get watchlist",
-                            "data": getresult['list']
+                            "data": getresult
                         },200
                 else:
                     return {
