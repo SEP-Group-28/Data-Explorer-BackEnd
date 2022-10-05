@@ -33,20 +33,17 @@ class Crypto_Broker:
         #     'volume':msg['volume'].iloc[-1],
         #     'state':state
         # }
-
-
         
         # print('length',len(self.listeners),self.id)
-        for i in reversed(range(len(self.listeners))):
+        FIFO_listners=range(len(self.listeners))
+        for i in reversed(FIFO_listners):
             
             try:
-                self.listeners[i].put_nowait(format_sse(json.dumps(send_msg)))
+                self.listeners[i].put_nowait(convert_to_sse_format(json.dumps(send_msg)))
             except queue.Full:
                 del self.listeners[i]
 
-
-
-        if len(self.db_push_queue)<1:  
+        if len(self.db_push_queue)<=5:  
             if(candle_closed==True): #add trade data in relevant interval
                 self.db_push_queue.append(send_msg)
     
@@ -82,8 +79,8 @@ class Crypto_Broker:
         # print('history data requesting',history_data)
         return(history_data)
 
-def format_sse(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message
+def convert_to_sse_format(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message as a server sent event
     msg = f'data: {data}\n\n'
-    if event is not None:
+    if event is not None: #meaning this is a message event
         msg = f'event: {event}\n{msg}'
     return msg

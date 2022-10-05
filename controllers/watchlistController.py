@@ -105,7 +105,7 @@ def watchlistController(server):
             data=request.json
             print(data)
             id=current_user["_id"]
-            crypto=data['crypto']
+            # crypto=data['crypto']
             watchlistmodel=Watchlist()
             try:
                 getresult=watchlistmodel.getwatchlist(id)

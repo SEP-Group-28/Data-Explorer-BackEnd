@@ -23,7 +23,7 @@ from controllers.adminController import adminController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
-from pubsub.pubsubservices import start_pub_sub_model
+from pubsub.pubsubservices import start_publisher_subscriber_model
 server = Flask(__name__)
 
 # scheduler.start()
