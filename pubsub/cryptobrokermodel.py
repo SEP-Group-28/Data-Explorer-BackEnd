@@ -9,14 +9,14 @@ from models.market import Crypto
 class Crypto_Broker:
 
     def __init__(self):
-        self.listeners = []
-        self.db_push_queue =[]
-        self.id=randint(1,10000)
+        self.subscribers = []
+        self.push_queue =[]
+        # self.id=randint(1,10000)
 
     def subscribe(self):
         q = queue.Queue(maxsize=10)
         print('q is added',q)
-        self.listeners.append(q)
+        self.subscribers.append(q)
         return q
 
     def publish(self,cryptoname,interval, msg,candle_closed):
@@ -42,19 +42,19 @@ class Crypto_Broker:
         # }
         
         # print('length',len(self.listeners),self.id)
-        FIFO_listners=range(len(self.listeners))
-        for i in reversed(FIFO_listners):
+        FIFO_subscribers=range(len(self.subscribers))
+        for i in reversed(FIFO_subscribers):
             
             try:
-                self.listeners[i].put_nowait(convert_to_sse_format(json.dumps(send_msg)))
+                self.subscribers[i].put_nowait(convert_to_sse_format(json.dumps(send_msg)))
             except queue.Full:
                 del self.listeners[i]
 
 
 
-        if len(self.db_push_queue)<=5:  
+        if len(self.push_queue)<=5:  
             if(candle_closed==True): #add trade data in relevant interval
-                self.db_push_queue.append(send_msg)
+                self.push_queue.append(send_msg)
     
         else: ##limit database call by using a queue
       
@@ -62,7 +62,7 @@ class Crypto_Broker:
             print('printing crypto data list',cryptoname, interval, crypto_data_list)
             history_data = crypto_data_list['data']
         #[""]
-            for dec_set in self.db_push_queue:
+            for dec_set in self.push_queue:
                 # print('history data length',len(history_data[-1]))
                 if(len(history_data)==0):
                     history_data.append(dec_set)
@@ -75,7 +75,7 @@ class Crypto_Broker:
             # Crypto.removeCryptoDataList(interval,cryptoname)
             # print('')
             # Crypto.insertCryptoDataList(interval,cryptoname,history_data)
-            self.db_push_queue = []
+            self.push_queue = []
     
     def get_historical_data(self,cryptoname,interval):
 
@@ -83,7 +83,7 @@ class Crypto_Broker:
     
         history_data = history_details['data']
 
-        for trade_data in self.db_push_queue:
+        for trade_data in self.push_queue:
             last_history_data_time=history_data[-1][0]
             trade_data_time=trade_data[0]
             if (last_history_data_time<trade_data_time):  ##Additional protection to certify data 
