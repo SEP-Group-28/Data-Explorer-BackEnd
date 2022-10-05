@@ -1,3 +1,4 @@
+from urllib.request import Request
 from flask import Blueprint, request
 import json
 from models.watchlist import Watchlist
@@ -9,8 +10,8 @@ load_dotenv()
 import os
 
 def watchlistController(server):
-    @server.route('/removemarket', methods=['DELETE'])
-    # @verifyJWT
+    @server.route('/remove-market', methods=['DELETE'])
+    @verifyJWT
     def removemarket(current_user):
         try:
             data=request.json
@@ -61,33 +62,50 @@ def watchlistController(server):
     
         # return remove_from_watch_list(current_user['email'], data['brands'])
 
-    @server.route('/addmarket', methods=['POST'])
-    # @verifyJWT
+    @server.route('/add-market', methods=['POST'])
+    @verifyJWT
     def addmarket(current_user):
         try:
+            print("add market data....")
             data=request.json
             print(data)
             id=current_user["_id"]
             crypto=data['crypto']
             watchlistmodel=Watchlist()
             watchlist=watchlistmodel.getwatchlist(id)
+            print("watchlist", watchlist)
             if not(watchlist):
+                print("if not watchlist")
                 watchlistmodel.createwatchlist(id)
                 watchlist=watchlistmodel.getwatchlist(id)
+                print("created watchlist", watchlist)
                 # watchlist=getresult['list']
             if crypto not in watchlist:
                 watchlist.append(crypto)
-                updateresult=watchlistmodel.updatewatchlist(id,watchlist)
-                if(updateresult):
-                        updatedwatchlist=watchlistmodel.getwatchlist(id)
+                print("watchlist append", watchlist)
+                updateResult = watchlistmodel.updatewatchlist(id,watchlist)
+                print("getting watchlist")
+                if (updateResult):
+                    updatedwatchlist=watchlistmodel.getwatchlist(id)
+                    print("updateed watchlist", updatedwatchlist)
+                    if(updatedwatchlist):
                         return {
                         "message": "Successfully updated watchlist",
                         "data": updatedwatchlist
-                    },200
-            return {
+                        },200
+                    return {
                     "message": "Update watchlist fail",
                     "data":None
-                },400
+                    },400
+                return {
+                    "message": "Update watchlist fail",
+                    "data":None
+                    },400
+                # print("Get watchlist crypto", watchlistmodel.getwatchlist(id))    
+            return {
+                    "message": "Crypto type already added",
+                    "data":watchlist
+                },200
 
         except Exception as e:
             print(e)
@@ -98,21 +116,23 @@ def watchlistController(server):
                     },400
 
 
-    @server.route('/viewwatchlist', methods=['GET'])
-    # @verifyJWT
+    @server.route('/view-watchlist', methods=['GET'])
+    @verifyJWT
     def viewwatchlist(current_user):
         try:
-            data=request.json
-            print(data)
+            print(current_user)
+            
+            # data=request.form
+            # print(data)
             id=current_user["_id"]
-            crypto=data['crypto']
+            # crypto=data['crypto']
             watchlistmodel=Watchlist()
             try:
                 getresult=watchlistmodel.getwatchlist(id)
                 if getresult :
                     return {
                             "message": "Successfully get watchlist",
-                            "data": getresult['list']
+                            "data": getresult
                         },200
                 else:
                     return {
