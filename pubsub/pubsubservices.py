@@ -30,7 +30,7 @@ def start_pub_sub_model():
             crypto_list.append(crypto)
 
     for crypto in crypto_list:
-        crypto_broker_list= {"1d":Crypto_Broker(),"1h":Crypto_Broker(),"30m":Crypto_Broker(),"15m":Crypto_Broker(),"1m":Crypto_Broker(),"5m":Crypto_Broker()}
+        crypto_broker_list= {"1d":Crypto_Broker(),"1h":Crypto_Broker(),"30m":Crypto_Broker(),"1m":Crypto_Broker(),"5m":Crypto_Broker()}
 
         crypto_brokers[crypto] =crypto_broker_list
         # for i in crypto_broker_list:
