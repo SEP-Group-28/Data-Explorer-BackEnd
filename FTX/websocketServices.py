@@ -339,7 +339,7 @@ class FtxClientWs(WebsocketManager):
 #print(interval)
         interval=interval
 
-        scheduler.add_job(on_calc_candle, trigger='cron', second='*/1',args=[interval,ASSET,RES])
+        scheduler.add_job(on_calc_candle, trigger='cron', second='*/2',args=[interval,ASSET,RES])
         if(interval=='1m'):
 #print('printing 1m')
             scheduler.add_job(candle_close, trigger='cron', minute='0-59',args=['1m',ASSET,RES])
