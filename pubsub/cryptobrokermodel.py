@@ -21,7 +21,14 @@ class Crypto_Broker:
 
     def publish(self,cryptoname,interval, msg,candle_closed):
       
-        send_msg = [msg['time'].iloc[-1],msg['open'].iloc[-1],msg['high'].iloc[-1],msg['low'].iloc[-1],msg['close'].iloc[-1],msg['volume'].iloc[-1]]
+        send_msg = [
+            msg['time'].iloc[-1],
+            msg['open'].iloc[-1],
+            msg['high'].iloc[-1],
+            msg['low'].iloc[-1],
+            msg['close'].iloc[-1],
+            msg['volume'].iloc[-1]
+            ]
      
         # print('annnounced',msg,interval)
         # json_msg={
@@ -33,14 +40,13 @@ class Crypto_Broker:
         #     'volume':msg['volume'].iloc[-1],
         #     'state':state
         # }
-
-
         
         # print('length',len(self.listeners),self.id)
-        for i in reversed(range(len(self.listeners))):
+        FIFO_listners=range(len(self.listeners))
+        for i in reversed(FIFO_listners):
             
             try:
-                self.listeners[i].put_nowait(format_sse(json.dumps(send_msg)))
+                self.listeners[i].put_nowait(convert_to_sse_format(json.dumps(send_msg)))
             except queue.Full:
                 del self.listeners[i]
 
@@ -85,8 +91,8 @@ class Crypto_Broker:
         # print('history data requesting',history_data)
         return(history_data)
 
-def format_sse(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message
+def convert_to_sse_format(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message as a server sent event
     msg = f'data: {data}\n\n'
-    if event is not None:
+    if event is not None: #meaning this is a message event
         msg = f'event: {event}\n{msg}'
     return msg

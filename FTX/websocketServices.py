@@ -7,7 +7,7 @@ from gevent.event import Event
 from threading    import Thread, Lock,enumerate
 import websocket
 import datetime
-from pubsub.pubsubservices import publish_to_socket
+from pubsub.pubsubservices import publish_to_socket_for_real_time_crypto
 import time
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -280,7 +280,7 @@ class FtxClientWs(WebsocketManager):
             # data['time'].iloc[-1]=time.time()   
             if not(data.empty):
                 # print('queue value 2',[crypto,interval,data])
-                publish_to_socket(crypto,interval,data,True)
+                publish_to_socket_for_real_time_crypto(crypto,interval,data,True)
 #print('Closed')
             # print(frontier)
             # print('close0',threading.enumerate())
@@ -302,7 +302,7 @@ class FtxClientWs(WebsocketManager):
             if not(data.empty):
 
                 # print('queue value 1',[crypto,interval,data])
-                publish_to_socket(crypto,interval,data,False)
+                publish_to_socket_for_real_time_crypto(crypto,interval,data,False)
             # print(frontier)
             # print('close0',threading.enumerate())
             
@@ -339,7 +339,7 @@ class FtxClientWs(WebsocketManager):
 #print(interval)
         interval=interval
 
-        scheduler.add_job(on_calc_candle, trigger='cron', second='*/1',args=[interval,ASSET,RES])
+        scheduler.add_job(on_calc_candle, trigger='cron', second='*/2',args=[interval,ASSET,RES])
         if(interval=='1m'):
 #print('printing 1m')
             scheduler.add_job(candle_close, trigger='cron', minute='0-59',args=['1m',ASSET,RES])
