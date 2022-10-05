@@ -21,7 +21,14 @@ class Crypto_Broker:
 
     def publish(self,cryptoname,interval, msg,candle_closed):
       
-        send_msg = [msg['time'].iloc[-1],msg['open'].iloc[-1],msg['high'].iloc[-1],msg['low'].iloc[-1],msg['close'].iloc[-1],msg['volume'].iloc[-1]]
+        send_msg = [
+            msg['time'].iloc[-1],
+            msg['open'].iloc[-1],
+            msg['high'].iloc[-1],
+            msg['low'].iloc[-1],
+            msg['close'].iloc[-1],
+            msg['volume'].iloc[-1]
+            ]
      
         # print('annnounced',msg,interval)
         # json_msg={

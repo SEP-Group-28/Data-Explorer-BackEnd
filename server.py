@@ -38,7 +38,7 @@ scheduler = BackgroundScheduler()
 # @server.before_first_request
 def activate_job():
     # pass
-    start_pub_sub_model()
+    start_publisher_subscriber_model()
     scheduler.add_job(start_streaming)
     scheduler.start()
 
