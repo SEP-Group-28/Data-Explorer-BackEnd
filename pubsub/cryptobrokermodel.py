@@ -14,7 +14,7 @@ class Crypto_Broker:
         self.id=randint(1,10000)
 
     def subscribe(self):
-        q = queue.Queue(maxsize=1000)
+        q = queue.Queue(maxsize=10)
         print('q is added',q)
         self.listeners.append(q)
         return q
@@ -52,7 +52,7 @@ class Crypto_Broker:
 
 
 
-        if len(self.db_push_queue)<=2:  
+        if len(self.db_push_queue)<=5:  
             if(candle_closed==True): #add trade data in relevant interval
                 self.db_push_queue.append(send_msg)
     

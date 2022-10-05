@@ -14,7 +14,7 @@ import os
 
 
 def notificationController(server):
-    @server.route('/notifications/present/open_price', methods=['GET'])
+    @server.route('/notifications/present/', methods=['GET'])
     def take_present_notifications():
         def stream():
             notifications = subscribe_to_socket()
@@ -25,6 +25,6 @@ def notificationController(server):
         return Response(stream(), mimetype='text/event-stream')
 
 
-    @server.route('/notifications/history/open_price', methods=['GET'])
+    @server.route('/notifications/history/', methods=['GET'])
     def take_history_notifications():
         return(historical_nots())

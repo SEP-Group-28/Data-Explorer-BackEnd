@@ -35,7 +35,6 @@ CORS(server,supports_credentials=True,origins=allowedOrigins)
 scheduler = BackgroundScheduler()
 
 
-# @server.before_first_request
 def activate_job():
     # pass
     start_publisher_subscriber_model()
