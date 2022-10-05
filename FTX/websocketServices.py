@@ -345,8 +345,8 @@ class FtxClientWs(WebsocketManager):
             scheduler.add_job(candle_close, trigger='cron', minute='0-59',args=['1m',ASSET,RES])
         elif(interval=='5m'):
             scheduler.add_job(candle_close, trigger='cron', minute='*/5',args=['5m',ASSET,RES])
-        elif(interval=='15m'):
-            scheduler.add_job(candle_close, trigger='cron', minute='0, 15, 30, 45',args=['15m',ASSET,RES])
+        # elif(interval=='15m'):
+        #     scheduler.add_job(candle_close, trigger='cron', minute='0, 15, 30, 45',args=['15m',ASSET,RES])
         elif(interval=='30m'):
             scheduler.add_job(candle_close, trigger='cron', minute='0, 30',args=['30m',ASSET,RES])
         elif(interval=='1h'):
