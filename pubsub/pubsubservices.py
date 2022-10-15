@@ -22,11 +22,11 @@ def get_history_for_crypto(cryptoname,interval):
 def start_publisher_subscriber_model():  #Initialize the model for each crypto interval
     fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({'type':'crypto'})
     # symbl_set = db_action("read_one",[{"type":"crypto"},"symbols"],"admin")
-    print('crypto_list:---------',fetched_crypto_list_from_market)
+    # print('crypto_list:---------',fetched_crypto_list_from_market)
     for crypto in fetched_crypto_list_from_market['list']:
 
         if (crypto not in crypto_list):
-            print(crypto)
+            # print(crypto)
             crypto_list.append(crypto)
 
     for crypto in crypto_list:

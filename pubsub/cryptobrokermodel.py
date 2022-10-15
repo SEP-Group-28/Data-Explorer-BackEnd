@@ -15,7 +15,7 @@ class Crypto_Broker:
 
     def subscribe(self):
         q = queue.Queue(maxsize=1000)
-        print('q is added',q)
+        # print('q is added',q)
         self.listeners.append(q)
         return q
 
@@ -59,7 +59,7 @@ class Crypto_Broker:
         else: ##limit database call by using a queue
       
             crypto_data_list=Crypto.getCryptoDataList(interval,cryptoname)
-            print('printing crypto data list',cryptoname, interval, crypto_data_list)
+            # print('printing crypto data list',cryptoname, interval, crypto_data_list)
             history_data = crypto_data_list['data']
         #[""]
             for dec_set in self.db_push_queue:
