@@ -62,7 +62,7 @@ def authController(server):
                         
                     },200)
                     # response.access_control_allow_credentials
-                    response.set_cookie('jwt',refresh_token,httponly=True)
+                    response.set_cookie('jwt',refresh_token,sameSite= 'None',httponly=True,max_age= 24 * 60 * 60 * 1000 ,secure=True)
                     
                     
                     # print(response)
