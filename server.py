@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 
+
 from FTX.websocketCall import start_streaming
 from controllers.watchlistController import watchlistController
 from flask import Flask
@@ -20,6 +21,7 @@ from config.allowedOrigins import allowedOrigins
 from controllers.cryptoController import cryptoController
 from controllers.stockController import stockController
 from controllers.adminController import adminController
+from controllers.notificationController import notificationController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -49,7 +51,7 @@ cryptoController(server)
 stockController(server)
 watchlistController(server)
 adminController(server)
-
+notificationController(server)
 
 if __name__== "__main__":
     server.run(debug=True)
