@@ -4,6 +4,7 @@ import json
 import queue
 from random import randint
 from models.market import Crypto
+from pubsubservices import add_notification
 
 
 class Crypto_Broker:
@@ -50,7 +51,30 @@ class Crypto_Broker:
             except queue.Full:
                 del self.listeners[i]
 
+        if (interval=="1m" and candle_closed==True):
 
+            # data = db_action("read_one",[{"type":"data_1d"},sy],"admin")
+            crypto_data_list_details=Crypto.getCryptoDataList('1d',cryptoname)
+            crypto_data=crypto_data_list_details['data']
+            if len(crypto_data)!=0:
+                peak_price = float(crypto_data[-1][1])
+                open_price= msg['open'].iloc[-1]
+                percent_price = ((float(open_price) - peak_price)/peak_price)*100
+
+                if (percent_price>75):
+                    add_notification({"message":"successful","type":"Over 75 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                elif(percent_price>50):
+                    add_notification({"message":"successful","type":"Over 50 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                elif(percent_price>25):
+                    add_notification({"message":"successful","type":"Over 25 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                elif(percent_price>5):
+                    add_notification({"message":"successful","type":"Over 5 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                elif(percent_price<(-25)):
+                    add_notification({"message":"successful","type":"Over 25 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                elif(percent_price<(-50)):
+                    add_notification({"message":"successful","type":"Over 50 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                elif(percent_price<(-75)):
+                    add_notification({"message":"successful","type":"Over 75 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
 
         if len(self.push_queue)<=5:  
             if(candle_closed==True): #add trade data in relevant interval
@@ -59,7 +83,7 @@ class Crypto_Broker:
         else: ##limit database call by using a queue
       
             crypto_data_list=Crypto.getCryptoDataList(interval,cryptoname)
-            print('printing crypto data list',cryptoname, interval, crypto_data_list)
+            # print('printing crypto data list',cryptoname, interval, crypto_data_list)
             history_data = crypto_data_list['data']
         #[""]
             for dec_set in self.push_queue:
@@ -91,8 +115,31 @@ class Crypto_Broker:
         # print('history data requesting',history_data)
         return(history_data)
 
+    
+class NotificationAnnouncer:
+
+    def __init__(self):
+        self.listener_set = []
+
+    def listen_nots(self):
+        qu = queue.Queue(maxsize=100)
+        self.listener_set.append(qu)
+        return (qu)
+
+    def announce_nots(self, msg):
+
+        msg = convert_to_sse_format(data=msg)
+
+        for i in reversed(range(len(self.listener_set))):
+            try:
+                self.listener_set[i].put_nowait(msg)
+            except queue.Full:
+                del self.listener_set[i]
+
 def convert_to_sse_format(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message as a server sent event
     msg = f'data: {data}\n\n'
     if event is not None: #meaning this is a message event
         msg = f'event: {event}\n{msg}'
     return msg
+
+

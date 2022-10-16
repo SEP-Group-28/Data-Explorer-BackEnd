@@ -1,5 +1,5 @@
 
-from pubsub.pubsubservices import subscribe_to_socket
+from pubsub.pubsubservices import listen_notifications,historical_nots
 from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request,Response
 from models.user import User
@@ -14,10 +14,10 @@ import os
 
 
 def notificationController(server):
-    @server.route('/notifications/present/', methods=['GET'])
+    @server.route('/notifications/present/open_price', methods=['GET'])
     def take_present_notifications():
         def stream():
-            notifications = subscribe_to_socket()
+            notifications = listen_notifications()
             while True:                        
                 msg = notifications.get()  
                 yield msg
@@ -25,6 +25,6 @@ def notificationController(server):
         return Response(stream(), mimetype='text/event-stream')
 
 
-    @server.route('/notifications/history/', methods=['GET'])
+    @server.route('/notifications/history/open_price', methods=['GET'])
     def take_history_notifications():
         return(historical_nots())

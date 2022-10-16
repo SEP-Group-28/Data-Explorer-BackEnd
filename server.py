@@ -23,7 +23,7 @@ from controllers.adminController import adminController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
-from pubsub.pubsubservices import start_publisher_subscriber_model
+from pubsub.pubsubservices import start_publisher_subscriber_model,look_for_nots
 server = Flask(__name__)
 
 # scheduler.start()
@@ -39,6 +39,7 @@ def activate_job():
     # pass
     start_publisher_subscriber_model()
     scheduler.add_job(start_streaming)
+    scheduler.add_job(look_for_nots)
     scheduler.start()
 
 activate_job()
