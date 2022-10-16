@@ -1,4 +1,4 @@
-from crypt import crypt
+# from crypt import crypt
 import bson, os
 from dotenv import load_dotenv
 load_dotenv()
@@ -14,8 +14,8 @@ class Notification:
     def __init__(self):
         return
 
-    def insertnotifications(self,data):
-        result=db[notification_collection].insert_one(data)
+    def insertnotifications(data):
+        result=notification_collection.insert_one(data)
         # watchlist=db[crypt].find_one({'userid':id})
         # if not watchlist:
         #     return False
@@ -26,8 +26,8 @@ class Notification:
         return result
 
         
-    def gethistoricnotifications(self,time_period):
-        coll = db[notification_collection]
+    def gethistoricnotifications(time_period):
+        coll = notification_collection
         result = []
         for read in coll.find(time_period): # returns a cursor instance of the documents related
             result.append(read)

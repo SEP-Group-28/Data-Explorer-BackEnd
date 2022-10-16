@@ -26,11 +26,11 @@ def get_history_for_crypto(cryptoname,interval):
 def start_publisher_subscriber_model():  #Initialize the model for each crypto interval
     fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({'type':'crypto'})
     # symbl_set = db_action("read_one",[{"type":"crypto"},"symbols"],"admin")
-    print('crypto_list:---------',fetched_crypto_list_from_market)
+    # print('crypto_list:---------',fetched_crypto_list_from_market)
     for crypto in fetched_crypto_list_from_market['list']:
 
         if (crypto not in crypto_list):
-            print(crypto)
+            # print(crypto)
             crypto_list.append(crypto)
 
     for crypto in crypto_list:
@@ -57,16 +57,18 @@ def look_for_nots():
         if(len(notifications)>0):
             notification_announcer.announce_nots(notifications[0])
             data={"time":int(time()*1000),"data":notifications[0]}
+            print("pubsub data", data)
             result=Notification.insertnotifications(data)
-            print(result)
+            print("notification result", result)
             # db_action("insert_one",[{"time":int(time()*1000),"data":notifications[0]},"notifications"],"admin")
             notifications.pop(0)
         
 
 def historical_nots():
     time_filter = int(time()*1000 - (5*24*60*60*1000))
-    time={"time": {"$gte":time_filter}}
-    data=Notification.gethistoricnotifications(time)
+    timeDetails={"time": {"$gte":time_filter}}
+    data=Notification.gethistoricnotifications(timeDetails)
+    print("line 70, ..", data)
     # data = db_action("read_many",[{"time": {"$gte":time_filter}},"notifications"],"admin")
     opt = []
     for dt in data:
