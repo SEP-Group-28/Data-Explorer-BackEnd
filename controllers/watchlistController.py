@@ -15,11 +15,13 @@ def watchlistController(server):
     def removemarket(current_user):
         try:
             data=request.json
-            print(data)
+            print("data remove market", data)
             id=current_user["_id"]
+            print("user id", id)
             crypto=data['crypto']
             watchlistmodel=Watchlist()
             watchlist=watchlistmodel.getwatchlist(id)
+            print("watchlist remove ", watchlist)
             if(watchlist):
                 # watchlist=getresult['list']
                 if crypto in watchlist:

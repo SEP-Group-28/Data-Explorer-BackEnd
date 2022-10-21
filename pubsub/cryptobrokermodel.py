@@ -1,10 +1,12 @@
 from pubsubservices import add_notification
 from datetime import datetime
 import json
+import math
 import queue
-from random import randint
+from random import Random, randint
+import time
 from models.market import Crypto
-
+from .import pubsubservices
 # from pubsubservices import add_notification
 
 
@@ -16,7 +18,7 @@ class Crypto_Broker:
         # self.id=randint(1,10000)
 
     def subscribe(self):
-        q = queue.Queue(maxsize=10)
+        q = queue.Queue(maxsize=1000)
         print('q is added',q)
         self.subscribers.append(q)
         return q
@@ -63,19 +65,19 @@ class Crypto_Broker:
                 percent_price = ((float(open_price) - peak_price)/peak_price)*100
 
                 if (percent_price>75):
-                    add_notification({"message":"successful","type":"Over 75 percent increment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                    pubsubservices.add_notification({"message":"successful","type":"Over 75 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
                 elif(percent_price>50):
-                    add_notification({"message":"successful","type":"Over 50 percent increment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                    pubsubservices.add_notification({"message":"successful","type":"Over 50 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
                 elif(percent_price>25):
-                    add_notification({"message":"successful","type":"Over 25 percent increment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                    pubsubservices.add_notification({"message":"successful","type":"Over 25 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
                 elif(percent_price>5):
-                    add_notification({"message":"successful","type":"Over 5 percent increment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                    pubsubservices.add_notification({"message":"successful","type":"Over 5 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
                 elif(percent_price<(-25)):
-                    add_notification({"message":"successful","type":"Over 25 percent decrement","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                    pubsubservices.add_notification({"message":"successful","type":"Over 25 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
                 elif(percent_price<(-50)):
-                    add_notification({"message":"successful","type":"Over 50 percent decrement","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                    pubsubservices.add_notification({"message":"successful","type":"Over 50 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
                 elif(percent_price<(-75)):
-                    add_notification({"message":"successful","type":"Over 75 percent decrement","symbol":cryptoname,"open price":open_price,"current peak price":peak_price})
+                    pubsubservices.add_notification({"message":"successful","type":"Over 75 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
 
         if len(self.push_queue)<=5:  
             if(candle_closed==True): #add trade data in relevant interval

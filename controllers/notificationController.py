@@ -27,4 +27,5 @@ def notificationController(server):
 
     @server.route('/notifications/history/open_price', methods=['GET'])
     def take_history_notifications():
+        print("receving........")
         return(historical_nots())
