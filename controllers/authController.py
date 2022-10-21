@@ -198,8 +198,6 @@ def authController(server):
         
 
 
-
-
     @server.route("/auth/logout",methods=['GET',"POST"])
     def logout():
         cookies = request.cookies

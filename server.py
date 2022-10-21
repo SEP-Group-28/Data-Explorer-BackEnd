@@ -35,14 +35,13 @@ CORS(server,supports_credentials=True,origins=allowedOrigins)
 scheduler = BackgroundScheduler()
 
 
-# @server.before_first_request
+@server.before_first_request
 def activate_job():
     # pass
     start_pub_sub_model()
     scheduler.add_job(start_streaming)
     scheduler.start()
 
-activate_job()
 authController(server)
 userController(server)
 cryptoController(server)
