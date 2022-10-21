@@ -6,7 +6,7 @@ from flask import jsonify,request,Response
 from models.user import User
 from middlewares.verifyRoles import verifyRole
 from dotenv import load_dotenv
-from pubsub.pubsubservices import subscribe_to_socket,get_history
+from pubsub.pubsubservices import subscribe_to_socket_for_real_time_crypto,get_history_for_crypto
 load_dotenv()
 import os
 from models.market import Crypto
@@ -31,7 +31,7 @@ def cryptoController(server):
             cryptoname= market
             interval=interval
             print("Checkinggg historyy..........")
-            history_data=get_history(cryptoname,interval)
+            history_data=get_history_for_crypto(cryptoname,interval)
             print("historyyyy",market,interval,history_data)
             # if not historical_data:
             #     return
@@ -84,17 +84,16 @@ def cryptoController(server):
             interval=interval
             def stream(cryptoname,interval):
               
-                messages = subscribe_to_socket(cryptoname,interval) 
+                messages = subscribe_to_socket_for_real_time_crypto(cryptoname,interval) 
                 print('messages',messages.get())
                 while True:   
-                    
                     msg = messages.get()
                     print('listened',interval,cryptoname,msg)
                     # encoded=str(msg).encode()
                     # print('encoded ',msg)
                     yield msg
             
-            return Response(stream(cryptoname,interval), mimetype='text/event-stream')
+            return Response(stream(cryptoname,interval), mimetype='text/event-stream') #sending multipurpose internet mail extension with a type and subtype
             
 
             #main thread

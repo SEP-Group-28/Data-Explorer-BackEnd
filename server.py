@@ -1,6 +1,9 @@
 
 from datetime import datetime
 
+from controllers.technicalIndicactorsController import technicalIndicactorsController
+
+
 
 
 from FTX.websocketCall import start_streaming
@@ -20,10 +23,11 @@ from config.allowedOrigins import allowedOrigins
 from controllers.cryptoController import cryptoController
 from controllers.stockController import stockController
 from controllers.adminController import adminController
+from controllers.notificationController import notificationController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
-from pubsub.pubsubservices import start_pub_sub_model
+from pubsub.pubsubservices import start_publisher_subscriber_model,look_for_nots
 server = Flask(__name__)
 
 # scheduler.start()
@@ -38,8 +42,9 @@ scheduler = BackgroundScheduler()
 @server.before_first_request
 def activate_job():
     # pass
-    start_pub_sub_model()
+    start_publisher_subscriber_model()
     scheduler.add_job(start_streaming)
+    scheduler.add_job(look_for_nots)
     scheduler.start()
 
 authController(server)
@@ -48,7 +53,8 @@ cryptoController(server)
 stockController(server)
 watchlistController(server)
 adminController(server)
-
+notificationController(server)
+technicalIndicactorsController(server)
 
 if __name__== "__main__":
     server.run(debug=True)
