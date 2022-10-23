@@ -13,7 +13,7 @@ import packages to your environment and create conda environment  using pip envi
     'conda create --name <env_name> --file requirements.txt '
 
 Update packages of existing environment 
-    'conda env update -n <env_name> --file environment.yml'
+    'conda env update -n <env_name> --file enviornment.yml'
 
 see imported packages:
     'conda list'
@@ -25,7 +25,7 @@ Deactivate your conda environment:
     'conda deactivate'
 
 Export your active environment to a new file:
-    'conda env export > environment.yml'
+    'conda env export > enviornment.yml'
 
 
 -------------------------------------------------------
