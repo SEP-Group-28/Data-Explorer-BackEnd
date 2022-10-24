@@ -1,7 +1,7 @@
 
 from datetime import datetime
 
-from controllers.technicalIndicactorsController import technicalIndicactorsController
+# from controllers.technicalIndicactorsController import technicalIndicactorsController
 
 
 
@@ -23,7 +23,7 @@ from config.allowedOrigins import allowedOrigins
 from controllers.cryptoController import cryptoController
 from controllers.stockController import stockController
 from controllers.adminController import adminController
-from controllers.notificationController import notificationController
+# from controllers.notificationController import notificationController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -44,7 +44,7 @@ def activate_job():
     # pass
     start_publisher_subscriber_model()
     scheduler.add_job(start_streaming)
-    scheduler.add_job(look_for_nots)
+    # scheduler.add_job(look_for_nots)
     scheduler.start()
 
 authController(server)
@@ -53,8 +53,8 @@ cryptoController(server)
 stockController(server)
 watchlistController(server)
 adminController(server)
-notificationController(server)
-technicalIndicactorsController(server)
+# notificationController(server)
+# technicalIndicactorsController(server)
 
 if __name__== "__main__":
     server.run(debug=True)
