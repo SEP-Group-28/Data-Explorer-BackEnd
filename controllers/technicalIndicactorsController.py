@@ -1,5 +1,3 @@
-
-
 from models.technicalIndicator import TechnicalIndicator
 from pubsub.pubsubservices import listen_notifications,historical_nots
 from middlewares.verifyJWT import verifyJWT

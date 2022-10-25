@@ -1,4 +1,4 @@
-from crypt import crypt
+#  from crypt import crypt
 import talib
 import bson, os
 from dotenv import load_dotenv
@@ -7,8 +7,8 @@ load_dotenv()
 from pymongo import MongoClient
 from flask import jsonify
 from dbconnection import connectdb as db_con
-from ..pubsub.pubsubservices import get_history_for_crypto
-from market import Stock
+from pubsub.pubsubservices import get_history_for_crypto
+from .market import Stock
 import numpy as np
 db=db_con().TestDB
 # notification_collection=db.notifications
