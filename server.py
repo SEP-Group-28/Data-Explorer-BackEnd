@@ -1,9 +1,4 @@
-
 from datetime import datetime
-
-# from controllers.technicalIndicactorsController import technicalIndicactorsController
-
-
 
 
 from FTX.websocketCall import start_streaming
@@ -23,6 +18,7 @@ from config.allowedOrigins import allowedOrigins
 from controllers.cryptoController import cryptoController
 from controllers.stockController import stockController
 from controllers.adminController import adminController
+from controllers.technicalIndicactorsController import technicalIndicactorsController
 # from controllers.notificationController import notificationController
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -54,7 +50,7 @@ stockController(server)
 watchlistController(server)
 adminController(server)
 # notificationController(server)
-# technicalIndicactorsController(server)
+technicalIndicactorsController(server)
 
 if __name__== "__main__":
     server.run(debug=True)

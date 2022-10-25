@@ -16,35 +16,35 @@ def validate_email(email: str):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     return validate(email, regex)
 
-def validate_book(**args):
-    """Book Validator"""
-    if not args.get('title') or not args.get('image_url') \
-        or not args.get('category') or not args.get('user_id'):
-        return {
-            'title': 'Title is required',
-            'image_url': 'Image URL is required',
-            'category': 'Category is required',
-            'user_id': 'User ID is required'
-        }
-    if args.get('category') not in ['romance', 'peotry', 'politics' 'picture book', 'science', 'fantasy', 'horror', 'thriller']:
-        return {
-            'status': 'error',
-            'message': 'Invalid category'
-        }
-    try:
-        ObjectId(args.get('user_id'))
-    except:
-        return {
-            'user_id': 'User ID must be valid'
-        }
-    if not isinstance(args.get('title'), str) or not isinstance(args.get('description'), str) \
-        or not isinstance(args.get('image_url'), str):
-        return {
-            'title': 'Title must be a string',
-            'description': 'Description must be a string',
-            'image_url': 'Image URL must be a string',
-        }
-    return True
+# def validate_book(**args):
+#     """Book Validator"""
+#     if not args.get('title') or not args.get('image_url') \
+#         or not args.get('category') or not args.get('user_id'):
+#         return {
+#             'title': 'Title is required',
+#             'image_url': 'Image URL is required',
+#             'category': 'Category is required',
+#             'user_id': 'User ID is required'
+#         }
+#     if args.get('category') not in ['romance', 'peotry', 'politics' 'picture book', 'science', 'fantasy', 'horror', 'thriller']:
+#         return {
+#             'status': 'error',
+#             'message': 'Invalid category'
+#         }
+#     try:
+#         ObjectId(args.get('user_id'))
+#     except:
+#         return {
+#             'user_id': 'User ID must be valid'
+#         }
+#     if not isinstance(args.get('title'), str) or not isinstance(args.get('description'), str) \
+#         or not isinstance(args.get('image_url'), str):
+#         return {
+#             'title': 'Title must be a string',
+#             'description': 'Description must be a string',
+#             'image_url': 'Image URL must be a string',
+#         }
+#     return True
 
 def validate_user(**args):
     """User Validator"""
