@@ -19,7 +19,7 @@ class TechnicalIndicator:
         return
     def get_close_values(self,market_type, market_name, interval):
         if market_type == 'crypto':
-            klines = get_history_for_crypto(market_name, interval)
+            klines = get_history_for_crypto(market_name+"/USDT", interval)
         elif market_type=='stock':
             klines=Stock.getStockDataList(market_name,interval)
             # klines = get_historical_stock_data(name, interval)
@@ -30,7 +30,7 @@ class TechnicalIndicator:
 
     def get_close_and_volume_values(self,market_type, market_name, interval):
         if market_type == 'crypto':
-            klines = get_history_for_crypto(market_name, interval)
+            klines = get_history_for_crypto(market_name+"/USDT", interval)
         elif market_type=='stock':
             klines = Stock.getStockDataList(market_name, interval)
         close_prices = np.array([i[4] for i in klines], dtype=float)
@@ -40,7 +40,7 @@ class TechnicalIndicator:
 
     def get_high_low_close_values(self,market_type, market_name, interval):
         if market_type == 'crypto':
-            klines = get_history_for_crypto(market_name, interval)
+            klines = get_history_for_crypto(market_name+"/USDT", interval)
         elif market_type=='stock':
             klines = Stock.getStockDataList(market_name, interval)
         high_prices = np.array([i[2] for i in klines], dtype=float)
@@ -67,26 +67,26 @@ class TechnicalIndicator:
         json_time_rsi = json.dumps(time_rsi)
         return json_time_rsi
 
-    # def calculate_obv(self,market_type, market_name, interval):
-    #     close_times, volume, close_prices = self.get_close_and_volume_values(market_type, market_name, interval)
-    #     obv = talib.OBV(close_prices, volume)
-    #     dict_indicator = dict(zip(close_times, obv))
-    #     json_dict = json.dumps(dict_indicator)
-    #     return json_dict
+    def calculate_obv(self,market_type, market_name, interval):
+        close_times, volume, close_prices = self.get_close_and_volume_values(market_type, market_name, interval)
+        obv = talib.OBV(close_prices, volume)
+        dict_indicator = dict(zip(close_times, obv))
+        json_dict = json.dumps(dict_indicator)
+        return json_dict
     
-    # def calculate_roc(self,market_type, market_name, interval):
-    #     close_times, close_prices = self.get_close_values(market_type, market_name, interval)
-    #     roc = talib.ROC(close_prices)
-    #     dict_indicator = dict(zip(close_times[10:], roc[10:]))
-    #     json_dict = json.dumps(dict_indicator)
-    #     return json_dict
+    def calculate_roc(self,market_type, market_name, interval):
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval)
+        roc = talib.ROC(close_prices)
+        dict_indicator = dict(zip(close_times[10:], roc[10:]))
+        json_dict = json.dumps(dict_indicator)
+        return json_dict
 
-    # def calculate_ema(self,market_type, market_name, interval):
-    #     close_times, close_prices = self.get_close_values(market_type, market_name, interval)
-    #     ema = talib.EMA(close_prices)
-    #     dict_indicator = dict(zip(close_times[29:], ema[29:]))
-    #     json_dict = json.dumps(dict_indicator)
-    #     return json_dict
+    def calculate_ema(self,market_type, market_name, interval):
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval)
+        ema = talib.EMA(close_prices)
+        dict_indicator = dict(zip(close_times[29:], ema[29:]))
+        json_dict = json.dumps(dict_indicator)
+        return json_dict
 
 
     def calculate_ma(self,market_type, market_name, interval):
