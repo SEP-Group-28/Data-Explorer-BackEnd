@@ -7,6 +7,7 @@ from random import Random, randint
 import time
 from models.market import Crypto
 from .import pubsubservices
+from firebase.confirebase import confirebase
 # from pubsubservices import add_notification
 
 
@@ -33,6 +34,7 @@ class Crypto_Broker:
             msg['close'].iloc[-1],
             msg['volume'].iloc[-1]
             ]
+        # [[id,crypto,price,token],[id,crypto,price,token],[id,crypto,price,token]]
      
         # print('annnounced',msg,interval)
         # json_msg={
@@ -46,6 +48,16 @@ class Crypto_Broker:
         # }
         
         # print('length',len(self.listeners),self.id)
+        
+        # if crypto
+        price=msg['close'].iloc[-1]
+        if price in pubsubservices.alertsdict:
+            for i in pubsubservices.alertsdict[price]:
+                if i[0]==cryptoname:
+                    confirebase(i[1])
+    
+
+
         FIFO_subscribers=range(len(self.subscribers))
         for i in reversed(FIFO_subscribers):
             

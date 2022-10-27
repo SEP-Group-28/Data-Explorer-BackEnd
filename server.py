@@ -1,6 +1,8 @@
 
 from datetime import datetime
 
+from controllers.alertController import alertController
+
 from controllers.technicalIndicactorsController import technicalIndicactorsController
 
 
@@ -44,6 +46,7 @@ def activate_job():
     start_publisher_subscriber_model()
     scheduler.add_job(start_streaming)
     scheduler.add_job(look_for_nots)
+    scheduler.add_job(send_alerts)
     scheduler.start()
 
 activate_job()
@@ -55,6 +58,7 @@ watchlistController(server)
 adminController(server)
 notificationController(server)
 technicalIndicactorsController(server)
+alertController(server)
 
 if __name__== "__main__":
     server.run(debug=True)

@@ -9,6 +9,7 @@ from time import time
 crypto_brokers = {}
 crypto_list = []
 notifications = []
+alertsdict={}
 notification_announcer = NotificationAnnouncer()
 
 def subscribe_to_socket_for_real_time_crypto(name,interval): 
@@ -42,8 +43,14 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
             "1m":Crypto_Broker(),
             "5m":Crypto_Broker()
         }
-
+# btc:[[],[],[],[],[]],sol:[[]]/\
         crypto_brokers[crypto] =crypto_broker_list
+# <crypto>/<crypto_price>/<token>
+def add_alert(crypto_name,crypto_price,token):
+    if crypto_price not in alertsdict:
+        alertsdict[crypto_price]=[[crypto_name+'/USDT',token]]
+    elif type(alertsdict[crypto_price]==list):
+        alertsdict[crypto_price].append([crypto_name+'/USDT',token])
   
 
 def listen_notifications():
