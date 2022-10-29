@@ -46,11 +46,13 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
 # btc:[[],[],[],[],[]],sol:[[]]/\
         crypto_brokers[crypto] =crypto_broker_list
 # <crypto>/<crypto_price>/<token>
-def add_alert(crypto_name,crypto_price,token):
+def add_firebase_alert(crypto_name,crypto_price,token):
     if crypto_price not in alertsdict:
         alertsdict[crypto_price]=[[crypto_name+'/USDT',token]]
     elif type(alertsdict[crypto_price]==list):
         alertsdict[crypto_price].append([crypto_name+'/USDT',token])
+
+    return alertsdict
   
 
 def listen_notifications():

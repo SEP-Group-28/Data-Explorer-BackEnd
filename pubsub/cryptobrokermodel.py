@@ -51,12 +51,17 @@ class Crypto_Broker:
         
         # if crypto
         price=msg['close'].iloc[-1]
-        if price in pubsubservices.alertsdict:
-            for i in pubsubservices.alertsdict[price]:
+        # print(type(price))
+        alertsdict=pubsubservices.alertsdict
+        if price in alertsdict:
+            for i in alertsdict[price]:
+                # print('printing',i ,i[0])
                 if i[0]==cryptoname:
                     confirebase(i[1])
-    
-
+                    if price in alertsdict:
+                        alertsdict.pop(float(price))
+                        print(alertsdict)
+                
 
         FIFO_subscribers=range(len(self.subscribers))
         for i in reversed(FIFO_subscribers):

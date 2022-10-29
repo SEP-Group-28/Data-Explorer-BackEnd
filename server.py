@@ -1,6 +1,6 @@
 from datetime import datetime
 
-# from controllers.alertController import alertController
+from controllers.alertController import alertController
 
 from controllers.technicalIndicactorsController import technicalIndicactorsController
 
@@ -30,8 +30,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 
 from pubsub.pubsubservices import start_publisher_subscriber_model,look_for_nots
-server = Flask(__name__)
 
+def server_intialize():
+    server = Flask(__name__)
+    return server
+server=server_intialize()
 # scheduler.start()
 # server.config["MONGO_URI"]='mongodb://localhost:27017/TestDB'
 

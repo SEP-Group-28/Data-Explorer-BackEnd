@@ -1,6 +1,9 @@
+from server import server_intialize
+import sys
 import pytest
 from dotenv import load_dotenv
-import app
+# sys.path.append('../../Data-Explorer-BackEnd/server.py')
+
 
 @pytest.fixture(scope='session', autouse=True)
 def load_env():
@@ -8,6 +11,6 @@ def load_env():
 
 @pytest.fixture
 def client():
-    APP = app.create_app()
-    with APP.test_client() as client:
+    SERVER = server_intialize()
+    with SERVER.test_client() as client:
         yield client
