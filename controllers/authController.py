@@ -9,13 +9,14 @@ import os
 import utils.token as token
 from models.user import User
 from utils.validate import validate_user,validate_email_and_password
-
+from middlewares.verifyJWT import verifyJWT
 def authController(server):
 #print('check')
     @server.route("/auth/login",methods=["POST"])
     def login():
         try:
             data = request.json
+            print(data)
             if not data:
                 return {
                     "message": "Please provide user details",
@@ -61,6 +62,7 @@ def authController(server):
                         "access_token": access_token,
                         
                     },200)
+                    print(response)
                     # response.access_control_allow_credentials
                     response.set_cookie('jwt',refresh_token, httponly=True,max_age= 24 * 60 * 60 * 1000 ,secure=True)
                     
@@ -231,5 +233,13 @@ def authController(server):
         }),200)
         response.set_cookie('jwt','')
         return response
+    
+    
+    # test route
+    @server.route("/auth/test",methods=['GET',"POST"])
+    @verifyJWT
+    def get_test(current_user):
+        print(current_user)
+        return make_response(jsonify({'message': 'OK'}), 200)
 
 

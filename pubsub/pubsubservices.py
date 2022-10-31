@@ -9,7 +9,7 @@ from time import time
 crypto_brokers = {}
 crypto_list = []
 notifications = []
-alertsdict={}
+# alertsdict={}
 notification_announcer = NotificationAnnouncer()
 
 def subscribe_to_socket_for_real_time_crypto(name,interval): 
@@ -46,16 +46,16 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
 # btc:[[],[],[],[],[]],sol:[[]]/\
         crypto_brokers[crypto] =crypto_broker_list
 # <crypto>/<crypto_price>/<token>
-def add_firebase_alert(crypto_name,crypto_price,token):
-    if crypto_price not in alertsdict:
-        alertsdict[crypto_price]=[[crypto_name+'/USDT',token]]
-    elif type(alertsdict[crypto_price]==list):
-        alertsdict[crypto_price].append([crypto_name+'/USDT',token])
+# def add_firebase_alert(crypto_name,crypto_price,user_id):
+#     if crypto_price not in alertsdict:
+#         alertsdict[crypto_price]=[[crypto_name+'/USDT',user_id]]
+#     elif type(alertsdict[crypto_price]==list):
+#         alertsdict[crypto_price].append([crypto_name+'/USDT',user_id])
 
-    return alertsdict
+#     return alertsdict
   
 
-def listen_notifications():
+def listen_notifications(crypto_name):
     return(notification_announcer.listen_nots())
 
 def add_notification(data):
@@ -71,6 +71,9 @@ def look_for_nots():
             print("notification result", result)
             # db_action("insert_one",[{"time":int(time()*1000),"data":notifications[0]},"notifications"],"admin")
             notifications.pop(0)
+
+
+
         
 
 def historical_nots():

@@ -9,4 +9,5 @@ def connectdb():
 
     cluster = MongoClient(DATABASE_URL,27017)  
     #use for localhost (mongodb compass)
-    return cluster
+    db=cluster.TestDB
+    return db

@@ -5,11 +5,12 @@ load_dotenv()
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify
-from dbconnection import connectdb as db_con
+from dbconnection import connectdb as db
 import cloudinary.uploader
-db=db_con().TestDB
-record_collection =db.record
-user_collection=db.user
+
+# record_collection =db.record
+print(db)
+user_collection=db().user
 
 
 
@@ -161,13 +162,13 @@ class User:
         # return user
     
 
-    # def delete(self, user_id):
-    #     """Delete a user"""
+    def delete(self, email):
+        """Delete a user"""
 
-    #     Books().delete_by_user_id(user_id)
-    #     user = db.users.delete_one({"_id": bson.ObjectId(user_id)})
-    #     user = self.get_by_id(user_id)
-    #     return user
+        # Books().delete_by_user_email(email)
+        user_collection.delete_one({"email": email})
+        deluser = self.get_by_email(email)
+        return deluser
 
     def disable_account(self, user_id):
         """Disable a user account"""

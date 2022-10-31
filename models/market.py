@@ -1,10 +1,9 @@
 
-from dbconnection import connectdb as db_con
+from dbconnection import connectdb as db
 from datetime import timezone, datetime
 
 import flask
-db=db_con().TestDB
-market_collection=db.market
+market_collection=db().market
 
 
 class Market:

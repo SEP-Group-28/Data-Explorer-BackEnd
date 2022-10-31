@@ -8,6 +8,7 @@ import time
 from models.market import Crypto
 from .import pubsubservices
 from firebase.confirebase import confirebase
+from models.alert import Alert
 # from pubsubservices import add_notification
 
 
@@ -16,6 +17,7 @@ class Crypto_Broker:
     def __init__(self):
         self.subscribers = []
         self.push_queue =[]
+        
         # self.id=randint(1,10000)
 
     def subscribe(self):
@@ -50,18 +52,37 @@ class Crypto_Broker:
         # print('length',len(self.listeners),self.id)
         
         # if crypto
+        # price=msg['close'].iloc[-1]
+        # # print(type(price))
+        # alertsdict=Alert().take_previous_alerts_for_price(price)
+        # if price in alertsdict and interval=='1m':
+        #     # pubsubservices.add_alert()
+        #     for i in alertsdict[price]:
+        #         # print('printing',i ,i[0])
+        #         if i[0]==cryptoname and interval=='1m':
+        #             confirebase(price,i[1])
+        #             if price in alertsdict:
+        #                 alertsdict.pop(float(price))
+        #                 print(alertsdict)
         price=msg['close'].iloc[-1]
         # print(type(price))
-        alertsdict=pubsubservices.alertsdict
-        if price in alertsdict:
-            for i in alertsdict[price]:
-                # print('printing',i ,i[0])
-                if i[0]==cryptoname:
-                    confirebase(i[1])
-                    if price in alertsdict:
-                        alertsdict.pop(float(price))
-                        print(alertsdict)
-                
+        if interval=='1m':
+            alertsdict=Alert().take_previous_alerts_for_price(cryptoname)['alertlist']
+            # if interval
+            # aler
+            if not (alertsdict is None):
+                # print('adfsdfafdsfalertsdicct',alertsdict)
+                # for i in alertsdict:
+                #     if i[0]==price and interval=='1m':
+                #         confirebase(price,i[1])
+                        
+
+                # newalertsdict=[confirebase(price,i[1]) for i in alertsdict if not(i[0]==price and interval=='1m')]
+                newalertsdict=[i for i in alertsdict if ((i[0]==price and interval=='1m') and (confirebase(price,i[1])) and False) or (i[0]!=price or interval!='1m')]
+                # print('newalert..........',newalertsdict,cryptoname)
+                Alert().update_alerts_for_price(cryptoname,newalertsdict)
+
+                    
 
         FIFO_subscribers=range(len(self.subscribers))
         for i in reversed(FIFO_subscribers):
@@ -71,30 +92,30 @@ class Crypto_Broker:
             except queue.Full:
                 del self.listeners[i]
 
-        if (interval=="1m" and candle_closed==True):
+        # if (interval=="1m" and candle_closed==True):
 
             # data = db_action("read_one",[{"type":"data_1d"},sy],"admin")
-            crypto_data_list_details=Crypto.getCryptoDataList('1d',cryptoname)
-            crypto_data=crypto_data_list_details['data']
-            if len(crypto_data)!=0:
-                peak_price = float(crypto_data[-1][1])
-                open_price= msg['open'].iloc[-1]
-                percent_price = ((float(open_price) - peak_price)/peak_price)*100
+            # crypto_data_list_details=Crypto.getCryptoDataList('1d',cryptoname)
+            # crypto_data=crypto_data_list_details['data']
+            # if len(crypto_data)!=0:
+            #     peak_price = float(crypto_data[-1][1])
+            #     open_price= msg['open'].iloc[-1]
+            #     percent_price = ((float(open_price) - peak_price)/peak_price)*100
 
-                if (percent_price>75):
-                    pubsubservices.add_notification({"message":"successful","type":"Over 75 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price>50):
-                    pubsubservices.add_notification({"message":"successful","type":"Over 50 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price>25):
-                    pubsubservices.add_notification({"message":"successful","type":"Over 25 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price>5):
-                    pubsubservices.add_notification({"message":"successful","type":"Over 5 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price<(-25)):
-                    pubsubservices.add_notification({"message":"successful","type":"Over 25 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price<(-50)):
-                    pubsubservices.add_notification({"message":"successful","type":"Over 50 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price<(-75)):
-                    pubsubservices.add_notification({"message":"successful","type":"Over 75 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+            #     if (percent_price>75):
+            #         pubsubservices.add_notification({"message":"successful","type":"Over 75 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+            #     elif(percent_price>50):
+            #         pubsubservices.add_notification({"message":"successful","type":"Over 50 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+            #     elif(percent_price>25):
+            #         pubsubservices.add_notification({"message":"successful","type":"Over 25 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+            #     elif(percent_price>5):
+            #         pubsubservices.add_notification({"message":"successful","type":"Over 5 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+            #     elif(percent_price<(-25)):
+            #         pubsubservices.add_notification({"message":"successful","type":"Over 25 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+            #     elif(percent_price<(-50)):
+            #         pubsubservices.add_notification({"message":"successful","type":"Over 50 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+            #     elif(percent_price<(-75)):
+            #         pubsubservices.add_notification({"message":"successful","type":"Over 75 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
 
         if len(self.push_queue)<=5:  
             if(candle_closed==True): #add trade data in relevant interval
