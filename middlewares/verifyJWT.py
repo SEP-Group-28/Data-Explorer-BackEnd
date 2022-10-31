@@ -27,27 +27,27 @@ def verifyJWT(f):
                 "message": "Unauthorized"
             }),401
    
-        print("out from bearer if")
+        # print("out from bearer if")
         token = authHeader.split(' ')[1]
         if not token:
-            print("unauthorized")
+            # print("unauthorized")
             return jsonify({
                 "message": "Authentication Token is missing!",
                 "data": None,
                 "error": "Unauthorized"
             }), 401
 #print(os.getenv('ACCESS_TOKEN_SECRET'))
-        print("out from token if")
-        print("token", token)
+        # print("out from token if")
+        # print("token", token)
         try:
-            print("access token, ", os.getenv('ACCESS_TOKEN_SECRET'))
+            # print("access token, ", os.getenv('ACCESS_TOKEN_SECRET'))
             decoded_data=jwt.decode(token,
             os.getenv('ACCESS_TOKEN_SECRET'),algorithms=['HS256'])
             
-            print(decoded_data)
-            print("decoded data", [decoded_data["user_id"]])
+            # print(decoded_data)
+            # print("decoded data", [decoded_data["user_id"]])
             current_user=User().get_by_id(decoded_data['user_id'])
-            print("user", current_user)
+            # print("user", current_user)
             if current_user is None:
                 return {
                 "message": "Invalid Authentication token!",

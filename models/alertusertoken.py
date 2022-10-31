@@ -7,7 +7,7 @@ alert_user_token_collection=db()['alert-user-token']
 class Add_TOKEN:
     def add_token_for_user(self,user_id,token):
         token_list=self.take_token_list(user_id)
-        print('printing',token_list)
+        # print('printing',token_list)
         if token_list:
             token_list.append(token)
             self.update_token_list(user_id,token_list)
@@ -18,7 +18,7 @@ class Add_TOKEN:
     def take_token_list(self,user_id):
         try:
             user=alert_user_token_collection.find_one({"user_id":user_id})
-            print('userssssssss.......',user)
+            # print('userssssssss.......',user)
         except Exception as e:
             print(e)
         if user:
@@ -33,7 +33,7 @@ class Add_TOKEN:
         )
     def remove_token_for_user(self,user_id,token):
         token_list=self.take_token_list(user_id)
-        print('printing',token_list)
+        # print('printing',token_list)
         if token_list:
             token_list.remove(token)
             self.update_token_list(user_id,token_list)
