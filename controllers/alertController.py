@@ -60,7 +60,7 @@ def alertController(server):
         # alertsdict=add_firebase_alert(crypto_name,float(crypto_price),token)
         # return alertsdict
 
-    @server.route('/alert/get-all-alerts/<crypto_name>',methods=['GET'])
+    @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])
     @verifyJWT
     def get_all_alerts_for_user(current_user,crypto_name):
         print("currentuser............",current_user)
@@ -82,6 +82,44 @@ def alertController(server):
             return previous_alert_prices
         except Exception as e:
             print(e)
+
+    @server.route('/alert/get-all-alerts',methods=['GET'])
+    @verifyJWT
+    def get_all_alerts(current_user):
+        # print("currentuser............",current_user)
+        # print("currentuser............",current_user)
+        # print("crypto",crypto_name)
+        # print('crypto_price',crypto_price)
+        # print('token',token)
+        user_id=current_user['_id']
+        try:
+            fetched_alerts=Alert().take_previous_all_alerts()
+            data={}
+            # print('printing the data',data)
+            
+            for i in fetched_alerts:
+                # print('printing',i)
+                # data.append([i['name'],i['al']])
+                # print('printing i',i)
+                data[i['name']]={}
+                # print("printing data",data)
+                for j in i['alertlist']:
+                    if j[1]==user_id:
+                        data[i['name']]=j[0]
+
+            # print('fetched.................',data)
+            return data
+            # previous_alert_prices=[]
+            # if fetched_alerts is None:
+            #     return previous_alert_prices
+            # alertlist=fetched_alerts['alertlist']
+            # for i in alertlist:
+            #     if (i[1]==user_id):
+            #         previous_alert_prices.append(i[0])
+            # return previous_alert_prices
+        except Exception as e:
+            print(e)
+
 
         # print(user_id)
         # alertsdict=add_firebase_alert(crypto_name,float(crypto_price),token)

@@ -31,6 +31,17 @@ class Alert:
             return fetched_alert
         return fetched_alert
 
+    def take_previous_all_alerts(self):
+        try:
+            alerts=alert_collection.find()
+        
+        except Exception as e:
+            print(e)
+
+        if alerts:
+            return alerts
+        return alerts
+
     def update_alerts_for_price(self,crypto_name,alert_list):
         alert_collection.update_one(
             {'name':crypto_name},
