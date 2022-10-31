@@ -91,23 +91,26 @@ def alertController(server):
         # print("crypto",crypto_name)
         # print('crypto_price',crypto_price)
         # print('token',token)
+        print("current user is ", current_user)
         user_id=current_user['_id']
+        print("user id is ", user_id)
         try:
             fetched_alerts=Alert().take_previous_all_alerts()
-            data={}
+            print("fetched_alerts, ", fetched_alerts)
+            data=[]
             # print('printing the data',data)
             
             for i in fetched_alerts:
                 # print('printing',i)
                 # data.append([i['name'],i['al']])
                 # print('printing i',i)
-                data[i['name']]={}
+                # dat=[]
                 # print("printing data",data)
                 for j in i['alertlist']:
                     if j[1]==user_id:
-                        data[i['name']]=j[0]
+                        data.append({'crypto_name':i['name'], 'crypto_price':j[0]})
 
-            # print('fetched.................',data)
+            print('fetched.................',data)
             return data
             # previous_alert_prices=[]
             # if fetched_alerts is None:
