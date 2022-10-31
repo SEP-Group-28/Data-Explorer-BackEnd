@@ -35,6 +35,26 @@ def alertController(server):
                 "error": str(e),
                 "data": None
         }), 400
+    
+    @server.route('/alert/remove-alert/<crypto_name>/<crypto_price>',methods=['DELETE'])
+    @verifyJWT
+    def remove_alert(current_user,crypto_name,crypto_price):
+        print("currentuser............",current_user)
+        print("crypto",crypto_name)
+
+        print('crypto_price',crypto_price)
+        # print('token',token)
+         
+        try:
+            alert_list=Alert().remove_alert_for_price(crypto_name,float(crypto_price),current_user["_id"])
+            return jsonify({"message": "Successfully added alert",
+                "alertlist": alert_list['alertlist']})
+        except Exception as e:
+            return jsonify({
+                "message": "failed to add alert",
+                "error": str(e),
+                "data": None
+        }), 400
 
         # return alertsdict
 
