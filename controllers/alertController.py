@@ -59,6 +59,24 @@ def alertController(server):
        
         # alertsdict=add_firebase_alert(crypto_name,float(crypto_price),token)
         # return alertsdict
+    @server.route('/alert/remove-token/<token>',methods=['POST'])
+    @verifyJWT
+    def add_token(current_user,token):
+        print("currentuser............",current_user)
+        # print("crypto",crypto_name)
+        # print('crypto_price',crypto_price)
+        print('token',token)
+        try:
+             tokenlist=Add_TOKEN().remove_token_for_user(current_user['_id'],token)
+             return jsonify({"message": "Successfully removed token",
+                "tokenlist":tokenlist })
+        except Exception as e:
+            return jsonify({
+                "message": "failed to add token",
+                "error": str(e),
+                "data": None
+        }), 400
+        
 
     @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])
     @verifyJWT
