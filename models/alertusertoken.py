@@ -31,3 +31,13 @@ class Add_TOKEN:
                         "$set":{"token_list":token_list}
                     }
         )
+    def remove_token_for_user(self,user_id,token):
+        token_list=self.take_token_list(user_id)
+        print('printing',token_list)
+        if token_list:
+            token_list.remove(token)
+            self.update_token_list(user_id,token_list)
+        # else:
+        #     alert_user_token_collection.insert_one({'user_id':user_id,'token_list':[token]})
+        return self.take_token_list(user_id)
+    
