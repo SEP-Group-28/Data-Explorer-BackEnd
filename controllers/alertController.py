@@ -61,7 +61,7 @@ def alertController(server):
         # return alertsdict
     @server.route('/alert/remove-token/<token>',methods=['POST'])
     @verifyJWT
-    def add_token(current_user,token):
+    def remove_token(current_user,token):
         print("currentuser............",current_user)
         # print("crypto",crypto_name)
         # print('crypto_price',crypto_price)
