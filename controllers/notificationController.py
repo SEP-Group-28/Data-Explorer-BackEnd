@@ -14,10 +14,10 @@ import os
 
 
 def notificationController(server):
-    @server.route('/notifications/present/open_price', methods=['GET'])
+    @server.route('/notifications/present/<crypto_name>', methods=['GET'])
     def take_present_notifications():
-        def stream():
-            notifications = listen_notifications()
+        def stream(crypto_name):
+            notifications = listen_notifications(crypto_name)
             while True:                        
                 msg = notifications.get()  
                 yield msg

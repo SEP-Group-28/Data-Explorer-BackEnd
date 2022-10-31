@@ -1,9 +1,13 @@
-from server import server_intialize
+# from ..server import server_intialize
+
+
 import sys
 import pytest
 from dotenv import load_dotenv
-# sys.path.append('../../Data-Explorer-BackEnd/server.py')
-
+sys.path.append('./')
+import os
+# print('printing............',os.getcwd())
+from server import server_intialize
 
 @pytest.fixture(scope='session', autouse=True)
 def load_env():
