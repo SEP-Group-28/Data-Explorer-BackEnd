@@ -13,7 +13,7 @@ from models.alert import Alert
 
 
 class Crypto_Broker:
-
+    previous_price=-1
     def __init__(self):
         self.subscribers = []
         self.push_queue =[]
@@ -27,7 +27,7 @@ class Crypto_Broker:
         return q
 
     def publish(self,cryptoname,interval, msg,candle_closed):
-      
+        global previous_price
         send_msg = [
             msg['time'].iloc[-1],
             msg['open'].iloc[-1],
@@ -76,11 +76,16 @@ class Crypto_Broker:
                 #     if i[0]==price and interval=='1m':
                 #         confirebase(price,i[1])
                         
+# (previous_price<=i[0]<=current_price) or (previous_price>=i[0]>=current_price)
 
                 # newalertsdict=[confirebase(price,i[1]) for i in alertsdict if not(i[0]==price and interval=='1m')]
-                newalertsdict=[i for i in alertsdict if ((i[0]==price and interval=='1m') and (confirebase(price,i[1])) and False) or (i[0]!=price or interval!='1m')]
+                current_price=price
+                if previous_price>=0:
+                    newalertsdict=[i for i in alertsdict if ((((previous_price<=i[0]<=current_price) or (previous_price>=i[0]>=current_price))and interval=='1m') and (confirebase(price,i[1])) and False) or (((previous_price>i[0] or i[0]>current_price)  and (previous_price<i[0] or i[0]<current_price)) or interval!='1m')]
+                    Alert().update_alerts_for_price(cryptoname,newalertsdict)
+                previous_price=price
                 # print('newalert..........',newalertsdict,cryptoname)
-                Alert().update_alerts_for_price(cryptoname,newalertsdict)
+                
 
                     
 
