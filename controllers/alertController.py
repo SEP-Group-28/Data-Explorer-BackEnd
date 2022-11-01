@@ -79,7 +79,7 @@ def alertController(server):
        
         # alertsdict=add_firebase_alert(crypto_name,float(crypto_price),token)
         # return alertsdict
-    @server.route('/alert/remove-token/<token>',methods=['POST'])
+    @server.route('/alert/remove-token/<token>',methods=['DELETE'])
     @verifyJWT
     def remove_token(current_user,token):
         # print("currentuser............",current_user)
@@ -92,7 +92,7 @@ def alertController(server):
                 "tokenlist":tokenlist })
         except Exception as e:
             return jsonify({
-                "message": "failed to add token",
+                "message": "failed to remove token",
                 "error": str(e),
                 "data": None
         }), 400
