@@ -10,7 +10,8 @@ crypto_brokers = {}
 crypto_list = []
 notifications = []
 # alertsdict={}
-notification_announcer = NotificationAnnouncer()
+notification_brokers={}
+# notification_announcer = NotificationAnnouncer()
 
 def subscribe_to_socket_for_real_time_crypto(name,interval): 
     crypto_broker = crypto_brokers[name][interval]
@@ -43,6 +44,8 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
             "1m":Crypto_Broker(),
             "5m":Crypto_Broker()
         }
+        notification_brokers[crypto]={'1m':NotificationAnnouncer()}
+
 # btc:[[],[],[],[],[]],sol:[[]]/\
         crypto_brokers[crypto] =crypto_broker_list
 # <crypto>/<crypto_price>/<token>
@@ -55,26 +58,24 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
 #     return alertsdict
   
 
-def listen_notifications(crypto_name):
-    return(notification_announcer.listen_nots())
+def subscribe_to_socket_for_real_time_notifications(crypto_name):
+    return(notification_brokers[crypto_name].listen_nots())
 
-def add_notification(data):
-    notifications.append(data)
+def publish_to_socket_for_real_time_notifications(data):
+    notifications.append([data['symbol'],data])
    
 def look_for_nots():
     while(True):
         if(len(notifications)>0):
-            notification_announcer.announce_nots(notifications[0])
-            data={"time":int(time()*1000),"data":notifications[0]}
+            crypto_name=notifications[0][0]
+            notification_brokers[crypto_name].announce_nots(notifications[0][1])
+            data={"time":int(time()*1000),"data":notifications[0][1]}
             print("pubsub data", data)
             result=Notification.insertnotifications(data)
             print("notification result", result)
             # db_action("insert_one",[{"time":int(time()*1000),"data":notifications[0]},"notifications"],"admin")
             notifications.pop(0)
 
-
-
-        
 
 def historical_nots():
     time_filter = int(time()*1000 - (5*24*60*60*1000))
