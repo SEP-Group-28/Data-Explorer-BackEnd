@@ -85,10 +85,10 @@ def cryptoController(server):
             def stream(cryptoname,interval):
               
                 messages = subscribe_to_socket_for_real_time_crypto(cryptoname,interval) 
-                print('messages',messages.get())
+                # print('messages',messages.get())
                 while True:   
                     msg = messages.get()
-                    print('listened',interval,cryptoname,msg)
+                    # print('listened',interval,cryptoname,msg)
                     # encoded=str(msg).encode()
                     # print('encoded ',msg)
                     yield msg

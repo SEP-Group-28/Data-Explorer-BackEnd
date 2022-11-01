@@ -19,10 +19,10 @@ def alertController(server):
     @server.route('/alert/add-alert/<crypto_name>/<crypto_price>',methods=['POST'])
     @verifyJWT
     def add_alert(current_user,crypto_name,crypto_price):
-        print("currentuser............",current_user)
-        print("crypto",crypto_name)
+        # print("currentuser............",current_user)
+        # print("crypto",crypto_name)
 
-        print('crypto_price',crypto_price)
+        # print('crypto_price',crypto_price)
         # print('token',token)
          
         try:
@@ -39,10 +39,10 @@ def alertController(server):
     @server.route('/alert/remove-alert/<crypto_name>/<crypto_price>',methods=['DELETE'])
     @verifyJWT
     def remove_alert(current_user,crypto_name,crypto_price):
-        print("currentuser............",current_user)
-        print("crypto",crypto_name)
+        # print("currentuser............",current_user)
+        # print("crypto",crypto_name)
 
-        print('crypto_price',crypto_price)
+        # print('crypto_price',crypto_price)
         # print('token',token)
          
         try:
@@ -61,10 +61,10 @@ def alertController(server):
     @server.route('/alert/add-token/<token>',methods=['POST'])
     @verifyJWT
     def add_token(current_user,token):
-        print("currentuser............",current_user)
-        # print("crypto",crypto_name)
-        # print('crypto_price',crypto_price)
-        print('token',token)
+        # print("currentuser............",current_user)
+        # # print("crypto",crypto_name)
+        # # print('crypto_price',crypto_price)
+        # print('token',token)
         try:
              tokenlist=Add_TOKEN().add_token_for_user(current_user['_id'],token)
              return jsonify({"message": "Successfully added token",
@@ -82,10 +82,14 @@ def alertController(server):
     @server.route('/alert/remove-token/<token>',methods=['POST'])
     @verifyJWT
     def remove_token(current_user,token):
-        print("currentuser............",current_user)
+        # print("currentuser............",current_user)
         # print("crypto",crypto_name)
         # print('crypto_price',crypto_price)
-        print('token',token)
+        # print('token',token)
+        # print("currentuser............",current_user)
+        # # print("crypto",crypto_name)
+        # # print('crypto_price',crypto_price)
+        # print('token',token)
         try:
              tokenlist=Add_TOKEN().remove_token_for_user(current_user['_id'],token)
              return jsonify({"message": "Successfully removed token",
@@ -101,7 +105,7 @@ def alertController(server):
     @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])
     @verifyJWT
     def get_all_alerts_for_user(current_user,crypto_name):
-        print("currentuser............",current_user)
+        # print("currentuser............",current_user)
         # print("currentuser............",current_user)
         # print("crypto",crypto_name)
         # print('crypto_price',crypto_price)
@@ -109,7 +113,7 @@ def alertController(server):
         user_id=current_user['_id']
         try:
             fetched_alerts=Alert().take_previous_alerts_for_price(crypto_name)
-            print('fetched.................',fetched_alerts)
+            # print('fetched.................',fetched_alerts)
             previous_alert_prices=[]
             if fetched_alerts is None:
                 return previous_alert_prices
@@ -129,21 +133,24 @@ def alertController(server):
         # print("crypto",crypto_name)
         # print('crypto_price',crypto_price)
         # print('token',token)
+        # print("current user is ", current_user)
         user_id=current_user['_id']
+        # print("user id is ", user_id)
         try:
             fetched_alerts=Alert().take_previous_all_alerts()
-            data={}
+            # print("fetched_alerts, ", fetched_alerts)
+            data=[]
             # print('printing the data',data)
             
             for i in fetched_alerts:
                 # print('printing',i)
                 # data.append([i['name'],i['al']])
                 # print('printing i',i)
-                data[i['name']]={}
+                # dat=[]
                 # print("printing data",data)
                 for j in i['alertlist']:
                     if j[1]==user_id:
-                        data[i['name']]=j[0]
+                        data.append({'crypto_name':i['name'], 'crypto_price':j[0]})
 
             # print('fetched.................',data)
             return data
