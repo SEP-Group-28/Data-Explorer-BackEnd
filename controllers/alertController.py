@@ -83,6 +83,10 @@ def alertController(server):
     @verifyJWT
     def remove_token(current_user,token):
         # print("currentuser............",current_user)
+        # print("crypto",crypto_name)
+        # print('crypto_price',crypto_price)
+        # print('token',token)
+        # print("currentuser............",current_user)
         # # print("crypto",crypto_name)
         # # print('crypto_price',crypto_price)
         # print('token',token)
