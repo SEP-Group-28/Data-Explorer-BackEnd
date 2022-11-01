@@ -233,7 +233,7 @@ class FtxClientWs(WebsocketManager):
                     data['low' ].iloc[-1] = tick['price']
 
                 data['close' ].iloc[-1]  = tick['price']
-                data['volume'].iloc[-1] += tick['size' ]
+                data['volume'].iloc[-1] += tick['size' ]*tick['price']
                 # print(tick)
             
         def on_tick():

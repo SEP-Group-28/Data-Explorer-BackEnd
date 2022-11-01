@@ -10,7 +10,7 @@ class Add_TOKEN:
         print('printing',token_list)
         if token_list is None:
             alert_user_token_collection.insert_one({'user_id':user_id,'token_list':[token]})
-        else:
+        elif token not in token_list:
             token_list.append(token)
             self.update_token_list(user_id,token_list)
         return self.take_token_list(user_id)
