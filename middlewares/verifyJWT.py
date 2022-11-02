@@ -3,8 +3,8 @@ from flask import jsonify
 from flask import request
 import jwt
 from functools import wraps
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 import os
 from models.user import User
 # import utils.token as token
@@ -42,7 +42,7 @@ def verifyJWT(f):
         try:
             # print("access token, ", os.getenv('ACCESS_TOKEN_SECRET'))
             decoded_data=jwt.decode(token,
-            os.getenv('ACCESS_TOKEN_SECRET'),algorithms=['HS256'])
+            os.environ.get('ACCESS_TOKEN_SECRET'),algorithms=['HS256'])
             
             # print(decoded_data)
             # print("decoded data", [decoded_data["user_id"]])

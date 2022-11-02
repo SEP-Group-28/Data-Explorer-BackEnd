@@ -2,8 +2,8 @@ from audioop import add
 from flask import request,jsonify,make_response
 from bson.objectid  import ObjectId
 import bcrypt
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 import jwt
 from middlewares.verifyJWT import verifyJWT
 import os

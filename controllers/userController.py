@@ -3,9 +3,9 @@ from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request
 from models.user import User
 from middlewares.verifyRoles import verifyRole
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from io import BufferedReader
-load_dotenv()
+# load_dotenv()
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 

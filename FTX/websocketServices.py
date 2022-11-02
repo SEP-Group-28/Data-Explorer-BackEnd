@@ -3,7 +3,7 @@ import threading
 from collections  import defaultdict, deque
 from itertools    import zip_longest
 from typing       import DefaultDict, Deque, List, Dict, Tuple, Optional
-from gevent.event import Event
+# from gevent.event import Event
 from threading    import Thread, Lock,enumerate
 import websocket
 import datetime
