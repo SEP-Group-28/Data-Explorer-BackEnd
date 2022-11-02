@@ -3,8 +3,8 @@ from flask import jsonify
 from flask import request,abort
 import jwt
 from functools import wraps
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 import os
 import models
 import utils.token as token

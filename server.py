@@ -14,8 +14,8 @@ from flask_cors import CORS
 # from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid  import ObjectId
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 import os
 
 from controllers.authController import authController

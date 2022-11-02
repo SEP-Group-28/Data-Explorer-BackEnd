@@ -4,10 +4,10 @@ from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request,Response
 from models.user import User
 from middlewares.verifyRoles import verifyRole
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import json
 
-load_dotenv()
+# load_dotenv()
 import os
 
 

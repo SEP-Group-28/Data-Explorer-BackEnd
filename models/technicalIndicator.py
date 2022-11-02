@@ -1,9 +1,9 @@
 #  from crypt import crypt
 import talib
 import bson, os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import json
-load_dotenv()
+# load_dotenv()
 from pymongo import MongoClient
 from flask import jsonify
 from dbconnection import connectdb as db

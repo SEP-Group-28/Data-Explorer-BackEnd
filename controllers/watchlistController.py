@@ -5,8 +5,8 @@ from models.watchlist import Watchlist
 from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request
 from middlewares.verifyRoles import verifyRole
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 import os
 
 def watchlistController(server):

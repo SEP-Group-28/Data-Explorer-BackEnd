@@ -2,8 +2,8 @@
 from flask import request,jsonify,make_response
 from bson.objectid  import ObjectId
 import bcrypt
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 import jwt
 import os
 import utils.token as token
@@ -45,7 +45,7 @@ def authController(server):
                 try:
                     authObject= {
                     "id": user['_id'],
-                    "role":os.getenv('USER_ROLE'),
+                    "role":os.environ.get('USER_ROLE'),
                     }
                     access_token=token.getAccessToken(authObject)
                     refresh_token=token.getRefreshToken(authObject)
@@ -180,13 +180,13 @@ def authController(server):
 #print('kk')
         authObject= {
             "id": str(auth['_id']),
-            "role":os.getenv('USER_ROLE'),
+            "role":os.environ.get('USER_ROLE'),
         }
         
 #print(os.getenv('REFRESH_TOKEN_SECRET'))
         decoded=jwt.decode(
             refresh_token,
-            os.getenv('REFRESH_TOKEN_SECRET') ,algorithms=['HS256'])
+            os.environ.get('REFRESH_TOKEN_SECRET') ,algorithms=['HS256'])
         # print(decoded)
         if(auth['_id'] != decoded['user_id']):
 #print("requesting new access token failed invalid token")
