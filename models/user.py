@@ -45,7 +45,7 @@ class User:
                 "lastname": lastname,
                 "email": email,
                 "password": self.encrypt_password(password),
-        
+                "active":'1'
             }
         )
         return self.get_by_id(new_user.inserted_id)
@@ -53,20 +53,34 @@ class User:
     def get_all(self,skip,take):
         try:
             """Get all users"""
-            print('checlllll')
+            # print('checlllll')
             users = user_collection.find().skip(skip).limit(take)
-            print('looooooo')
-            edited_list= [{"firstname":user['firstname'],'lastname':user['lastname'],'email':user['email'], "_id": str(user["_id"]),'active':user['active']} for user in users]
-            # print(edited_list)
+            # print("hello world")
+            # print('users',users)
+            # print('looooooo')
+            # need to add active inactive state of user
+            edited_list = []
+            for user in users:
+                # print('user',user)
+                temp = {"firstname":user['firstname'],'lastname':user['lastname'],'email':user['email'], "_id": str(user["_id"]), "active":user['active']}
+                # print("printing temp")
+                # print(temp)
+                if ('dob' in user):
+                    # print(user['dob'], user)
+                    temp['dob']=user['dob']
+                elif ('country' in user):
+                    temp['country']=user['country']
+                edited_list.append(temp)
+            # print('edited_list',edited_list)
             return edited_list
                 
         except Exception as e:
             print(e)
     def get_total_count(self):
         try:
-            print('\nkdksfks')
+            # print('\nkdksfks')
             items=user_collection.estimated_document_count()
-            print('items',items)
+            # print('items',items)
             return items
         except Exception as e:
             print(e)
@@ -76,7 +90,7 @@ class User:
         """Get a user by id"""
         # user = db.users.find_one({"_id": bson.ObjectId(user_id), "active": True})
         user = user_collection.find_one({"_id": bson.ObjectId(user_id)})
-
+        # print('user',user)
         if not user:
             return
         user["_id"] = str(user["_id"])

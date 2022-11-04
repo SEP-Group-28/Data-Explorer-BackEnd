@@ -12,24 +12,25 @@ def adminController(server):
     # @verifyJWT
     def get_all_users():
         try:
-            print('chekk')
+            # print('chekk')
             skip=request.args.get('skip')
             take=request.args.get('take')
             search_by=request.args.get('search_by')
-            print('skip',skip)
-            print('take',take)
-            print('search_by',search_by)
-
+            # print('skip',skip)
+            # print('take',take)
+            # print('search_by',search_by)
+            # print("get_all_users")
             users=User().get_all(int(skip),int(take))
+            # print("got users")
             # print('users',users)
-            print('ji')
+            # print('ji')
             userscount=User().get_total_count()
             # print('users',users)
             # print('userscount',userscount)
 
             if(users and userscount):
-                print('gooo')
-                print('users:-',users,'userscount:-',userscount)
+                # print('gooo')
+                # print('users:-',users,'userscount:-',userscount)
                 return {
                 "message": "successfully retrieved users",
                 "data":{'users':users,'usercount':userscount}
