@@ -1,3 +1,8 @@
 .pytest_cache/
 venv/
 .flaskenv
+__pycache__/ 
+/env
+docs/
+*.log
+*.pyc
