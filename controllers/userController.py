@@ -149,6 +149,7 @@ def userController(server):
             print(data)
             userid=data['user_id']
             userdetails=User().get_by_id(userid)
+            # print("userdetails",userdetails)
             if not(userdetails):
                  return {
                     'message':"failed to change activation",
