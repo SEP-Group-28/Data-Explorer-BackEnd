@@ -7,7 +7,7 @@ import pytest
 sys.path.append('./')
 import os
 # print('printing............',os.getcwd())
-from server import server_intialize
+import server 
 
 # @pytest.fixture(scope='session', autouse=True)
 # def load_env():
@@ -15,6 +15,6 @@ from server import server_intialize
 
 @pytest.fixture
 def client():
-    SERVER = server_intialize()
+    SERVER = server.server_intialize()
     with SERVER.test_client() as client:
         yield client
