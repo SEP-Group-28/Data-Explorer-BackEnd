@@ -27,8 +27,8 @@ def alertController(server):
          
         try:
             alert_list=Alert().add_alert_for_price(crypto_name,float(crypto_price),current_user["_id"])
-            return jsonify({"message": "Successfully added alert",
-                "alertlist": alert_list['alertlist']})
+            return {"message": "Successfully added alert",
+                "alertlist": alert_list['alertlist']},200
         except Exception as e:
             return jsonify({
                 "message": "failed to add alert",
@@ -47,8 +47,8 @@ def alertController(server):
          
         try:
             alert_list=Alert().remove_alert_for_price(crypto_name,float(crypto_price),current_user["_id"])
-            return jsonify({"message": "Successfully added alert",
-                "alertlist": alert_list['alertlist']})
+            return{"message": "Successfully removed alert",
+                "alertlist": alert_list['alertlist']},200
         except Exception as e:
             return jsonify({
                 "message": "failed to add alert",
@@ -67,8 +67,8 @@ def alertController(server):
         # print('token',token)
         try:
              tokenlist=Add_TOKEN().add_token_for_user(current_user['_id'],token)
-             return jsonify({"message": "Successfully added token",
-                "tokenlist":tokenlist })
+             return {"message": "Successfully added token",
+                "tokenlist":tokenlist },200
         except Exception as e:
             return jsonify({
                 "message": "failed to add token",
@@ -92,8 +92,8 @@ def alertController(server):
         # print('token',token)
         try:
              tokenlist=Add_TOKEN().remove_token_for_user(current_user['_id'],token)
-             return jsonify({"message": "Successfully removed token",
-                "tokenlist":tokenlist })
+             return {"message": "Successfully removed token",
+                "tokenlist":tokenlist },200
         except Exception as e:
             return jsonify({
                 "message": "failed to remove token",
@@ -110,6 +110,7 @@ def alertController(server):
         # print("crypto",crypto_name)
         # print('crypto_price',crypto_price)
         # print('token',token)
+        crypto_name=crypto_name+'/USDT'
         user_id=current_user['_id']
         try:
             fetched_alerts=Alert().take_previous_alerts_for_price(crypto_name)
@@ -121,9 +122,11 @@ def alertController(server):
             for i in alertlist:
                 if (i[1]==user_id):
                     previous_alert_prices.append(i[0])
-            return previous_alert_prices
+            print('passing.......')
+            return {"message":"Successfully fetched all alerts for crypto",'allalertlistcrypto':previous_alert_prices},200
+            
         except Exception as e:
-            print(e)
+            return {"message":"Fetching all alerts for crypto failed"},404
 
     @server.route('/alert/get-all-alerts',methods=['GET'])
     @verifyJWT
@@ -153,7 +156,8 @@ def alertController(server):
                         data.append({'crypto_name':i['name'], 'crypto_price':j[0]})
 
             # print('fetched.................',data)
-            return data
+            return {'message':'Successfully fetched all alerts',"allalertlist":data},200
+            
             # previous_alert_prices=[]
             # if fetched_alerts is None:
             #     return previous_alert_prices
@@ -163,7 +167,8 @@ def alertController(server):
             #         previous_alert_prices.append(i[0])
             # return previous_alert_prices
         except Exception as e:
-            print(e)
+            return {"message":"Fetching all alerts failed"},404
+            
 
 
         # print(user_id)

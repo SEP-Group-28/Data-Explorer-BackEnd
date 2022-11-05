@@ -14,7 +14,7 @@ def watchlistController(server):
     @verifyJWT
     def removemarket(current_user):
         try:
-            data=request.json
+            data=json.loads(request.data)
             print("data remove market", data)
             id=current_user["_id"]
             print("user id", id)
@@ -46,7 +46,7 @@ def watchlistController(server):
                     },400
             return {
                         "message": "No watchlist for this user",
-                        "data":None
+                        "data":False
                     },400
 
 
@@ -69,7 +69,7 @@ def watchlistController(server):
     def addmarket(current_user):
         try:
             print("add market data....")
-            data=request.json
+            data=json.loads(request.data)
             print(data)
             id=current_user["_id"]
             crypto=data['crypto']
@@ -92,15 +92,15 @@ def watchlistController(server):
                     print("updateed watchlist", updatedwatchlist)
                     if(updatedwatchlist):
                         return {
-                        "message": "Successfully updated watchlist",
+                        "message": "Successfully added to watchlist",
                         "data": updatedwatchlist
                         },200
                     return {
-                    "message": "Update watchlist fail",
+                    "message": "Adding to watchlist fail",
                     "data":None
                     },400
                 return {
-                    "message": "Update watchlist fail",
+                    "message": "Adding to watchlist fail",
                     "data":None
                     },400
                 # print("Get watchlist crypto", watchlistmodel.getwatchlist(id))    
@@ -112,7 +112,7 @@ def watchlistController(server):
         except Exception as e:
             print(e)
             return {
-                        "message": "Update watchlist fail",
+                        "message": "Adding to watchlist fail",
                         "data":None,
                         "error":str(e)
                     },400
@@ -139,7 +139,7 @@ def watchlistController(server):
                 else:
                     return {
                                 "message": "Watchlist is empty",
-                                "data": None
+                                "data": getresult
                             },200
             except Exception as e:
                 print(e)

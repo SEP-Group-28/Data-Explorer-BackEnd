@@ -12,11 +12,15 @@ def verifyJWT(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         print("verifying....")
-
+        authHeader=None
 #print('JWT verification...')
-
+        # print(request.headers)
         # authHeader = request.headers['authorization'] or request.headers['Authorization']
-        authHeader=request.headers['Authorization']
+        if 'Authorization' in request.headers:
+            authHeader=request.headers['Authorization']
+        
+        if not authHeader:
+            return jsonify({'message': 'Authentication Token is missing!'}), 401
 #print('authHeader', authHeader)
 
 
@@ -29,6 +33,7 @@ def verifyJWT(f):
    
         # print("out from bearer if")
         token = authHeader.split(' ')[1]
+        print(token)
         if not token:
             # print("unauthorized")
             return jsonify({
@@ -58,10 +63,10 @@ def verifyJWT(f):
         except Exception as e:
             print("exception", e)
             return jsonify({
-                "message": "Something went wrong",
+                "message": "Invalid Authentication token!",
                 "data": None,
                 "error": str(e)
-            }),403
+            }),401
         
 #print('JWT verified...')
 #print("decoded :", decoded_data)

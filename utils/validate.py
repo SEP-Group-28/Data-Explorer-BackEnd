@@ -48,6 +48,7 @@ def validate_email(email: str):
 
 def validate_user(**args):
     """User Validator"""
+    print(args.get('email'))
     if  not args.get('email') or not args.get('password') or not args.get('firstname') or not args.get('lastname'):
         return {
             'email': 'Email is required',
@@ -92,7 +93,7 @@ def validate_user(**args):
             
     if not 2 <= len(args['firstname']) :
         return {
-            'firstname': 'First Name must be between 2 and 30 characters'
+            'firstname': '1'
         }
     if not 2 <= len(args['lastname']) :
         return {
