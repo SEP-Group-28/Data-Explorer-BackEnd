@@ -16,13 +16,15 @@ def adminController(server):
             skip=request.args.get('skip')
             take=request.args.get('take')
             search_by=request.args.get('search_by')
+            filter_by=request.args.get('filter_by')
             print('skip',skip)
             print('take',take)
             print('search_by',search_by)
+            print('filter_by',filter_by)
             # print("get_all_users")
             if (int(take) == -1):
                 print("hello")
-                users=User().get_all_search(search_by)
+                users, user_count=User().get_all_search(search_by, filter_by, int(skip), int(take))
                 print("got users")
                 print('users',users)
                 # print('ji')
@@ -31,9 +33,9 @@ def adminController(server):
                     "message": "No users found",
                     "data":{'users':users,'usercount':0}
                     }
-                userscount=User().get_total_count()
+                userscount=user_count
                 # print('users',users)
-                # print('userscount',userscount)
+                print('userscount',userscount)
 
                 if(users and userscount):
                     # print('gooo')

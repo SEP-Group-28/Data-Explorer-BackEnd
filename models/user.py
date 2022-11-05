@@ -67,15 +67,17 @@ class User:
         # print('edited_list',edited_list)
         return edited_list
 
-    def get_all_search(self, search):
+    def get_all_search(self, search, filter, skip, take):
         """Get all users using search"""
         try:
-            regx = re.compile("^"+search, re.IGNORECASE)
-            print("/^"+search)
-            users = user_collection.find({'firstname':regx})
+            regx = re.compile(search, re.IGNORECASE)
+            print(filter, " ",regx)
+            users = user_collection.find({filter.lower():regx})
+            user_count = len(self.get_user_list(users))
+            print('users count from search',user_count)
+            users_ =  user_collection.find({filter.lower():regx}).skip(skip).limit(5)
             
-            print('users from search',users)
-            return self.get_user_list(users)
+            return self.get_user_list(users_), user_count
         except Exception as e:
             print(e)
 
