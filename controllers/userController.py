@@ -156,7 +156,7 @@ def userController(server):
                     'data':None
                 },404
             result=User().changeactivation(userid,userdetails)
-            print('result',result)
+            # print('result',result)
             return {
                     'message':"Successfully changed activation",
                     'data':result

@@ -16,30 +16,58 @@ def adminController(server):
             skip=request.args.get('skip')
             take=request.args.get('take')
             search_by=request.args.get('search_by')
-            # print('skip',skip)
-            # print('take',take)
-            # print('search_by',search_by)
+            print('skip',skip)
+            print('take',take)
+            print('search_by',search_by)
             # print("get_all_users")
-            users=User().get_all(int(skip),int(take))
-            # print("got users")
-            # print('users',users)
-            # print('ji')
-            userscount=User().get_total_count()
-            # print('users',users)
-            # print('userscount',userscount)
+            if (int(take) == -1):
+                print("hello")
+                users=User().get_all_search(search_by)
+                print("got users")
+                print('users',users)
+                # print('ji')
+                if(len(users) <= 0):
+                    return {
+                    "message": "No users found",
+                    "data":{'users':users,'usercount':0}
+                    }
+                userscount=User().get_total_count()
+                # print('users',users)
+                # print('userscount',userscount)
 
-            if(users and userscount):
-                # print('gooo')
-                # print('users:-',users,'userscount:-',userscount)
-                return {
-                "message": "successfully retrieved users",
-                "data":{'users':users,'usercount':userscount}
-                
-            }
-            return jsonify({
-                "message": "failed to get users",
-                "data": None
-            }), 400
+                if(users and userscount):
+                    # print('gooo')
+                    # print('users:-',users,'userscount:-',userscount)
+                    return {
+                    "message": "successfully retrieved users",
+                    "data":{'users':users,'usercount':userscount}
+                    
+                }
+                return jsonify({
+                    "message": "failed to get users",
+                    "data": None
+                }), 400
+            else:
+                users=User().get_all(int(skip),int(take))
+                print("got users")
+                print('users',users)
+                # print('ji')
+                userscount=User().get_total_count()
+                # print('users',users)
+                # print('userscount',userscount)
+
+                if(users and userscount):
+                    # print('gooo')
+                    # print('users:-',users,'userscount:-',userscount)
+                    return {
+                    "message": "successfully retrieved users",
+                    "data":{'users':users,'usercount':userscount}
+                    
+                }
+                return jsonify({
+                    "message": "failed to get users",
+                    "data": None
+                }), 400
         except Exception as e:
             print(e)
             return jsonify({
