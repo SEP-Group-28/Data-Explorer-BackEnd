@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify
 from dbconnection import connectdb as db
 import cloudinary.uploader
+import re
 
 # record_collection =db.record
 print(db)
@@ -27,7 +28,7 @@ class User:
         user = user_collection.update_one(
             {"_id": bson.ObjectId(user_id)},
             {
-                "$set": {'active':activation}
+                "$set": {'active':activation, 'refresh_token':None}
             }
         )
         user = self.get_by_id(user_id)
@@ -50,6 +51,35 @@ class User:
         )
         return self.get_by_id(new_user.inserted_id)
 
+    def get_user_list(self, users):
+        edited_list = []
+        for user in users:
+            print('user from list',user)
+            temp = {"firstname":user['firstname'],'lastname':user['lastname'],'email':user['email'], "_id": str(user["_id"]), "active":user['active']}
+            # print("printing temp")
+            # print(temp)
+            if ('dob' in user):
+                # print(user['dob'], user)
+                temp['dob']=user['dob']
+            elif ('country' in user):
+                temp['country']=user['country']
+            edited_list.append(temp)
+        # print('edited_list',edited_list)
+        return edited_list
+
+    def get_all_search(self, search):
+        """Get all users using search"""
+        try:
+            regx = re.compile("^"+search, re.IGNORECASE)
+            print("/^"+search)
+            users = user_collection.find({'firstname':regx})
+            
+            print('users from search',users)
+            return self.get_user_list(users)
+        except Exception as e:
+            print(e)
+
+
     def get_all(self,skip,take):
         try:
             """Get all users"""
@@ -59,21 +89,7 @@ class User:
             # print('users',users)
             # print('looooooo')
             # need to add active inactive state of user
-            edited_list = []
-            for user in users:
-                # print('user',user)
-                temp = {"firstname":user['firstname'],'lastname':user['lastname'],'email':user['email'], "_id": str(user["_id"]), "active":user['active']}
-                # print("printing temp")
-                # print(temp)
-                if ('dob' in user):
-                    # print(user['dob'], user)
-                    temp['dob']=user['dob']
-                elif ('country' in user):
-                    temp['country']=user['country']
-                edited_list.append(temp)
-            # print('edited_list',edited_list)
-            return edited_list
-                
+            return self.get_user_list(users)    
         except Exception as e:
             print(e)
     def get_total_count(self):
