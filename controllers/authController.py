@@ -11,6 +11,10 @@ import utils.token as token
 from models.user import User
 from utils.validate import validate_user,validate_email_and_password
 from middlewares.verifyJWT import verifyJWT
+from dbconnection import connectdb as db
+user_collection=db().user
+
+
 def authController(server):
 #print('check')
     @server.route("/auth/login",methods=["POST"])
@@ -120,11 +124,13 @@ def authController(server):
             is_validated = validate_user(**user)
 #print(is_validated)]
             print(is_validated)
+            # print(is_validated)
             if is_validated is not True:
                
                 return jsonify(message='Invalid data', data=None, error=is_validated), 400
             userModel = User().create(**user)
             print(userModel)
+            print("userModel",userModel)
 
             # form_data=request.json
             # FirstName:form_data['FirstName']

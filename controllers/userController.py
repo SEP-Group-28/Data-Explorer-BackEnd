@@ -149,13 +149,14 @@ def userController(server):
             print(data)
             userid=data['user_id']
             userdetails=User().get_by_id(userid)
+            # print("userdetails",userdetails)
             if not(userdetails):
                  return {
                     'message':"failed to change activation",
                     'data':None
                 },404
             result=User().changeactivation(userid,userdetails)
-            print('result',result)
+            # print('result',result)
             return {
                     'message':"Successfully changed activation",
                     'data':result

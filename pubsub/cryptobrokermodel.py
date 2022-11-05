@@ -82,7 +82,8 @@ class Crypto_Broker:
                 current_price=price
                 previous_price = self.previous_price
                 if(cryptoname == "BTC/USDT"):
-                    print(cryptoname, " current price is ", current_price, " previous price is ", previous_price)
+                    pass
+                    # print(cryptoname, " current price is ", current_price, " previous price is ", previous_price)
                 if previous_price>=0:
                     newalertsdict=[i for i in alertsdict if ((((previous_price<=i[0]<=current_price) or (previous_price>=i[0]>=current_price))and interval=='1m') and (confirebase(i[0],i[1])) and False) or (((previous_price>i[0] or i[0]>current_price)  and (previous_price<i[0] or i[0]<current_price)) or interval!='1m')]
                     Alert().update_alerts_for_price(cryptoname,newalertsdict)
