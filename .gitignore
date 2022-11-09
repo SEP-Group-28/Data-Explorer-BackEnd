@@ -1,4 +1,6 @@
 __pycache__/ 
 /env
+/venvMarketData
 .vscode
-
+/python=3.9
+pip
