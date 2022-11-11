@@ -21,7 +21,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto(market_name+"/USDT", interval)
         elif market_type=='stock':
-            klines=Stock.getStockDataList(market_name,interval)
+            klines=Stock().getStockDataList(market_name,interval)
             # klines = get_historical_stock_data(name, interval)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
@@ -32,7 +32,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto(market_name+"/USDT", interval)
         elif market_type=='stock':
-            klines = Stock.getStockDataList(market_name, interval)
+            klines = Stock().getStockDataList(market_name, interval)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         volume = np.array([i[5] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
@@ -42,7 +42,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto(market_name+"/USDT", interval)
         elif market_type=='stock':
-            klines = Stock.getStockDataList(market_name, interval)
+            klines = Stock().getStockDataList(market_name, interval)
         high_prices = np.array([i[2] for i in klines], dtype=float)
         low_prices = np.array([i[3] for i in klines], dtype=float)
         close_prices = np.array([i[4] for i in klines], dtype=float)
@@ -139,7 +139,7 @@ class TechnicalIndicator:
         dict_macdhist = dict(zip(close_times[33:], macdhist[33:]))
         dict_indicator = {'macd': dict_macd, 'macdsignal': dict_macdsignal, 'macdhist': dict_macdhist}
         json_dict = json.dumps(dict_indicator)
-        print(json_dict)
+        # print(json_dict)
         return json_dict
 
 

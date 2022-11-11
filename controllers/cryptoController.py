@@ -32,7 +32,7 @@ def cryptoController(server):
             interval=interval
             print("Checkinggg historyy..........")
             history_data=get_history_for_crypto(cryptoname,interval)
-            print("historyyyy",market,interval,history_data)
+            # print("historyyyy",market,interval,history_data)
             # if not historical_data:
             #     return
             # return historical_data

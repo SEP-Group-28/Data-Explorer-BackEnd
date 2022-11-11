@@ -37,7 +37,6 @@ class Stock(Market):
         print("gfttcghcghcgh",stock,interval)
         stock_collection=stock
         stock_data=db[stock_collection].find_one({'interval':interval})
-        print()
         if not stock_data["data"]:
             return
         return stock_data["data"]
