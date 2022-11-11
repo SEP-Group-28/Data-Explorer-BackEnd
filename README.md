@@ -52,3 +52,16 @@ import packages in new virtual env
 
 Export your active environment to a new text file  
     'pip freeze > requirements.txt'
+################################################################
+
+Create environment
+python -m venv env
+
+activate environment
+.\env\Scripts\activate.bat
+
+install dependencies
+pip install -r requirements.txt 
+
+
+then run

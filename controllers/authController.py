@@ -2,33 +2,47 @@
 from flask import request,jsonify,make_response
 from bson.objectid  import ObjectId
 import bcrypt
-from dotenv import load_dotenv
-load_dotenv()
+import json
+# from dotenv import load_dotenv
+# load_dotenv()
 import jwt
 import os
 import utils.token as token
 from models.user import User
 from utils.validate import validate_user,validate_email_and_password
+from middlewares.verifyJWT import verifyJWT
+from dbconnection import connectdb as db
+user_collection=db().user
+
 
 def authController(server):
 #print('check')
     @server.route("/auth/login",methods=["POST"])
     def login():
         try:
-            data = request.json
-            if not data:
-                return {
-                    "message": "Please provide user details",
-                    "data": None,
-                    "error": "Bad request"
-                }, 400
+            print('helllo')
+            data = json.loads(request.data) 
+            try:
+                if not data or not data['email'] or not data['password']:
+                    return make_response(jsonify({'message': 'All fields are required for logging in'}), 400)
+            except:
+                return make_response(jsonify({'message': 'All fields are required for logging in'}), 400)
+            print(data)
+            # if not data:
+            #     return {
+            #         "message": "Please provide user details",
+            #         "data": None,
+            #         "error": "Bad request"
+            #     }, 400
             is_validated = validate_email_and_password(data.get('email'), data.get('password'))
+            print(is_validated)
             # form_data=request.form
             # Email= form_data['Email']
             # Password=form_data['Password']
 #print(is_validated)
+            print('hi.......')
             if is_validated is not True:
-                
+                print('validating')
                 return dict(message='Invalid data', data=None, error=is_validated), 400
             user = User().login(
                 data["email"],
@@ -36,15 +50,15 @@ def authController(server):
             )
 #print(user)
             if user=='wrong_email':
-                return jsonify({ "message": "Email :{email} does not exist...".format(email=data['email'])}),404
+                return { "message": "Email does not exist...".format(email=data['email'])},404
             if user=='wrong_password':
-                return jsonify({ "message": "Password is incorrect..." }),401
+                return { "message": "Password is incorrect..." },401
             
             if user:
                 try:
                     authObject= {
                     "id": user['_id'],
-                    "role":os.getenv('USER_ROLE'),
+                    "role":os.environ.get('USER_ROLE'),
                     }
                     access_token=token.getAccessToken(authObject)
                     refresh_token=token.getRefreshToken(authObject)
@@ -61,6 +75,7 @@ def authController(server):
                         "access_token": access_token,
                         
                     },200)
+                    print(response)
                     # response.access_control_allow_credentials
                     response.set_cookie('jwt',refresh_token, httponly=True,max_age= 24 * 60 * 60 * 1000 ,secure=True)
                     
@@ -68,21 +83,21 @@ def authController(server):
                     # print(response)
                     return response
                 except Exception as e:
-#print(e)
+#print(e)()
                     return {
                     "error": "Something went wrong",
                     "message": str(e)
                 }, 500
-            return {
+            return{
             "message": "Error fetching auth token!, invalid email or password",
-            "data": None,
+            "data": str(data),
             "error": "Unauthorized"
         }, 404
         except Exception as e:
             return {
                 "message": "Something went wrong!",
                 "error": str(e),
-                "data": None
+                "data": str(e)
         }, 500
 
         # passwordbytes = Password.encode('utf=8')
@@ -97,8 +112,8 @@ def authController(server):
     def register():
         try:
 #print('jwt',request.cookies.get('jwt'))
-            user=request.json
-            
+            user=json.loads(request.data)
+            print(user)
             if not user:
                 return {
                     "message": "Please provide user details",
@@ -107,12 +122,15 @@ def authController(server):
                 }, 400
             
             is_validated = validate_user(**user)
-#print(is_validated)
+#print(is_validated)]
+            print(is_validated)
+            # print(is_validated)
             if is_validated is not True:
                
                 return jsonify(message='Invalid data', data=None, error=is_validated), 400
             userModel = User().create(**user)
-       
+            print(userModel)
+            print("userModel",userModel)
 
             # form_data=request.json
             # FirstName:form_data['FirstName']
@@ -123,7 +141,7 @@ def authController(server):
            
             if(userModel=='duplicateuser'):
 #print("Email :{email} already exists...".format(email=user['email']))
-                return {"message": "Email :{email} already exists...".format(email=user['email'])},409
+                return {"message": "Email already exists...".format(email=user['email'])},409
             
             # Password='kol'
             # print('d')
@@ -178,13 +196,13 @@ def authController(server):
 #print('kk')
         authObject= {
             "id": str(auth['_id']),
-            "role":os.getenv('USER_ROLE'),
+            "role":os.environ.get('USER_ROLE'),
         }
         
 #print(os.getenv('REFRESH_TOKEN_SECRET'))
         decoded=jwt.decode(
             refresh_token,
-            os.getenv('REFRESH_TOKEN_SECRET') ,algorithms=['HS256'])
+            os.environ.get('REFRESH_TOKEN_SECRET') ,algorithms=['HS256'])
         # print(decoded)
         if(auth['_id'] != decoded['user_id']):
 #print("requesting new access token failed invalid token")
@@ -231,5 +249,15 @@ def authController(server):
         }),200)
         response.set_cookie('jwt','')
         return response
+    # @server.route('/auth/testing',methods=['POST'])
+    # def testing():
+    #     return 'Hello'
+    
+    # test route
+    @server.route("/auth/test",methods=['GET',"POST"])
+    @verifyJWT
+    def get_test(current_user):
+        print(current_user)
+        return make_response(jsonify({'message': 'OK'}), 200)
 
 

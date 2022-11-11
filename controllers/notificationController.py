@@ -1,23 +1,23 @@
 
-from pubsub.pubsubservices import listen_notifications,historical_nots
+from pubsub.pubsubservices import subscribe_to_socket_for_real_time_notifications,historical_nots
 from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request,Response
 from models.user import User
 from middlewares.verifyRoles import verifyRole
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from models.market import Stock
 import json
 
-load_dotenv()
+# load_dotenv()
 import os
 
 
 
 def notificationController(server):
-    @server.route('/notifications/present/open_price', methods=['GET'])
+    @server.route('/notifications/present/<crypto_name>', methods=['GET'])
     def take_present_notifications():
-        def stream():
-            notifications = listen_notifications()
+        def stream(crypto_name):
+            notifications = subscribe_to_socket_for_real_time_notifications(crypto_name)
             while True:                        
                 msg = notifications.get()  
                 yield msg

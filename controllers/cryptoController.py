@@ -5,9 +5,9 @@ from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request,Response
 from models.user import User
 from middlewares.verifyRoles import verifyRole
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pubsub.pubsubservices import subscribe_to_socket_for_real_time_crypto,get_history_for_crypto
-load_dotenv()
+# load_dotenv()
 import os
 from models.market import Crypto
 
@@ -85,10 +85,10 @@ def cryptoController(server):
             def stream(cryptoname,interval):
               
                 messages = subscribe_to_socket_for_real_time_crypto(cryptoname,interval) 
-                print('messages',messages.get())
+                # print('messages',messages.get())
                 while True:   
                     msg = messages.get()
-                    print('listened',interval,cryptoname,msg)
+                    # print('listened',interval,cryptoname,msg)
                     # encoded=str(msg).encode()
                     # print('encoded ',msg)
                     yield msg

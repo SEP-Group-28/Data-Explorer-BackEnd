@@ -1,12 +1,12 @@
 import bson, os
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 from pymongo import MongoClient
 from flask import jsonify
-from dbconnection import connectdb as db_con
+from dbconnection import connectdb as db
 
-db=db_con().TestDB
-watchlist_collection=db.watchlist
+# db=db_con().TestDB
+watchlist_collection=db().watchlist
 
 
 class Watchlist:

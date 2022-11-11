@@ -3,9 +3,9 @@ from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request
 from models.user import User
 from middlewares.verifyRoles import verifyRole
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from io import BufferedReader
-load_dotenv()
+# load_dotenv()
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -149,13 +149,14 @@ def userController(server):
             print(data)
             userid=data['user_id']
             userdetails=User().get_by_id(userid)
+            # print("userdetails",userdetails)
             if not(userdetails):
                  return {
                     'message':"failed to change activation",
                     'data':None
                 },404
             result=User().changeactivation(userid,userdetails)
-            print('result',result)
+            # print('result',result)
             return {
                     'message':"Successfully changed activation",
                     'data':result

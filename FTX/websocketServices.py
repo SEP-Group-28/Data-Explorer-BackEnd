@@ -3,7 +3,7 @@ import threading
 from collections  import defaultdict, deque
 from itertools    import zip_longest
 from typing       import DefaultDict, Deque, List, Dict, Tuple, Optional
-from gevent.event import Event
+# from gevent.event import Event
 from threading    import Thread, Lock,enumerate
 import websocket
 import datetime
@@ -233,7 +233,7 @@ class FtxClientWs(WebsocketManager):
                     data['low' ].iloc[-1] = tick['price']
 
                 data['close' ].iloc[-1]  = tick['price']
-                data['volume'].iloc[-1] += tick['size' ]
+                data['volume'].iloc[-1] += tick['size' ]*tick['price']
                 # print(tick)
             
         def on_tick():

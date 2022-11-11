@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  web:
+    image: crypstoxplorer-backend-image:latest
+    container_name: backend
+    environment:
+      - FLASK_APP=server.py
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - FLASK_RUN_PORT=5000
+      - DATABASE_URL=localhost
+      - ACCESS_TOKEN_SECRET=8f8ae825eb8b77c29f316428b561419e6f81ae5c42bac17d0721b118126e6fc35cd28c821a6e5d90b130a04d2b418bdebcf52e701db9e9862dfe2bba3ae0ca62
+      - REFRESH_TOKEN_SECRET=b242bd27dffb81ff736e1e37b614056e8429ff5a1e8ac04684dbaa74deaeea6b2797b35eb133fc8982819c1557c9689dcd61594ac3721c19986af3033b2384d0
+      - CLOUD_NAME=dbkyosmtj
+      - CLOUDINARY_API_KEY=855167371271189
+      - CLOUDINARY_API_SECRET=4qvNf1I9pvnRe7vdwmOYxsh4Q3Q
+      - ADMIN_ROLE=1
+      - USER_ROLE=2
+    ports:
+      - "80:80"
