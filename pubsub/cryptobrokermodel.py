@@ -152,10 +152,11 @@ class Crypto_Broker:
             self.push_queue = []
     
     def get_historical_data(self,cryptoname,interval):
-
+        print("asasasasasas", cryptoname,interval)
         history_details= Crypto.getCryptoDataList(interval,cryptoname)
     
         history_data = history_details['data']
+        
 
         for trade_data in self.push_queue:
             last_history_data_time=history_data[-1][0]

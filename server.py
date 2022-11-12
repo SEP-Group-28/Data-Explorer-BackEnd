@@ -42,7 +42,7 @@ def server_intialize():
     scheduler = BackgroundScheduler()
 
 
-    # @server.before_first_request
+    @server.before_first_request
     def activate_job():
         # pass
         start_publisher_subscriber_model()
