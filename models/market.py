@@ -230,7 +230,7 @@ class Crypto(Market):
             {'$match' :{"interval":interval}},
             {'$unwind':'$data'},
             {'$sort':{'$data':-1}},
-            {"$skip":'timestamp'},
+            {"$skip":timestamp},
             {'$limit':5},
             # {'$sort':{'$data':1}}
     

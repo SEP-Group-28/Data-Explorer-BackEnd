@@ -25,17 +25,28 @@ class Crypto_Broker:
         print('q is added',q)
         self.subscribers.append(q)
         return q
-
-    def publish(self,cryptoname,interval, msg,candle_closed):
+    #FTX
+    def publish(self,cryptoname,interval, msg):
         # global previous_price
-        send_msg = [
-            msg['time'].iloc[-1],
-            msg['open'].iloc[-1],
-            msg['high'].iloc[-1],
-            msg['low'].iloc[-1],
-            msg['close'].iloc[-1],
-            msg['volume'].iloc[-1]
-            ]
+
+        #FTX
+        # send_msg = [
+        #     msg['time'].iloc[-1],
+        #     msg['open'].iloc[-1],
+        #     msg['high'].iloc[-1],
+        #     msg['low'].iloc[-1],
+        #     msg['close'].iloc[-1],
+        #     msg['volume'].iloc[-1]
+        #     ]
+        
+        send_msg= [msg['k']['t'],
+                    msg['k']['o'],
+                    msg['k']['h'],
+                    msg['k']['l'],
+                    msg['k']['c'],
+                    msg['k']['v'],
+                    ]
+        
         # [[id,crypto,price,token],[id,crypto,price,token],[id,crypto,price,token]]
      
         # print('annnounced',msg,interval)
@@ -64,7 +75,11 @@ class Crypto_Broker:
         #             if price in alertsdict:
         #                 alertsdict.pop(float(price))
         #                 print(alertsdict)
-        price=msg['close'].iloc[-1]
+        print(msg)
+        #FTX
+        candle_closed=msg['k']['x']
+        # price=msg['close'].iloc[-1]
+        price= msg['k']['c']
         # print(type(price))
         if interval=='1m':
             alertsdict=Alert().take_previous_alerts_for_price(cryptoname)['alertlist']
@@ -108,7 +123,10 @@ class Crypto_Broker:
             crypto_data=crypto_data_list_details['data']
             if len(crypto_data)!=0:
                 peak_price = float(crypto_data[-1][1])
-                open_price= msg['open'].iloc[-1]
+                #FTX
+                # open_price= msg['open'].iloc[-1]
+                open_price= msg['k']['o']
+                
                 percent_price = ((float(open_price) - peak_price)/peak_price)*100
 
                 if (percent_price>75):
