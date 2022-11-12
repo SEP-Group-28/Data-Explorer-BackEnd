@@ -167,7 +167,7 @@ def cryptoController(server):
         }), 400
 
     @server.route('/timestamp/<market>/<interval>/<timestamp>',methods=['GET'])
-    def take_history_data(market,interval,timestamp):
+    def take_history_data_timestamp(market,interval,timestamp):
         try:
             # data=request.json
             # if not data:
