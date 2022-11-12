@@ -166,6 +166,20 @@ class Crypto_Broker:
         # print('history data requesting',history_data)
         return(history_data)
 
+    def get_historical_data_timestamp(self,cryptoname,interval,timestamp):
+        history_data= Crypto.getCryptoDataListForTimeStamp(interval,cryptoname,timestamp)
+    
+        # history_data = history_details['data']
+        #CHECK
+        # for trade_data in self.push_queue:
+        #     last_history_data_time=history_data[-1][0]
+        #     trade_data_time=trade_data[0]
+        #     if (last_history_data_time<trade_data_time):  ##Additional protection to certify data 
+        #         history_data.append(trade_data)   
+        # print('history data requesting',history_data)
+        return(history_data)
+
+
     
 class NotificationAnnouncer:
 
