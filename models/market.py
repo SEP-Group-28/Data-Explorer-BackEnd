@@ -1,9 +1,10 @@
 
-from dbconnection import connectdb as db
+from dbconnection import connectdb as database
 from datetime import timezone, datetime
 
 import flask
-market_collection=db().market
+db = database()
+market_collection=db.market
 
 
 class Market:
@@ -36,7 +37,6 @@ class Stock(Market):
         print("gfttcghcghcgh",stock,interval)
         stock_collection=stock
         stock_data=db[stock_collection].find_one({'interval':interval})
-        print()
         if not stock_data["data"]:
             return
         return stock_data["data"]
@@ -186,10 +186,11 @@ class Crypto(Market):
     def getCryptoDataList(interval,collection):
         # print(data)
         crypto_collection=collection
+        # print("Crypto list", interval,collection)
 #print('collect',crypto_data_collection)
-#print('int',interval)
+# print('int',interval)
         crypto_data_list=db[crypto_collection].find_one({"interval":interval})
-#print('data list',crypto_data_list)
+        # print('data list',crypto_data_list)
         if not crypto_data_list:
             return
         return crypto_data_list
