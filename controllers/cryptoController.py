@@ -32,7 +32,7 @@ def cryptoController(server):
             interval=interval
             print("Checkinggg historyy..........")
             history_data=get_history_for_crypto(cryptoname,interval)
-            print("historyyyy",market,interval,history_data)
+            # print("historyyyy",market,interval,history_data)
             # if not historical_data:
             #     return
             # return historical_data
@@ -167,7 +167,7 @@ def cryptoController(server):
         }), 400
 
     @server.route('/timestamp/<market>/<interval>/<timestamp>',methods=['GET'])
-    def take_history_data(market,interval,timestamp):
+    def take_history_data_timestamp(market,interval,timestamp):
         try:
             # data=request.json
             # if not data:
