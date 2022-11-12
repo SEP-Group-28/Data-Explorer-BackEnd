@@ -221,6 +221,46 @@ class Crypto(Market):
             if not result:
                 return
             return result
+
+    def getCryptoDataListForTimeStamp(interval,collection,timestamp):
+        crypto_collection=collection
+#print('collect',crypto_data_collection)
+#print('int',interval)
+        crypto_data_list=db[crypto_collection].aggregate([
+            {'$match' :{"interval":interval}},
+            {'$unwind':'$data'},
+            {'$sort':{'$data':-1}},
+            {"$skip":'timestamp'},
+            {'$limit':5},
+            # {'$sort':{'$data':1}}
+    
+           ] )
+        list1=list(crypto_data_list)
+    # list1=
+        list1.reverse()
+        crypto_list=[i['data'] for i in list1]
+        # crypto_list=list(crypto_data_list)[::-1]
+        
+#print('data list',crypto_data_list)
+        if not crypto_list:
+            return
+        return crypto_list
+    
+    # def removeCryptoDataList(interval,collection):
+    #     crypto_collection=collection
+    #     result=db[crypto_collection].delete_one({'interval':interval})
+    #     if not result:
+    #         return
+    #     return result
+
+    # def insertCryptoDataList(interval,collection,new_data):
+    #     crypto_collection=collection
+    #     result=db[crypto_collection].insert_one({'interval':interval,'data':new_data})
+    #     print('inserted db',result)
+    #     if not result:
+    #         return
+    #     return result
+
   
 
         
