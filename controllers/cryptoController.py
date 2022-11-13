@@ -166,8 +166,8 @@ def cryptoController(server):
                 "data": None
         }), 400
 
-    @server.route('/timestamp/<market>/<interval>/<timestamp>',methods=['GET'])
-    def take_history_data_timestamp(market,interval,timestamp):
+    @server.route('/history/<market>/<interval>/<timestamp>/<datalimit>',methods=['GET'])
+    def take_history_data_timestamp(market,interval,timestamp,datalimit):
         try:
             # data=request.json
             # if not data:
@@ -184,7 +184,7 @@ def cryptoController(server):
             cryptoname= market
             interval=interval
             print("Checkinggg historyy..........")
-            history_data=get_history_for_crypto_timestamp(cryptoname,interval,timestamp)
+            history_data=get_history_for_crypto_timestamp(cryptoname,interval,timestamp,datalimit)
             print("historyyyy",market,interval,timestamp,history_data)
             # if not historical_data:
             #     return
@@ -201,6 +201,7 @@ def cryptoController(server):
             }), 400
 
         except Exception as e:
+            print("error",e)
             return jsonify({
                 "message": "failed to get history details",
                 "error": str(e),

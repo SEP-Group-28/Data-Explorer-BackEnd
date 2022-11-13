@@ -192,8 +192,8 @@ class Crypto_Broker:
         # print('history data requesting',history_data)
         return(history_data)
 
-    def get_historical_data_timestamp(self,cryptoname,interval,timestamp):
-        history_data= Crypto.getCryptoDataListForTimeStamp(interval,cryptoname,timestamp)
+    def get_historical_data_timestamp(self,cryptoname,interval,timestamp,datalimit):
+        history_data= Crypto.getCryptoDataListForTimeStamp(interval,cryptoname,timestamp,datalimit)
     
         # history_data = history_details['data']
         #CHECK

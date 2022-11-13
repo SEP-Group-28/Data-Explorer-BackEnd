@@ -225,16 +225,16 @@ class Crypto(Market):
                 return
             return result
 
-    def getCryptoDataListForTimeStamp(interval,collection,timestamp):
+    def getCryptoDataListForTimeStamp(interval,collection,timestamp,datalimit):
         crypto_collection=collection
 #print('collect',crypto_data_collection)
 #print('int',interval)
         crypto_data_list=db[crypto_collection].aggregate([
             {'$match' :{"interval":interval}},
             {'$unwind':'$data'},
-            {'$sort':{'$data':-1}},
-            {"$skip":timestamp},
-            {'$limit':5},
+            {'$sort':{'data':-1}},
+            {"$skip":int(timestamp)},
+            {'$limit':int(datalimit)},
             # {'$sort':{'$data':1}}
     
            ] )
