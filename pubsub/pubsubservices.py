@@ -24,6 +24,10 @@ def subscribe_to_socket_for_real_time_crypto(name,interval):
 #     crypto_broker.publish(name,interval,raw_data,candleclosed)
 
 def publish_to_socket_for_real_time_crypto(name,interval,raw_data): 
+    #FTX
+
+    change= name.split('USDT')
+    name=change[0]+'/USDT'
     crypto_broker=crypto_brokers[name][interval]
     
     crypto_broker.publish(name,interval,raw_data)

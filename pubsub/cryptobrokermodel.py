@@ -38,13 +38,22 @@ class Crypto_Broker:
         #     msg['close'].iloc[-1],
         #     msg['volume'].iloc[-1]
         #     ]
-        
-        send_msg= [msg['k']['t'],
-                    msg['k']['o'],
-                    msg['k']['h'],
-                    msg['k']['l'],
-                    msg['k']['c'],
-                    msg['k']['v'],
+        time=(float(msg['k']['t'])/1000)
+        open_price=float( msg['k']['o'])
+        high_price=float(msg['k']['h'])
+        low_price=float(msg['k']['l'])
+        close_price=float(msg['k']['c'])
+        volume=float(msg['k']['v'])
+        candle_closed=msg['k']['x']
+        price= float(msg['k']['c'])
+
+
+        send_msg= [time,
+                    open_price,
+                    high_price,
+                    low_price,
+                    close_price,
+                    volume
                     ]
         
         # [[id,crypto,price,token],[id,crypto,price,token],[id,crypto,price,token]]
@@ -75,11 +84,10 @@ class Crypto_Broker:
         #             if price in alertsdict:
         #                 alertsdict.pop(float(price))
         #                 print(alertsdict)
-        print(msg)
+        # print(msg)
         #FTX
-        candle_closed=msg['k']['x']
+        # print(type(msg['k']['c']))
         # price=msg['close'].iloc[-1]
-        price= msg['k']['c']
         # print(type(price))
         if interval=='1m':
             alertsdict=Alert().take_previous_alerts_for_price(cryptoname)['alertlist']
@@ -125,7 +133,7 @@ class Crypto_Broker:
                 peak_price = float(crypto_data[-1][1])
                 #FTX
                 # open_price= msg['open'].iloc[-1]
-                open_price= msg['k']['o']
+        
                 
                 percent_price = ((float(open_price) - peak_price)/peak_price)*100
 

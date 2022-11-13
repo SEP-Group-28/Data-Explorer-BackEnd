@@ -19,10 +19,11 @@ def start_streaming():
     # client =FtxClientWs()
    
     
-
+    print(api_key)
+    print(api_secret)
     if (checkInternetSocket()):
 
-        twm = ThreadedWebsocketManager(api_key=api_key, api_secret=api_secret)
+        twm = ThreadedWebsocketManager(api_key='E4qXXp67zhZevj0Um2AQ83OPvDEjysaRVdfHRPvNXR2EXWjIW9dyjZPY4ep574CC', api_secret='pYiSC30hGJqqOBFlmNcaLgojSx5scRf2xEBCp3feuc9CIq7T1wKpCQwdI7H5EUaW')
 
         twm.start()
 
@@ -33,16 +34,16 @@ def start_streaming():
         fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({"type":"crypto"})
         for crypto in  fetched_crypto_list_from_market['list']:
             if (crypto not in crypto_list):
-                crypto_list.append(crypto)
+                crypto_list.append((crypto.split('/USDT')[0])+'USDT')
 
-
+        print(crypto_list)
         for crypto in crypto_list:
         # crypto='SOL/USDT'
             # client._subscribe({'channel': 'trades', 'market': crypto})
             # trades=client._trades[crypto]
             # print('trades',id(trades))
             start_listen_for_each_crypto_interval(twm,crypto)
-            print('starteed')
+            # print('starteed')
 
 
 def start_listen_for_each_crypto_interval(twm, crypto):
@@ -74,7 +75,7 @@ def start_listen_for_each_crypto_interval(twm, crypto):
     twm.start_kline_socket(callback=handle_socket_message, symbol=crypto, interval=KLINE_INTERVAL_1HOUR)
     twm.start_kline_socket(callback=handle_socket_message, symbol=crypto, interval=KLINE_INTERVAL_1DAY)
 
-    
+    # twm.join()
 def checkInternetSocket(host="8.8.8.8", port=53, timeout=3):
     try:
         socket.setdefaulttimeout(timeout)
@@ -98,3 +99,4 @@ def reboot_binance_connection():
         if (reboot):
             print("Internet Connection rebooted")
             start_streaming()
+
