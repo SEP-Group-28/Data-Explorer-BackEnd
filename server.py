@@ -6,8 +6,9 @@ from controllers.technicalIndicactorsController import technicalIndicactorsContr
 
 
 
-
-from FTX.websocketCall import start_streaming
+#FTX
+# from FTX.websocketCall import start_streaming
+from Binance.websocketCall import start_streaming,reboot_binance_connection
 from controllers.watchlistController import watchlistController
 from flask import Flask
 from flask_cors import CORS
@@ -42,7 +43,7 @@ def server_intialize():
     scheduler = BackgroundScheduler()
 
 
-    # @server.before_first_request
+    @server.before_first_request
     def activate_job():
         # pass
         start_publisher_subscriber_model()
@@ -50,6 +51,7 @@ def server_intialize():
         # scheduler.add_job(look_for_nots)
         # scheduler.add_job(send_alerts)
         # scheduler.add_job(look_for_nots)
+        scheduler.add_job(reboot_binance_connection)
         scheduler.start()
 
     authController(server)

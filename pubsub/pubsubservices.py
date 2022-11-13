@@ -17,13 +17,26 @@ def subscribe_to_socket_for_real_time_crypto(name,interval):
     crypto_broker = crypto_brokers[name][interval]
     return(crypto_broker.subscribe())
 
-def publish_to_socket_for_real_time_crypto(name,interval,raw_data,candleclosed): 
+#FTX code
+# def publish_to_socket_for_real_time_crypto(name,interval,raw_data,candleclosed): 
+#     crypto_broker=crypto_brokers[name][interval]
+    
+#     crypto_broker.publish(name,interval,raw_data,candleclosed)
+
+def publish_to_socket_for_real_time_crypto(name,interval,raw_data): 
+    #FTX
+
+    change= name.split('USDT')
+    name=change[0]+'/USDT'
     crypto_broker=crypto_brokers[name][interval]
     
-    crypto_broker.publish(name,interval,raw_data,candleclosed)
+    crypto_broker.publish(name,interval,raw_data)
 
 def get_history_for_crypto(cryptoname,interval):
     return(crypto_brokers[cryptoname][interval].get_historical_data(cryptoname,interval))
+
+def get_history_for_crypto_timestamp(cryptoname,interval,timestamp,datalimit):
+    return(crypto_brokers[cryptoname][interval].get_historical_data_timestamp(cryptoname,interval,timestamp,datalimit))
 
 def start_publisher_subscriber_model():  #Initialize the model for each crypto interval
     fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({'type':'crypto'})

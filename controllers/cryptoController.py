@@ -6,7 +6,7 @@ from flask import jsonify,request,Response
 from models.user import User
 from middlewares.verifyRoles import verifyRole
 # from dotenv import load_dotenv
-from pubsub.pubsubservices import subscribe_to_socket_for_real_time_crypto,get_history_for_crypto
+from pubsub.pubsubservices import subscribe_to_socket_for_real_time_crypto,get_history_for_crypto,get_history_for_crypto_timestamp
 # load_dotenv()
 import os
 from models.market import Crypto
@@ -32,7 +32,7 @@ def cryptoController(server):
             interval=interval
             print("Checkinggg historyy..........")
             history_data=get_history_for_crypto(cryptoname,interval)
-            print("historyyyy",market,interval,history_data)
+            # print("historyyyy",market,interval,history_data)
             # if not historical_data:
             #     return
             # return historical_data
@@ -88,7 +88,7 @@ def cryptoController(server):
                 # print('messages',messages.get())
                 while True:   
                     msg = messages.get()
-                    # print('listened',interval,cryptoname,msg)
+                    print('listened',interval,cryptoname,msg)
                     # encoded=str(msg).encode()
                     # print('encoded ',msg)
                     yield msg
@@ -165,6 +165,49 @@ def cryptoController(server):
                 "error": str(e),
                 "data": None
         }), 400
+
+    @server.route('/history/<market>/<interval>/<timestamp>/<datalimit>',methods=['GET'])
+    def take_history_data_timestamp(market,interval,timestamp,datalimit):
+        try:
+            # data=request.json
+            # if not data:
+            #     return {
+            #         "message": "Please provide crypto details",
+            #         "data": None,
+            #         "error": "Bad request"
+            #     }, 400
+            market=market+'/USDT'
+            # cryptocurrency=Crypto(data['cryptoname'])
+            # cryptoname= data['cryptoname']
+            # interval=data['interval']
+            # history_data=get_history(cryptoname,interval)
+            cryptoname= market
+            interval=interval
+            print("Checkinggg historyy..........")
+            history_data=get_history_for_crypto_timestamp(cryptoname,interval,timestamp,datalimit)
+            print("historyyyy",market,interval,timestamp,history_data)
+            # if not historical_data:
+            #     return
+            # return historical_data
+            # history_data=cryptocurrency.readHistory(data)
+            if(history_data):
+                    return jsonify({
+                    "message": "successfully retrieved history details",
+                    "data": history_data
+                })
+            return jsonify({
+                    "message": "failed to get history details",
+                    "data": None
+            }), 400
+
+        except Exception as e:
+            print("error",e)
+            return jsonify({
+                "message": "failed to get history details",
+                "error": str(e),
+                "data": None
+        }), 400
+
 
            
 

@@ -1,9 +1,10 @@
 
-from dbconnection import connectdb as db
+from dbconnection import connectdb as database
 from datetime import timezone, datetime
 
 import flask
-market_collection=db().market
+db = database()
+market_collection=db.market
 
 
 class Market:
@@ -36,7 +37,6 @@ class Stock(Market):
         print("gfttcghcghcgh",stock,interval)
         stock_collection=stock
         stock_data=db[stock_collection].find_one({'interval':interval})
-        print()
         if not stock_data["data"]:
             return
         return stock_data["data"]
@@ -66,14 +66,16 @@ class Stock(Market):
             for index in range(1,len(candlelines)):
                 data = candlelines[index].split(',')
                 Date = data[0].split('-')
-                unix_timestamp = int(datetime(int(Date[0]), int(Date[1]), int(Date[2])).replace(tzinfo=timezone.utc).timestamp()*1000)
+                unix_timestamp = float(datetime(int(Date[0]), int(Date[1]), int(Date[2])).replace(tzinfo=timezone.utc).timestamp()*1000)
                 data[0] = unix_timestamp
-                candledata.append(data[:6])
+                candledata.append([float(i) for i in data[:6]])
             file.close()
             db[(filename.split('.')[0]).upper()].insert_one({
                 "interval": "1d",
                 "data": candledata
             })
+            print(candledata)
+
 
     def insert_1hour_interval_stock_data_to_database(self,stock_text_list,path):
         for filename in stock_text_list:
@@ -84,10 +86,10 @@ class Stock(Market):
             for index in range(1,len(candlelines)):
                 data = candlelines[index].split(',')
                 concat_datetime = data[0] + ' ' + data[1]
-                unix_timestamp = int(datetime.strptime(concat_datetime, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp()*1000)
+                unix_timestamp = float(datetime.strptime(concat_datetime, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp()*1000)
                 data = data[1:7]
                 data[0] = unix_timestamp
-                candledata.append(data)
+                candledata.append([float(i) for i in data])
             
             file.close() 
             
@@ -95,7 +97,7 @@ class Stock(Market):
                 "interval": "1h",
                 "data": candledata
             })
-       
+            print(candledata)
 
 
     def insert_5min_interval_stock_data_to_database(self,stock_text_list,path):
@@ -107,10 +109,10 @@ class Stock(Market):
             for index in range(1,len(candlelines)):
                 data = candlelines[index].split(',')
                 concat_datetime = data[0] + ' ' + data[1]
-                unix_timestamp = int(datetime.strptime(concat_datetime, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp()*1000)
+                unix_timestamp = float(datetime.strptime(concat_datetime, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp()*1000)
                 data = data[1:7]
                 data[0] = unix_timestamp
-                candledata.append(data)
+                candledata.append([float(i) for i in data])
             
             file.close()
         
@@ -186,10 +188,11 @@ class Crypto(Market):
     def getCryptoDataList(interval,collection):
         # print(data)
         crypto_collection=collection
+        # print("Crypto list", interval,collection)
 #print('collect',crypto_data_collection)
-#print('int',interval)
+# print('int',interval)
         crypto_data_list=db[crypto_collection].find_one({"interval":interval})
-#print('data list',crypto_data_list)
+        # print('data list',crypto_data_list)
         if not crypto_data_list:
             return
         return crypto_data_list
@@ -221,6 +224,46 @@ class Crypto(Market):
             if not result:
                 return
             return result
+
+    def getCryptoDataListForTimeStamp(interval,collection,timestamp,datalimit):
+        crypto_collection=collection
+#print('collect',crypto_data_collection)
+#print('int',interval)
+        crypto_data_list=db[crypto_collection].aggregate([
+            {'$match' :{"interval":interval}},
+            {'$unwind':'$data'},
+            {'$sort':{'data':-1}},
+            {"$skip":int(timestamp)},
+            {'$limit':int(datalimit)},
+            # {'$sort':{'$data':1}}
+    
+           ] )
+        list1=list(crypto_data_list)
+    # list1=
+        list1.reverse()
+        crypto_list=[i['data'] for i in list1]
+        # crypto_list=list(crypto_data_list)[::-1]
+        
+#print('data list',crypto_data_list)
+        if not crypto_list:
+            return
+        return crypto_list
+    
+    # def removeCryptoDataList(interval,collection):
+    #     crypto_collection=collection
+    #     result=db[crypto_collection].delete_one({'interval':interval})
+    #     if not result:
+    #         return
+    #     return result
+
+    # def insertCryptoDataList(interval,collection,new_data):
+    #     crypto_collection=collection
+    #     result=db[crypto_collection].insert_one({'interval':interval,'data':new_data})
+    #     print('inserted db',result)
+    #     if not result:
+    #         return
+    #     return result
+
   
 
         
