@@ -21,7 +21,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp(market_name+"/USDT", interval,timestamp,datalimit)
         elif market_type=='stock':
-            klines=Stock().getStockDataList(market_name,interval)
+            klines=Stock().getStockDataListTimestamp(market_name,interval,timestamp,datalimit)
             # klines = get_historical_stock_data(name, interval)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
@@ -32,7 +32,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp(market_name+"/USDT", interval,timestamp,datalimit)
         elif market_type=='stock':
-            klines = Stock().getStockDataList(market_name, interval)
+            klines = Stock().getStockDataListTimestamp(market_name, interval,timestamp,datalimit)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         volume = np.array([i[5] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
@@ -42,7 +42,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp(market_name+"/USDT", interval,timestamp,datalimit)
         elif market_type=='stock':
-            klines = Stock().getStockDataList(market_name, interval)
+            klines = Stock().getStockDataListTimestamp(market_name, interval,timestamp,datalimit)
         high_prices = np.array([i[2] for i in klines], dtype=float)
         low_prices = np.array([i[3] for i in klines], dtype=float)
         close_prices = np.array([i[4] for i in klines], dtype=float)
