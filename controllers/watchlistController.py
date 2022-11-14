@@ -10,6 +10,54 @@ from middlewares.verifyRoles import verifyRole
 import os
 
 def watchlistController(server):
+    # @server.route('/remove-market', methods=['DELETE'])
+    # @verifyJWT
+    # def removemarket(current_user):
+    #     try:
+    #         data=json.loads(request.data)
+    #         print("data remove market", data)
+    #         id=current_user["_id"]
+    #         print("user id", id)
+    #         crypto=data['crypto']
+    #         watchlistmodel=Watchlist()
+    #         watchlist=watchlistmodel.getwatchlist(id)
+    #         print("watchlist remove ", watchlist)
+    #         if(watchlist):
+    #             # watchlist=getresult['list']
+    #             if crypto in watchlist:
+    #                 watchlist.remove(crypto)
+            
+    #                 updateresult=watchlistmodel.updatewatchlist(id,watchlist)
+    #                 if(updateresult):
+    #                     updatedwatchlist=watchlistmodel.getwatchlist(id)
+    #                     return {
+    #                     "message": "Successfully remove crypto from watchlist",
+    #                     "data": updatedwatchlist
+    #                     },200
+    #                 else:
+    #                     return {
+    #                                 "message": "Watchlist is empty",
+    #                                 "data": None
+    #                             },200
+               
+    #             return {
+    #                     "message": "Remove crypto from watchlist fail",
+    #                     "data":None
+    #                 },400
+    #         return {
+    #                     "message": "No watchlist for this user",
+    #                     "data":False
+    #                 },400
+
+
+    #     except Exception as e:
+    #         print(e)
+    #         return {
+    #                     "message": "Remove crypto from watchlist fail",
+    #                     "data":None,
+    #                     "error":str(e)
+    #                 },400
+
     @server.route('/remove-market', methods=['DELETE'])
     @verifyJWT
     def removemarket(current_user):
@@ -24,26 +72,29 @@ def watchlistController(server):
             print("watchlist remove ", watchlist)
             if(watchlist):
                 # watchlist=getresult['list']
-                if crypto in watchlist:
-                    watchlist.remove(crypto)
+                for i in crypto:
+                    if i in watchlist:
+                        watchlist.remove(i)
+                # if crypto in watchlist:
+                #     watchlist.remove(crypto)
             
-                    updateresult=watchlistmodel.updatewatchlist(id,watchlist)
-                    if(updateresult):
-                        updatedwatchlist=watchlistmodel.getwatchlist(id)
-                        return {
-                        "message": "Successfully remove crypto from watchlist",
-                        "data": updatedwatchlist
-                        },200
-                    else:
-                        return {
-                                    "message": "Watchlist is empty",
-                                    "data": None
-                                },200
+                updateresult=watchlistmodel.updatewatchlist(id,watchlist)
+                if(updateresult):
+                    updatedwatchlist=watchlistmodel.getwatchlist(id)
+                    return {
+                    "message": "Successfully remove crypto from watchlist",
+                    "data": updatedwatchlist
+                    },200
+                else:
+                    return {
+                                "message": "Watchlist is empty",
+                                "data": None
+                            },200
                
-                return {
-                        "message": "Remove crypto from watchlist fail",
-                        "data":None
-                    },400
+                # return {
+                #         "message": "Remove crypto from watchlist fail",
+                #         "data":None
+                #     },400
             return {
                         "message": "No watchlist for this user",
                         "data":False
