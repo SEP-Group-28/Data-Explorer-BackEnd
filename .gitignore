@@ -2,5 +2,6 @@ __pycache__/
 /env
 /venvMarketData
 .vscode
+tempCodeRunnerFile.py
 /python=3.9
 pip
