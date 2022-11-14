@@ -84,7 +84,7 @@ def checkInternetSocket(host="8.8.8.8", port=53, timeout=3):
     except socket.error as ex:
         return (False)
 
-def reboot_binance_connection():
+def restart_binance_connection():
 
     while (True):
 

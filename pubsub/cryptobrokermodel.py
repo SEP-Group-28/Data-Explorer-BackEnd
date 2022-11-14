@@ -122,7 +122,7 @@ class Crypto_Broker:
             try:
                 self.subscribers[i].put_nowait(convert_to_sse_format(json.dumps(send_msg)))
             except queue.Full:
-                del self.listeners[i]
+                del self.subscribers[i]
 
         if (interval=="1m" and candle_closed==True):
 
