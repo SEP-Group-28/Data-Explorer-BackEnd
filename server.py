@@ -8,7 +8,7 @@ from controllers.technicalIndicactorsController import technicalIndicactorsContr
 
 #FTX
 # from FTX.websocketCall import start_streaming
-from Binance.websocketCall import start_streaming,reboot_binance_connection
+from Binance.websocketCall import start_streaming,restart_binance_connection
 from controllers.watchlistController import watchlistController
 from flask import Flask
 from flask_cors import CORS
@@ -51,7 +51,7 @@ def server_intialize():
         # scheduler.add_job(look_for_nots)
         # scheduler.add_job(send_alerts)
         # scheduler.add_job(look_for_nots)
-        scheduler.add_job(reboot_binance_connection)
+        scheduler.add_job(restart_binance_connection)
         scheduler.start()
 
     authController(server)
