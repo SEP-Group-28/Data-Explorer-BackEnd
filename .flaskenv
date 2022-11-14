@@ -1,4 +1,4 @@
-FLASK_APP=server.py
+FLASK_APP=start.py
 FLASK_ENV=development
 FLASK_DEBUG=1
 FLASK_RUN_PORT=500
