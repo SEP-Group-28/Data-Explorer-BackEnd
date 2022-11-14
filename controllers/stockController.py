@@ -20,7 +20,12 @@ def stockController(server):
         json_format_stock_data = json.dumps(stockdata)
         return json_format_stock_data
 
-
+    @server.route('/stockhistory/<stock>/<interval>/<timestamp>/<datalimit>',methods=['GET'])
+    def take_stock_history_data_timestamp(stock,interval,timestamp,datalimit):
+        stockdata = Stock().getStockDataListTimestamp(stock, interval,timestamp,datalimit)
+        # print(stockdata)
+        json_format_stock_data = json.dumps(stockdata)
+        return json_format_stock_data
 
     @server.route('/getstocklist',methods=['GET'])
     def get_stock_list():
