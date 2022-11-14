@@ -46,7 +46,7 @@ class Crypto_Broker:
         volume=float(msg['k']['v'])
         candle_closed=msg['k']['x']
         price= float(msg['k']['c'])
-
+        # print(cryptoname, interval)
 
         send_msg= [time,
                     open_price,
@@ -124,33 +124,33 @@ class Crypto_Broker:
             except queue.Full:
                 del self.listeners[i]
 
-        if (interval=="1m" and candle_closed==True):
+        # if (interval=="1m" and candle_closed==True):
 
-            # data = db_action("read_one",[{"type":"data_1d"},sy],"admin")
-            crypto_data_list_details=Crypto.getCryptoDataList('1d',cryptoname)
-            crypto_data=crypto_data_list_details['data']
-            if len(crypto_data)!=0:
-                peak_price = float(crypto_data[-1][1])
-                #FTX
-                # open_price= msg['open'].iloc[-1]
+        #     # data = db_action("read_one",[{"type":"data_1d"},sy],"admin")
+        #     crypto_data_list_details=Crypto.getCryptoDataList('1d',cryptoname)
+        #     crypto_data=crypto_data_list_details['data']
+        #     if len(crypto_data)!=0:
+        #         peak_price = float(crypto_data[-1][1])
+        #         #FTX
+        #         # open_price= msg['open'].iloc[-1]
         
                 
-                percent_price = ((float(open_price) - peak_price)/peak_price)*100
+        #         percent_price = ((float(open_price) - peak_price)/peak_price)*100
 
-                if (percent_price>75):
-                    pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 75 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price>50):
-                    pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 50 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price>25):
-                    pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 25 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price>5):
-                    pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 5 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price<(-25)):
-                    pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 25 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price<(-50)):
-                    pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 50 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
-                elif(percent_price<(-75)):
-                    pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 75 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+        #         if (percent_price>75):
+        #             pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 75 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+        #         elif(percent_price>50):
+        #             pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 50 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+        #         elif(percent_price>25):
+        #             pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 25 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+        #         elif(percent_price>5):
+        #             pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 5 percent incriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+        #         elif(percent_price<(-25)):
+        #             pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 25 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+        #         elif(percent_price<(-50)):
+        #             pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 50 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
+        #         elif(percent_price<(-75)):
+        #             pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Over 75 percent decriment","symbol":cryptoname,"open price":open_price,"current peak price":peak_price, 'id':Random.randInt()})
 
         if len(self.push_queue)<=5:  
             if(candle_closed==True): #add trade data in relevant interval
@@ -194,7 +194,14 @@ class Crypto_Broker:
 
     def get_historical_data_timestamp(self,cryptoname,interval,timestamp,datalimit):
         history_data= Crypto.getCryptoDataListForTimeStamp(interval,cryptoname,timestamp,datalimit)
+        print("timestamp datalimit",timestamp,datalimit)
     
+        if (int(timestamp) == 0):
+            for trade_data in self.push_queue:
+                last_history_data_time=history_data[-1][0]
+                trade_data_time=trade_data[0]
+                if (last_history_data_time<trade_data_time):
+                    history_data.append(trade_data)
         # history_data = history_details['data']
         #CHECK
         # for trade_data in self.push_queue:
@@ -203,6 +210,7 @@ class Crypto_Broker:
         #     if (last_history_data_time<trade_data_time):  ##Additional protection to certify data 
         #         history_data.append(trade_data)   
         # print('history data requesting',history_data)
+
         return(history_data)
 
 
