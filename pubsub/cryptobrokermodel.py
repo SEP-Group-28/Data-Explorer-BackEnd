@@ -9,7 +9,7 @@ from models.market import Crypto
 from .import pubsubservices
 from firebase.confirebase import confirebase
 from models.alert import Alert
-from pubsubservices import publish_to_socket_for_real_time_notifications
+
 
 
 
@@ -112,7 +112,7 @@ class Crypto_Broker:
                     for i in alertsdict 
                     if ((((previous_price<=i[0]<=current_price) 
                     or (previous_price>=i[0]>=current_price))and interval=='1m') and 
-                    (confirebase(cryptoname,i[0],i[1])) and (publish_to_socket_for_real_time_notifications({"message":"successful","type":"Crossing","price":price,"symbol":cryptoname},i[1]))  
+                    (confirebase(cryptoname,i[0],i[1])) and ( pubsubservices.publish_to_socket_for_real_time_notifications({"message":"successful","type":"Crossing","price":price,"symbol":cryptoname},i[1]))  
                     and False) or (((previous_price>i[0] or i[0]>current_price) 
                     and (previous_price<i[0] or 
                      i[0]<current_price)) or interval!='1m')]
@@ -233,8 +233,6 @@ class Crypto_Broker:
                 if (last_history_data_time<trade_data_time):
                     history_data.append(trade_data)
         return(history_data)
-        
-
 
     
 class NotificationAnnouncer:
