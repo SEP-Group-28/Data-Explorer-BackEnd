@@ -13,8 +13,10 @@ class Notification:
     def __init__(self):
         return
 
-    def insertnotifications(data):
-        result=notification_collection.insert_one(data)
+    def insertnotifications(data,user_id):
+        result=notification_collection.update_one({
+            "_id":user_id},
+            {"$push":{"alertlist":[data['time'],data['data']['symbol'],data['data']['price']]}})
         # watchlist=db[crypt].find_one({'userid':id})
         # if not watchlist:
         #     return False

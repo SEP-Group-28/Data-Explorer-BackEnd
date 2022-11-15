@@ -40,7 +40,46 @@ class Stock(Market):
         if not stock_data["data"]:
             return
         return stock_data["data"]
+    
+    def getStockDataListTimestamp(self,stock, interval,timestamp,datalimit):
+        stock_collection=stock
+        print("Timestamp , limit",timestamp,datalimit,interval)
+        stock_data = db[stock_collection].aggregate([
+            {'$match' :{"interval":interval}},
+            {'$unwind':'$data'},
+            {'$sort':{'data':-1}},
+            {"$skip":int(timestamp)},
+            {'$limit':int(datalimit)},
+            # {'$sort':{'data':1}},
+        ])
         
+        list1 = list(stock_data)
+        list1.reverse()
+        stock_list = [i['data'] for i in list1]
+        
+        if not stock_list:
+            return
+        return stock_list
+        
+    def getStockDataListTimestampForIndicators(self,stock, interval,timestamp,datalimit,indicator):
+        stock_collection=stock
+        print("Timestamp , limit",timestamp,datalimit,interval)
+        stock_data = db[stock_collection].aggregate([
+            {'$match' :{"interval":interval}},
+            {'$unwind':'$data'},
+            {'$sort':{'data':-1}},
+            {"$skip":int(timestamp)},
+            {'$limit':int(datalimit)+indicator},
+            # {'$sort':{'data':1}},
+        ])
+        
+        list1 = list(stock_data)
+        list1.reverse()
+        stock_list = [i['data'] for i in list1]
+        
+        if not stock_list:
+            return
+        return stock_list
     # def getStock(self):
     #     stock_data=market_collection.find_one({'type':'stock'})
     #     if not stock_data:
@@ -245,6 +284,28 @@ class Crypto(Market):
         # crypto_list=list(crypto_data_list)[::-1]
         
 #print('data list',crypto_data_list)
+        if not crypto_list:
+            return
+        return crypto_list
+
+    def getCryptoDataListForTimeStampForIndicator(interval,collection,timestamp,datalimit,indicator):
+        print('datalimit+indicator',datalimit,indicator,'plus=',int(datalimit)+indicator)
+        crypto_collection=collection
+#print('collect',crypto_data_collection)
+#print('int',interval)
+        crypto_data_list=db[crypto_collection].aggregate([
+            {'$match' :{"interval":interval}},
+            {'$unwind':'$data'},
+            {'$sort':{'data':-1}},
+            {"$skip":int(timestamp)},
+            {'$limit':int(datalimit)+indicator},
+            # {'$sort':{'$data':1}}
+    
+           ] )
+        list1=list(crypto_data_list)
+    # list1=
+        list1.reverse()
+        crypto_list=[i['data'] for i in list1]
         if not crypto_list:
             return
         return crypto_list
