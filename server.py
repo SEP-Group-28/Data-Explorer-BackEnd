@@ -50,7 +50,7 @@ def server_intialize():
         scheduler.add_job(start_streaming)
         # scheduler.add_job(look_for_nots)
         # scheduler.add_job(send_alerts)
-        # scheduler.add_job(look_for_nots)
+        scheduler.add_job(look_for_nots)
         scheduler.add_job(restart_binance_connection)
         scheduler.start()
 

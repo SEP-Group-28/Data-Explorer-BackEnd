@@ -46,9 +46,14 @@ def alertController(server):
         # print('token',token)
          
         try:
-            alert_list=Alert().remove_alert_for_price(crypto_name,float(crypto_price),current_user["_id"])
-            return{"message": "Successfully removed alert",
-                "alertlist": alert_list['alertlist']},200
+            alert = Alert().remove_alert_for_price(crypto_name,float(crypto_price),current_user["_id"])
+            # print(alert)
+            if not(alert):
+                return{"message": "Already removed"},202
+            else :
+                alert_list=alert
+                return{"message": "Successfully removed alert",
+                    "alertlist": alert_list['alertlist']},200
         except Exception as e:
             return jsonify({
                 "message": "failed to add alert",

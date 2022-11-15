@@ -14,6 +14,10 @@ class Notification:
         return
 
     def insertnotifications(data,user_id):
+        print("=======================")
+        print('data is',data)
+        print('user_id is',user_id)
+        print("=======================")
         result=notification_collection.update_one({
             "_id":user_id},
             {"$push":{"alertlist":[data['time'],data['data']['symbol'],data['data']['price']]}})
