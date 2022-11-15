@@ -14,18 +14,35 @@ import os
 
 
 def notificationController(server):
-    @server.route('/notifications/present/<crypto_name>/<id>', methods=['GET'])
-    def take_present_notifications(crypto_name,id):
-        def stream(crypto_name,id):
-            notifications = subscribe_to_socket_for_real_time_notifications(crypto_name,id)
+    @server.route('/notifications/present', methods=['GET'])
+    @verifyJWT
+    def take_present_notifications(current_user):
+        print("hello im taking present notifications now")
+        id = current_user["_id"]
+        def stream(id):
+            notifications = subscribe_to_socket_for_real_time_notifications(id)
             while True:                        
                 msg = notifications.get()  
+                print("oh here is my msg",msg)
+                print("oh here is my notifications 1", notifications)
                 yield msg
 
-        return Response(stream(crypto_name,id), mimetype='text/event-stream')
+        return Response(stream(id), mimetype='text/event-stream')
 
 
-    @server.route('/notifications/history/open_price', methods=['GET'])
-    def take_history_notifications():
+    @server.route('/notifications/history', methods=['GET'])
+    @verifyJWT
+    def take_history_notifications(current_user):
+        id = current_user["_id"]
+        print("user id", id)
         print("receving........")
-        return(historical_nots())
+        return(historical_nots(id))
+
+    @server.route('/notifications/get-count', methods=['GET'])
+    @verifyJWT
+    def take_history_notifications_count(current_user):
+        id = current_user["_id"]
+        print("user id", id)
+        print("receving........")
+        # print(historical_nots(id))
+        return str(len(historical_nots(id)['last day notifications']))

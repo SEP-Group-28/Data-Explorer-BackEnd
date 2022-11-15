@@ -28,6 +28,7 @@ class Crypto_Broker:
         return q
     #FTX
     def publish(self,cryptoname,interval, msg):
+        # print("publishingggg......")
         # global previous_price
 
         #FTX
@@ -94,7 +95,7 @@ class Crypto_Broker:
         def sending_notifications(i):
             confirebase(cryptoname,i[0],i[1])
             pubsubservices.publish_to_socket_for_real_time_notifications(
-                {"message":"successful","type":"Crossing","price":price,"symbol":cryptoname},i[1])
+                {"message":"successful","type":"Crossing","price":i[0],"symbol":cryptoname},i[1])
 
         if interval=='1m':
             alertsdict=Alert().take_previous_alerts_for_price(cryptoname)['alertlist']
