@@ -83,7 +83,7 @@ def look_for_nots():
     while(True):
         if(len(notifications)>0):
             crypto_name=notifications[0][0]
-            notification_brokers[crypto_name].announce_nots(notifications[0][1],notifications[0][2])
+            notification_brokers[crypto_name]['1m'].announce_nots(notifications[0][1],notifications[0][2])
             data={"time":int(time()*1000),"data":notifications[0][1]}
             print("pubsub data", data)
             result=Notification.insertnotifications(data,notifications[0][2])
