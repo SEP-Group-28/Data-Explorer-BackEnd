@@ -59,10 +59,10 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
             "1m":Crypto_Broker(),
             "5m":Crypto_Broker()
         }
-        notification_brokers[crypto]={'1m':NotificationAnnouncer()}
 
 # btc:[[],[],[],[],[]],sol:[[]]/\
         crypto_brokers[crypto] =crypto_broker_list
+    notification_brokers['1m'] = NotificationAnnouncer()
 # <crypto>/<crypto_price>/<token>
 # def add_firebase_alert(crypto_name,crypto_price,user_id):
 #     if crypto_price not in alertsdict:
@@ -71,10 +71,11 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
 #         alertsdict[crypto_price].append([crypto_name+'/USDT',user_id])
 
 #     return alertsdict
+    
   
 
-def subscribe_to_socket_for_real_time_notifications(crypto_name,id):
-    return(notification_brokers[crypto_name].listen_nots(id))
+def subscribe_to_socket_for_real_time_notifications(id):
+    return(notification_brokers['1m'].listen_nots(id))
 
 def publish_to_socket_for_real_time_notifications(data,user_id):
     notifications.append([data['symbol'],data,user_id])
@@ -83,8 +84,8 @@ def look_for_nots():
     while(True):
         if(len(notifications)>0):
             crypto_name=notifications[0][0]
-            notification_brokers[crypto_name]['1m'].announce_nots(notifications[0][1],notifications[0][2])
             data={"time":int(time()*1000),"data":notifications[0][1]}
+            notification_brokers['1m'].announce_nots(data,notifications[0][2])
             print("pubsub data", data)
             result=Notification.insertnotifications(data,notifications[0][2])
             print("notification result", result)
@@ -92,10 +93,10 @@ def look_for_nots():
             notifications.pop(0)
 
 
-def historical_nots():
+def historical_nots(id):
     time_filter = int(time()*1000 - (1*24*60*60*1000))
     # timeDetails={"time": {"$gte":time_filter}}
-    query={'alertlist.0.0':{"gte":time_filter}}
+    query=[{'_id':id},{'alertlist.0.0':{"gte":time_filter}}]
     data=Notification.gethistoricnotifications(query)
     print("line 70, ..", data)
     # data = db_action("read_many",[{"time": {"$gte":time_filter}},"notifications"],"admin")

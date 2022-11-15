@@ -20,7 +20,7 @@ class Notification:
         print("=======================")
         result=notification_collection.update_one({
             "_id":user_id},
-            {"$push":{"alertlist":[data['time'],data['data']['symbol'],data['data']['price']]}})
+            {"$push":{"alertlist":[data['time'],data['data']['symbol'],data['data']['price']]}}, upsert=True)
         # watchlist=db[crypt].find_one({'userid':id})
         # if not watchlist:
         #     return False
@@ -32,11 +32,19 @@ class Notification:
 
         
     def gethistoricnotifications(time_period):
+        time_period = time_period[0]
         coll = notification_collection
         result = []
-        for read in coll.find(time_period): # returns a cursor instance of the documents related
-            result.append(read)
-        return(result) 
+
+        # for read in coll.find(time_period): # returns a cursor instance of the documents related
+        #     result.append(read)
+        # return(result) 
+
+        temp = coll.find(time_period) 
+        print("type of temp", type(temp))
+        print("temp alert list", temp[0]['alertlist'])
+        return sorted(temp[0]['alertlist'], key=lambda x: x[0], reverse=True)
+
         # watchlist=notification_collection.insert_one(
         #     {
         #         'userid':id,
