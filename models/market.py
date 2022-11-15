@@ -61,6 +61,25 @@ class Stock(Market):
             return
         return stock_list
         
+    def getStockDataListTimestampForIndicators(self,stock, interval,timestamp,datalimit,indicator):
+        stock_collection=stock
+        print("Timestamp , limit",timestamp,datalimit,interval)
+        stock_data = db[stock_collection].aggregate([
+            {'$match' :{"interval":interval}},
+            {'$unwind':'$data'},
+            {'$sort':{'data':-1}},
+            {"$skip":int(timestamp)},
+            {'$limit':int(datalimit)+indicator},
+            # {'$sort':{'data':1}},
+        ])
+        
+        list1 = list(stock_data)
+        list1.reverse()
+        stock_list = [i['data'] for i in list1]
+        
+        if not stock_list:
+            return
+        return stock_list
     # def getStock(self):
     #     stock_data=market_collection.find_one({'type':'stock'})
     #     if not stock_data:
