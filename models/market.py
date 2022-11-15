@@ -268,6 +268,28 @@ class Crypto(Market):
         if not crypto_list:
             return
         return crypto_list
+
+    def getCryptoDataListForTimeStampForIndicator(interval,collection,timestamp,datalimit,indicator):
+        print('datalimit+indicator',datalimit,indicator,'plus=',int(datalimit)+indicator)
+        crypto_collection=collection
+#print('collect',crypto_data_collection)
+#print('int',interval)
+        crypto_data_list=db[crypto_collection].aggregate([
+            {'$match' :{"interval":interval}},
+            {'$unwind':'$data'},
+            {'$sort':{'data':-1}},
+            {"$skip":int(timestamp)},
+            {'$limit':int(datalimit)+indicator},
+            # {'$sort':{'$data':1}}
+    
+           ] )
+        list1=list(crypto_data_list)
+    # list1=
+        list1.reverse()
+        crypto_list=[i['data'] for i in list1]
+        if not crypto_list:
+            return
+        return crypto_list
     
     # def removeCryptoDataList(interval,collection):
     #     crypto_collection=collection
