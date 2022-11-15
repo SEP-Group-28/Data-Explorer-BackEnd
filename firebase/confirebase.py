@@ -1,16 +1,12 @@
 import requests
 import json
 from models.alertusertoken import Add_TOKEN
-from pubsub.pubsubservices import publish_to_socket_for_real_time_notifications
+# from pubsub.pubsubservices import publish_to_socket_for_real_time_notifications
 
 serverToken='AAAAHH3JbgU:APA91bEEtC7EAGqil7asmq-U1LZ5O6Q0IRGoUcQ0dS6uAv8HKzqlBP0INHLtcvRcEvEX4GD4zKwcftWO6-c6QMksvowSZj8Kf4N1Hv9FLk6-lYdaf_gEz719ucCkr3i6hBDaBYdai-gW'
 
-def confirebase(crypto_name,price,user_id):
+def confirebase(price,user_id):
     token_list=Add_TOKEN().take_token_list(user_id)
-    publish_to_socket_for_real_time_notifications({"message":"successful","type":"Crossing","price":price,"symbol":crypto_name},user_id)
-    
-    
-
     print('price is',price)
     print('printing.....',token_list)
     for i in token_list:
