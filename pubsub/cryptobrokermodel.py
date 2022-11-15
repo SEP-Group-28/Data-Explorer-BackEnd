@@ -213,6 +213,18 @@ class Crypto_Broker:
         # print('history data requesting',history_data)
 
         return(history_data)
+    
+    def get_historical_data_timestamp_for_indicator(self,cryptoname,interval,timestamp,datalimit,indicator):
+
+        history_data= Crypto.getCryptoDataListForTimeStampForIndicator(interval,cryptoname,timestamp,datalimit,indicator)
+        print("timestamp datalimit",timestamp,datalimit)
+    
+        if (int(timestamp) == 0):
+            for trade_data in self.push_queue:
+                last_history_data_time=history_data[-1][0]
+                trade_data_time=trade_data[0]
+                if (last_history_data_time<trade_data_time):
+                    history_data.append(trade_data)
 
 
     
