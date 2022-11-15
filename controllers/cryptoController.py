@@ -185,7 +185,7 @@ def cryptoController(server):
             interval=interval
             print("Checkinggg historyy..........")
             history_data=get_history_for_crypto_timestamp(cryptoname,interval,timestamp,datalimit)
-            print("historyyyy",market,interval,timestamp,history_data)
+            # print("historyyyy",market,interval,timestamp,history_data)
             # if not historical_data:
             #     return
             # return historical_data

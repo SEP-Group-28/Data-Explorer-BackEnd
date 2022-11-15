@@ -241,8 +241,6 @@ class Crypto_Broker:
                 if (last_history_data_time<trade_data_time):
                     history_data.append(trade_data)
         return(history_data)
-        
-
 
     
 class NotificationAnnouncer:

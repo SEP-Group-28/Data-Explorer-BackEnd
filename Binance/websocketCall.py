@@ -36,7 +36,7 @@ def start_streaming():
             if (crypto not in crypto_list):
                 crypto_list.append((crypto.split('/USDT')[0])+'USDT')
 
-        print(crypto_list)
+        # print(crypto_list)
         for crypto in crypto_list:
         # crypto='SOL/USDT'
             # client._subscribe({'channel': 'trades', 'market': crypto})
