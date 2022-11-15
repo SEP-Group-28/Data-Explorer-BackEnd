@@ -18,11 +18,13 @@ class TechnicalIndicator:
     def __init__(self):
         return
     def get_close_values(self,market_type, market_name, interval,timestamp,datalimit,indicator):
+        print("inside close values")
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp_for_indicators(market_name+"/USDT", interval,timestamp,datalimit,indicator)
         elif market_type=='stock':
             klines=Stock().getStockDataListTimestamp(market_name,interval,timestamp,datalimit)
             # klines = get_historical_stock_data(name, interval)
+        # print("klinesss", klines)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
         return close_times, close_prices
@@ -82,7 +84,7 @@ class TechnicalIndicator:
         return json_dict
 
     def calculate_ema(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, timestamp,datalimit,29)
+        close_times, close_prices = self.get_close_values(market_type, market_name,interval, timestamp,datalimit,29)
         ema = talib.EMA(close_prices)
         dict_indicator = dict(zip(close_times[29:], ema[29:]))
         json_dict = json.dumps(dict_indicator)
@@ -90,7 +92,7 @@ class TechnicalIndicator:
 
 
     def calculate_ma(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,29)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,30)
         ma = talib.MA(close_prices)
         dict_indicator = dict(zip(close_times[29:], ma[29:]))
         json_dict = json.dumps(dict_indicator)
