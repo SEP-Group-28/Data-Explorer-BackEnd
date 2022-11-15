@@ -38,6 +38,8 @@ def get_history_for_crypto(cryptoname,interval):
 def get_history_for_crypto_timestamp(cryptoname,interval,timestamp,datalimit):
     return(crypto_brokers[cryptoname][interval].get_historical_data_timestamp(cryptoname,interval,timestamp,datalimit))
 
+def get_history_for_crypto_timestamp_for_indicators(cryptoname,interval,timestamp,datalimit,indicator):
+    return(crypto_brokers[cryptoname][interval].get_historical_data_timestamp_for_indicator(cryptoname,interval,timestamp,datalimit,indicator))
 def start_publisher_subscriber_model():  #Initialize the model for each crypto interval
     fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({'type':'crypto'})
     # symbl_set = db_action("read_one",[{"type":"crypto"},"symbols"],"admin")
