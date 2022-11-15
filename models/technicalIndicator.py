@@ -21,7 +21,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp_for_indicators(market_name+"/USDT", interval,timestamp,datalimit,indicator)
         elif market_type=='stock':
-            klines=Stock().getStockDataListTimestamp(market_name,interval,timestamp,datalimit)
+            klines=Stock().getStockDataListTimestampForIndicators(market_name,interval,timestamp,datalimit,indicator)
             # klines = get_historical_stock_data(name, interval)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
@@ -32,7 +32,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp_for_indicators(market_name+"/USDT", interval,timestamp,datalimit,indicator)
         elif market_type=='stock':
-            klines = Stock().getStockDataListTimestamp(market_name, interval,timestamp,datalimit)
+            klines = Stock().getStockDataListTimestampForIndicators(market_name, interval,timestamp,datalimit,indicator)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         volume = np.array([i[5] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
@@ -42,7 +42,7 @@ class TechnicalIndicator:
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp_for_indicators(market_name+"/USDT", interval,timestamp,datalimit,indicator)
         elif market_type=='stock':
-            klines = Stock().getStockDataListTimestamp(market_name, interval,timestamp,datalimit)
+            klines = Stock().getStockDataListTimestampForIndicators(market_name, interval,timestamp,datalimit,indicator)
         high_prices = np.array([i[2] for i in klines], dtype=float)
         low_prices = np.array([i[3] for i in klines], dtype=float)
         close_prices = np.array([i[4] for i in klines], dtype=float)
@@ -61,7 +61,7 @@ class TechnicalIndicator:
     #     return result
     def calculate_rsi(self,market_type, market_name, interval,timestamp,datalimit):
     
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,14)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,15)
         rsi = talib.RSI(close_prices)
         time_rsi = dict(zip(close_times[14:], rsi[14:]))
         json_time_rsi = json.dumps(time_rsi)
@@ -75,14 +75,14 @@ class TechnicalIndicator:
         return json_dict
     
     def calculate_roc(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,10)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,11)
         roc = talib.ROC(close_prices)
         dict_indicator = dict(zip(close_times[10:], roc[10:]))
         json_dict = json.dumps(dict_indicator)
         return json_dict
 
     def calculate_ema(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, timestamp,datalimit,29)
+        close_times, close_prices = self.get_close_values(market_type, market_name, timestamp,datalimit,30)
         ema = talib.EMA(close_prices)
         dict_indicator = dict(zip(close_times[29:], ema[29:]))
         json_dict = json.dumps(dict_indicator)
@@ -90,7 +90,7 @@ class TechnicalIndicator:
 
 
     def calculate_ma(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,29)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,30)
         ma = talib.MA(close_prices)
         dict_indicator = dict(zip(close_times[29:], ma[29:]))
         json_dict = json.dumps(dict_indicator)
@@ -98,7 +98,7 @@ class TechnicalIndicator:
 
 
     def calculate_sma(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,29)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,30)
         sma = talib.SMA(close_prices)
         dict_indicator = dict(zip(close_times[29:], sma[29:]))
         json_dict = json.dumps(dict_indicator)
@@ -106,14 +106,14 @@ class TechnicalIndicator:
 
 
     def calculate_wma(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,29)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,30)
         wma = talib.WMA(close_prices)
         dict_indicator = dict(zip(close_times[29:], wma[29:]))
         json_dict = json.dumps(dict_indicator)
         return json_dict
 
     def calculate_stoch(self,market_type, market_name, interval,timestamp,datalimit):
-        high_prices, low_prices, close_prices, close_times = self.get_high_low_close_values(market_type, market_name, interval,timestamp,datalimit,8)
+        high_prices, low_prices, close_prices, close_times = self.get_high_low_close_values(market_type, market_name, interval,timestamp,datalimit,9)
         slowk, slowd = talib.STOCH(high_prices, low_prices, close_prices)
         slowk_dict = dict(zip(close_times[8:], slowk[8:]))
         slowd_dict = dict(zip(close_times[8:], slowd[8:]))
@@ -122,7 +122,7 @@ class TechnicalIndicator:
         return json_dict
     
     def calculate_bbands(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,10)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,11)
         upperband, middleband, lowerband = talib.BBANDS(close_prices)
         dict_upperband = dict(zip(close_times[10:], upperband[10:]))
         dict_middleband = dict(zip(close_times[10:], middleband[10:]))
@@ -132,7 +132,7 @@ class TechnicalIndicator:
         return json_dict
 
     def calculate_macd(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,33)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,34)
         macd, macdsignal, macdhist = talib.MACD(close_prices)
         dict_macd = dict(zip(close_times[33:], macd[33:]))
         dict_macdsignal = dict(zip(close_times[33:], macdsignal[33:]))
