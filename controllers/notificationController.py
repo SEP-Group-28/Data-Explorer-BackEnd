@@ -14,15 +14,15 @@ import os
 
 
 def notificationController(server):
-    @server.route('/notifications/present/<crypto_name>', methods=['GET'])
-    def take_present_notifications():
-        def stream(crypto_name):
-            notifications = subscribe_to_socket_for_real_time_notifications(crypto_name)
+    @server.route('/notifications/present/<crypto_name>/<id>', methods=['GET'])
+    def take_present_notifications(crypto_name,id):
+        def stream(crypto_name,id):
+            notifications = subscribe_to_socket_for_real_time_notifications(crypto_name,id)
             while True:                        
                 msg = notifications.get()  
                 yield msg
 
-        return Response(stream(), mimetype='text/event-stream')
+        return Response(stream(crypto_name,id), mimetype='text/event-stream')
 
 
     @server.route('/notifications/history/open_price', methods=['GET'])

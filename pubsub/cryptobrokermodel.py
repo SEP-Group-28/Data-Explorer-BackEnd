@@ -9,7 +9,7 @@ from models.market import Crypto
 from .import pubsubservices
 from firebase.confirebase import confirebase
 from models.alert import Alert
-# from pubsubservices import add_notification
+
 
 
 class Crypto_Broker:
@@ -108,8 +108,9 @@ class Crypto_Broker:
                     pass
                     # print(cryptoname, " current price is ", current_price, " previous price is ", previous_price)
                 if previous_price>=0:
-                    newalertsdict=[i for i in alertsdict if ((((previous_price<=i[0]<=current_price) or (previous_price>=i[0]>=current_price))and interval=='1m') and (confirebase(i[0],i[1])) and False) or (((previous_price>i[0] or i[0]>current_price)  and (previous_price<i[0] or i[0]<current_price)) or interval!='1m')]
+                    newalertsdict=[i for i in alertsdict if ((((previous_price<=i[0]<=current_price) or (previous_price>=i[0]>=current_price))and interval=='1m') and (confirebase(cryptoname,i[0],i[1])) and False) or (((previous_price>i[0] or i[0]>current_price)  and (previous_price<i[0] or i[0]<current_price)) or interval!='1m')]
                     Alert().update_alerts_for_price(cryptoname,newalertsdict)
+
                 self.previous_price=price
                 # print('newalert..........',newalertsdict,cryptoname)
                 
@@ -220,20 +221,21 @@ class NotificationAnnouncer:
     def __init__(self):
         self.listener_set = []
 
-    def listen_nots(self):
+    def listen_nots(self,id):
         qu = queue.Queue(maxsize=100)
-        self.listener_set.append(qu)
+        self.listener_set.append([id,qu])
         return (qu)
 
-    def announce_nots(self, msg):
+    def announce_nots(self, msg,id):
 
         msg = convert_to_sse_format(data=msg)
 
         for i in reversed(range(len(self.listener_set))):
-            try:
-                self.listener_set[i].put_nowait(msg)
-            except queue.Full:
-                del self.listener_set[i]
+            if self.listener_set[i][0]==id:
+                try:
+                    self.listener_set[i][1].put_nowait(msg)
+                except queue.Full:
+                    del self.listener_set[i]
 
 def convert_to_sse_format(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message as a server sent event
     msg = f'data: {data}\n\n'
