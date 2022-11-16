@@ -28,6 +28,7 @@ class Crypto_Broker:
         return q
     #FTX
     def publish(self,cryptoname,interval, msg):
+        # print("msggggg",msg)
         # global previous_price
 
         #FTX

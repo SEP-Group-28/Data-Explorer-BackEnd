@@ -84,7 +84,7 @@ class TechnicalIndicator:
         return json_dict
 
     def calculate_ema(self,market_type, market_name, interval,timestamp,datalimit):
-        close_times, close_prices = self.get_close_values(market_type, market_name, timestamp,datalimit,30)
+        close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,30)
         ema = talib.EMA(close_prices)
         dict_indicator = dict(zip(close_times[29:], ema[29:]))
         json_dict = json.dumps(dict_indicator)
