@@ -29,7 +29,25 @@ class Notification:
         #     return watchlist['list']
         # return False
         return result
+    
+    def delnotification(user_id,cryptoname,price):
+        cryptoname=cryptoname+'/USDT'
+        result=notification_collection.update_one({
+            '_id':user_id
+        },
+        {'$pull':{'alertlist.$':{'$in':[cryptoname,price]}}})
+        if result:
+            return result
+        return []
 
+    def delallnotifications(user_id):
+        result=notification_collection.update_one(
+            {'_id':user_id},
+            {'$unset':{'alertlist':""}}
+        )
+        if result:
+            return result
+        return []
         
     def gethistoricnotifications(time_period):
         time_period = time_period[0]
