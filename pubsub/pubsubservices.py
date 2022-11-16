@@ -96,16 +96,20 @@ def look_for_nots():
 def historical_nots(id):
     time_filter = int(time()*1000 - (1*24*60*60*1000))
     # timeDetails={"time": {"$gte":time_filter}}
-    query=[{'_id':id},{'alertlist.$.0':{"gte":time_filter}}]
-    data=Notification.gethistoricnotifications(query)
-    print("line 70, ..", data)
-    # data = db_action("read_many",[{"time": {"$gte":time_filter}},"notifications"],"admin")
-    opt = []
-    for dt in data:
-        opt.append([dt[0],dt[1],dt[2]])
+    try:
+        query=[{'_id':id},{'alertlist.$.0':{"gte":time_filter}}]
+        data=Notification.gethistoricnotifications(query)
+        print("line 70, ..", data)
+        # data = db_action("read_many",[{"time": {"$gte":time_filter}},"notifications"],"admin")
+        opt = []
+        for dt in data:
+            opt.append([dt[0],dt[1],dt[2]])
 
-    for dt in notifications:
-        opt.append([int(time()*1000),dt[1],dt[2]])
+        for dt in notifications:
+            opt.append([int(time()*1000),dt[1],dt[2]])
+    except Exception as e:
+        print("line 79, ..", e)
+        return ({"last day notifications": []})
 
     return({"last day notifications":opt})
 
