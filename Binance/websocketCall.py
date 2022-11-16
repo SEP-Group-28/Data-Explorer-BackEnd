@@ -21,29 +21,29 @@ def start_streaming():
     
     print(api_key)
     print(api_secret)
-    if (checkInternetSocket()):
+    # if (checkInternetSocket()):
 
-        twm = ThreadedWebsocketManager(api_key='E4qXXp67zhZevj0Um2AQ83OPvDEjysaRVdfHRPvNXR2EXWjIW9dyjZPY4ep574CC', api_secret='pYiSC30hGJqqOBFlmNcaLgojSx5scRf2xEBCp3feuc9CIq7T1wKpCQwdI7H5EUaW')
+    twm = ThreadedWebsocketManager(api_key='E4qXXp67zhZevj0Um2AQ83OPvDEjysaRVdfHRPvNXR2EXWjIW9dyjZPY4ep574CC', api_secret='pYiSC30hGJqqOBFlmNcaLgojSx5scRf2xEBCp3feuc9CIq7T1wKpCQwdI7H5EUaW')
 
-        twm.start()
+    twm.start()
 
-        print("Publisher started working !!!")
+    print("Publisher started working !!!")
 
-        # for smbl in symbols:
-        #     start_to_listen(twm,smbl)
-        fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({"type":"crypto"})
-        for crypto in  fetched_crypto_list_from_market['list']:
-            if (crypto not in crypto_list):
-                crypto_list.append((crypto.split('/USDT')[0])+'USDT')
+    # for smbl in symbols:
+    #     start_to_listen(twm,smbl)
+    fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({"type":"crypto"})
+    for crypto in  fetched_crypto_list_from_market['list']:
+        if (crypto not in crypto_list):
+            crypto_list.append((crypto.split('/USDT')[0])+'USDT')
 
-        print(crypto_list)
-        for crypto in crypto_list:
-        # crypto='SOL/USDT'
-            # client._subscribe({'channel': 'trades', 'market': crypto})
-            # trades=client._trades[crypto]
-            # print('trades',id(trades))
-            start_listen_for_each_crypto_interval(twm,crypto)
-            # print('starteed')
+    # print(crypto_list)
+    for crypto in crypto_list:
+    # crypto='SOL/USDT'
+        # client._subscribe({'channel': 'trades', 'market': crypto})
+        # trades=client._trades[crypto]
+        # print('trades',id(trades))
+        start_listen_for_each_crypto_interval(twm,crypto)
+        # print('starteed')
 
 
 def start_listen_for_each_crypto_interval(twm, crypto):

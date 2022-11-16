@@ -26,7 +26,7 @@ from controllers.cryptoController import cryptoController
 from controllers.stockController import stockController
 from controllers.adminController import adminController
 from controllers.technicalIndicactorsController import technicalIndicactorsController
-# from controllers.notificationController import notificationController
+from controllers.notificationController import notificationController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -50,7 +50,7 @@ def server_intialize():
         scheduler.add_job(start_streaming)
         # scheduler.add_job(look_for_nots)
         # scheduler.add_job(send_alerts)
-        # scheduler.add_job(look_for_nots)
+        scheduler.add_job(look_for_nots)
         scheduler.add_job(restart_binance_connection)
         scheduler.start()
 
@@ -60,7 +60,7 @@ def server_intialize():
     stockController(server)
     watchlistController(server)
     adminController(server)
-    # notificationController(server)
+    notificationController(server)
     technicalIndicactorsController(server)
     alertController(server)
 

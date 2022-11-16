@@ -9,7 +9,7 @@ from models.market import Crypto
 from .import pubsubservices
 from firebase.confirebase import confirebase
 from models.alert import Alert
-from pubsubservices import publish_to_socket_for_real_time_notifications
+# from pubsubservices import publish_to_socket_for_real_time_notifications
 
 
 
@@ -28,6 +28,7 @@ class Crypto_Broker:
         return q
     #FTX
     def publish(self,cryptoname,interval, msg):
+        # print("publishingggg......")
         # global previous_price
 
         #FTX
@@ -90,6 +91,12 @@ class Crypto_Broker:
         # print(type(msg['k']['c']))
         # price=msg['close'].iloc[-1]
         # print(type(price))
+
+        def sending_notifications(i):
+            confirebase(cryptoname,i[0],i[1])
+            pubsubservices.publish_to_socket_for_real_time_notifications(
+                {"message":"successful","type":"Crossing","price":i[0],"symbol":cryptoname},i[1])
+
         if interval=='1m':
             alertsdict=Alert().take_previous_alerts_for_price(cryptoname)['alertlist']
             # if interval
@@ -110,12 +117,14 @@ class Crypto_Broker:
                 if previous_price>=0:
                     newalertsdict=[i
                     for i in alertsdict 
-                    if ((((previous_price<=i[0]<=current_price) 
-                    or (previous_price>=i[0]>=current_price))and interval=='1m') and 
-                    (confirebase(cryptoname,i[0],i[1])) and (publish_to_socket_for_real_time_notifications({"message":"successful","type":"Crossing","price":price,"symbol":cryptoname},i[1]))  
-                    and False) or (((previous_price>i[0] or i[0]>current_price) 
-                    and (previous_price<i[0] or 
-                     i[0]<current_price)) or interval!='1m')]
+                    if (   
+                        (((previous_price<=i[0]<=current_price) or (previous_price>=i[0]>=current_price)) and interval=='1m') 
+                        and 
+                        sending_notifications(i) 
+                        and False) 
+                        or
+                        (((previous_price>i[0] or i[0]>current_price) and (previous_price<i[0] or i[0]<current_price)) or interval!='1m')
+                    ]
                     Alert().update_alerts_for_price(cryptoname,newalertsdict)
 
                 self.previous_price=price
@@ -233,8 +242,6 @@ class Crypto_Broker:
                 if (last_history_data_time<trade_data_time):
                     history_data.append(trade_data)
         return(history_data)
-        
-
 
     
 class NotificationAnnouncer:

@@ -5,7 +5,7 @@ from models.alertusertoken import Add_TOKEN
 
 serverToken='AAAAHH3JbgU:APA91bEEtC7EAGqil7asmq-U1LZ5O6Q0IRGoUcQ0dS6uAv8HKzqlBP0INHLtcvRcEvEX4GD4zKwcftWO6-c6QMksvowSZj8Kf4N1Hv9FLk6-lYdaf_gEz719ucCkr3i6hBDaBYdai-gW'
 
-def confirebase(price,user_id):
+def confirebase(cryptoname, price,user_id):
     token_list=Add_TOKEN().take_token_list(user_id)
     print('price is',price)
     print('printing.....',token_list)
@@ -17,8 +17,8 @@ def confirebase(price,user_id):
         }
         body={
             'notification':{
-                'title':'Alert for'+' Crossing '+ str(price),
-                'body':'New message'
+                'title':'New Alert',
+                'body':'Alert for '+ str(cryptoname) + ' Crossing '+ str(price),
             },
             'to':deviceToken,
             'priority':'high'

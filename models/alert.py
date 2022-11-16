@@ -18,6 +18,7 @@ class Alert:
             self.update_alerts_for_price(crypto_name+'/USDT',alert_list)
         return self.take_previous_alerts_for_price(crypto_name+'/USDT')
     
+    
     def remove_alert_for_price(self,crypto_name,crypto_price,user_id):
         previous_alerts=self.take_previous_alerts_for_price(crypto_name+'/USDT')
         # print('previous alerts printing',previous_alerts)
@@ -26,6 +27,8 @@ class Alert:
             # alert_collection.insert_one({"name":crypto_name+'/USDT','alertlist':[[crypto_price,user_id]]})
         # else:
             alert_list=previous_alerts['alertlist']
+            if [crypto_price,user_id] not in alert_list:
+                return False
             # alertsdict[crypto_price].append([crypto_name+'/USDT',user_id])
             alert_list.remove([crypto_price,user_id])
             # print('printing',alert_list)
