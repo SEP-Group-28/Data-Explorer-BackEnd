@@ -26,7 +26,7 @@ from controllers.cryptoController import cryptoController
 from controllers.stockController import stockController
 from controllers.adminController import adminController
 from controllers.technicalIndicactorsController import technicalIndicactorsController
-# from controllers.notificationController import notificationController
+from controllers.notificationController import notificationController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -60,7 +60,7 @@ def server_intialize():
     stockController(server)
     watchlistController(server)
     adminController(server)
-    # notificationController(server)
+    notificationController(server)
     technicalIndicactorsController(server)
     alertController(server)
 
