@@ -48,26 +48,26 @@ def notificationController(server):
         # print(historical_nots(id))
         return str(len(historical_nots(id)['last day notifications']))
 
-    @server.route('/notifications/delete/<cryptoname>/<price>', methods=['GET'])
+    @server.route('/notifications/delete/<cryptoname>/<price>', methods=['DELETE'])
     @verifyJWT
-    def take_history_notifications(current_user,cryptoname,price):
+    def delete_history_notifications(current_user,cryptoname,price):
         id = current_user["_id"]
         print(cryptoname)
         print(price)
         print("user id", id)
         print("receving........")
         if (id!=None and cryptoname != None and price!= None):
-            result=Notification().delnotification(id,cryptoname,price)
+            result=Notification.delnotification(id,cryptoname,price)
         return result
 
-    @server.route('/notifications/delete/all', methods=['GET'])
+    @server.route('/notifications/delete/all', methods=['DELETE'])
     @verifyJWT
-    def take_history_notifications(current_user):
+    def delete_all_history_notifications(current_user):
         id = current_user["_id"]
         # print(cryptoname)
         # print(price)
         print("user id", id)
         print("receving........")
         if (id!=None ):
-            result=Notification().delallnotifications(id)
+            result=Notification.delallnotifications(id)
         return result
