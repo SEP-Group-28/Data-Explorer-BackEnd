@@ -69,7 +69,6 @@ def authController(server):
                     access_token=token.getAccessToken(authObject)
                     refresh_token=token.getRefreshToken(authObject)
                     
-                    # print('dfdfd',refresh_token)
                    
                     # result =user_collection.update_one({'_id':ObjectId(auth['_id'])},{'$set' :{
                     # 'refresh_token':refresh_token
