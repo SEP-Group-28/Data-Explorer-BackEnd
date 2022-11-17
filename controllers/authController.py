@@ -137,7 +137,6 @@ def authController(server):
                
                 return jsonify(message='Invalid data', data=None, error=is_validated), 400
             user['role'] = '1'  # 1 for normal user
-            print(user)
             userModel = User().create(**user)
             print(userModel)
             print("userModel",userModel)
