@@ -93,10 +93,10 @@ def restart_binance_connection():
         while (not checkInternetSocket()):
             if (not reboot):
                 reboot = True
-                print("Internet Connection Not working Please Recconect :(")
+                print("Connection broken recconecting...")
             time.sleep(5)
 
         if (reboot):
-            print("Internet Connection rebooted")
+            print("Connection rebooted")
             start_streaming()
 

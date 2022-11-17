@@ -6,6 +6,7 @@ from models.user import User
 from middlewares.verifyRoles import verifyRole
 # from dotenv import load_dotenv
 from models.market import Stock
+from models.notification import Notification
 import json
 
 # load_dotenv()
@@ -46,3 +47,27 @@ def notificationController(server):
         print("receving........")
         # print(historical_nots(id))
         return str(len(historical_nots(id)['last day notifications']))
+
+    @server.route('/notifications/delete/<cryptoname>/<price>', methods=['DELETE'])
+    @verifyJWT
+    def delete_history_notifications(current_user,cryptoname,price):
+        id = current_user["_id"]
+        print(cryptoname)
+        print(price)
+        print("user id", id)
+        print("receving........")
+        if (id!=None and cryptoname != None and price!= None):
+            result=Notification.delnotification(id,cryptoname,price)
+        return result
+
+    @server.route('/notifications/delete/all', methods=['DELETE'])
+    @verifyJWT
+    def delete_all_history_notifications(current_user):
+        id = current_user["_id"]
+        # print(cryptoname)
+        # print(price)
+        print("user id", id)
+        print("receving........")
+        if (id!=None ):
+            result=Notification.delallnotifications(id)
+        return result
