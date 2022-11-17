@@ -76,7 +76,7 @@ class User:
             users = user_collection.find({filter.lower():regx})
             user_count = len(self.get_user_list(users))
             print('users count from search',user_count)
-            users_ =  user_collection.find({filter.lower():regx}).skip(skip).limit(5)
+            users_ =  user_collection.find({filter.lower():regx, 'role':'1'}).skip(skip).limit(5)
             
             return self.get_user_list(users_), user_count
         except Exception as e:
@@ -87,7 +87,7 @@ class User:
         try:
             """Get all users"""
             # print('checlllll')
-            users = user_collection.find().skip(skip).limit(take)
+            users = user_collection.find({'role':'1'}).skip(skip).limit(take)
             # print("hello world")
             # print('users',users)
             # print('looooooo')
@@ -98,7 +98,7 @@ class User:
     def get_total_count(self):
         try:
             # print('\nkdksfks')
-            items=user_collection.estimated_document_count()
+            items=user_collection.estimated_document_count({'role':'1'})
             # print('items',items)
             return items
         except Exception as e:
@@ -150,7 +150,6 @@ class User:
 
     def update(self, user_id, data={}):
         """Update a user"""
-        
         user = user_collection.update_one(
             {"_id": bson.ObjectId(user_id)},
             {
