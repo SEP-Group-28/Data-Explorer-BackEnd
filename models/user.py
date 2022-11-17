@@ -34,7 +34,7 @@ class User:
         user = self.get_by_id(user_id)
         return user
 
-    def create(self, firstname="",lastname="", email="", password=""):
+    def create(self, firstname="",lastname="", email="", password="", role=""):
         """Create a new user"""
         user = self.get_by_email(email)
         if user:
@@ -46,7 +46,8 @@ class User:
                 "lastname": lastname,
                 "email": email,
                 "password": self.encrypt_password(password),
-                "active":'1'
+                "active":'1',
+                "role": role
             }
         )
         return self.get_by_id(new_user.inserted_id)

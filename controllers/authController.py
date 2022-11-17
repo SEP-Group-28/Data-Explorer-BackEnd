@@ -56,10 +56,16 @@ def authController(server):
             
             if user:
                 try:
-                    authObject= {
-                    "id": user['_id'],
-                    "role":os.environ.get('USER_ROLE'),
-                    }
+                    if user['role'] == '1':
+                        authObject= {
+                        "id": user['_id'],
+                        "role":os.environ.get('USER_ROLE'),
+                        }
+                    elif user['role'] == '2':
+                        authObject= {
+                        "id": user['_id'],
+                        "role":os.environ.get('ADMIN_ROLE'),
+                        }
                     access_token=token.getAccessToken(authObject)
                     refresh_token=token.getRefreshToken(authObject)
                     
@@ -110,10 +116,13 @@ def authController(server):
 
     @server.route("/auth/register",methods=["POST"])
     def register():
+        print('register')
         try:
 #print('jwt',request.cookies.get('jwt'))
             user=json.loads(request.data)
-            print(user)
+            # print(user)
+            
+           
             if not user:
                 return {
                     "message": "Please provide user details",
@@ -128,6 +137,8 @@ def authController(server):
             if is_validated is not True:
                
                 return jsonify(message='Invalid data', data=None, error=is_validated), 400
+            user['role'] = '1'  # 1 for normal user
+            print(user)
             userModel = User().create(**user)
             print(userModel)
             print("userModel",userModel)
