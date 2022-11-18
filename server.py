@@ -20,8 +20,8 @@ from controllers.notificationController import notificationController
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
-from pubsub.pubsubservices import start_publisher_subscriber_model,look_for_nots
-
+from pubsub.pubsubservices import start_publisher_subscriber_model
+from pubsub.pubsubservices import look_for_nots
 def server_intialize():
     server = Flask(__name__)
     CORS(server,supports_credentials=True,origins=allowedOrigins)
@@ -31,6 +31,7 @@ def server_intialize():
     def activate_job():
         start_publisher_subscriber_model()
         scheduler.add_job(start_streaming)
+        scheduler.add_job(look_for_nots)
         scheduler.add_job(restart_binance_connection)
         scheduler.start()
 

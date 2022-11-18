@@ -2,13 +2,13 @@ from random import randint
 
 from models.notification import Notification
 from models.market import Crypto
-from .cryptobrokermodel import Crypto_Broker,NotificationAnnouncer
+from .cryptobrokermodel import Crypto_Broker
 # from db_access import db_action
 from time import time
 
 crypto_brokers = {}
 crypto_list = []
-# notifications = []
+notifications = []
 # alertsdict={}
 # notification_brokers={}
 # notification_announcer = NotificationAnnouncer()
@@ -77,41 +77,41 @@ def start_publisher_subscriber_model():  #Initialize the model for each crypto i
 # def subscribe_to_socket_for_real_time_notifications(id):
 #     return(notification_brokers['1m'].listen_nots(id))
 
-# def publish_to_socket_for_real_time_notifications(data,user_id):
-#     notifications.append([data['symbol'],data,user_id])
+def publish_to_socket_for_real_time_notifications(data,user_id):
+    notifications.append([data['symbol'],data,user_id])
    
-# def look_for_nots():
-#     while(True):
-#         if(len(notifications)>0):
-#             crypto_name=notifications[0][0]
-#             data={"time":int(time()*1000),"data":notifications[0][1]}
-#             notification_brokers['1m'].announce_nots(data,notifications[0][2])
-#             print("pubsub data", data)
-#             result=Notification.insertnotifications(data,notifications[0][2])
-#             print("notification result", result)
-#             # db_action("insert_one",[{"time":int(time()*1000),"data":notifications[0]},"notifications"],"admin")
-#             notifications.pop(0)
+def look_for_nots():
+    while(True):
+        if(len(notifications)>0):
+            crypto_name=notifications[0][0]
+            data={"time":int(time()*1000),"data":notifications[0][1]}
+            # notification_brokers['1m'].announce_nots(data,notifications[0][2])
+            print("pubsub data", data)
+            result=Notification.insertnotifications(data,notifications[0][2])
+            print("notification result", result)
+            # db_action("insert_one",[{"time":int(time()*1000),"data":notifications[0]},"notifications"],"admin")
+            notifications.pop(0)
 
 
-# def historical_nots(id):
-#     time_filter = int(time()*1000 - (1*24*60*60*1000))
-#     # timeDetails={"time": {"$gte":time_filter}}
-#     try:
-#         query=[{'_id':id},{'alertlist.$.0':{"gte":time_filter}}]
-#         data=Notification.gethistoricnotifications(query)
-#         print("line 70, ..", data)
-#         # data = db_action("read_many",[{"time": {"$gte":time_filter}},"notifications"],"admin")
-#         opt = []
-#         for dt in data:
-#             opt.append([dt[0],dt[1],dt[2]])
+def historical_nots(id):
+    time_filter = int(time()*1000 - (1*24*60*60*1000))
+    # timeDetails={"time": {"$gte":time_filter}}
+    try:
+        query=[{'_id':id},{'alertlist.$.0':{"gte":time_filter}}]
+        data=Notification.gethistoricnotifications(query)
+        print("line 70, ..", data)
+        # data = db_action("read_many",[{"time": {"$gte":time_filter}},"notifications"],"admin")
+        opt = []
+        for dt in data:
+            opt.append([dt[0],dt[1],dt[2]])
 
-#         for dt in notifications:
-#             opt.append([int(time()*1000),dt[1],dt[2]])
-#     except Exception as e:
-#         print("line 79, ..", e)
-#         return ({"last day notifications": []})
+        for dt in notifications:
+            opt.append([int(time()*1000),dt[1],dt[2]])
+    except Exception as e:
+        print("line 79, ..", e)
+        return ({"last day notifications": []})
 
-#     return({"last day notifications":opt})
+    return({"last day notifications":opt})
 
 
 
