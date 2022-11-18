@@ -8,7 +8,7 @@ from flask import jsonify
 from dbconnection import connectdb as db
 import cloudinary.uploader
 import re
-
+from watchlist import Watchlist
 # record_collection =db.record
 print(db)
 user_collection=db().user
@@ -107,10 +107,17 @@ class User:
         """Get a user by id"""
         # user = db.users.find_one({"_id": bson.ObjectId(user_id), "active": True})
         user = user_collection.find_one({"_id": bson.ObjectId(user_id)})
+        watchlist1=Watchlist()
+        userwatchlist=watchlist1.getwatchlist(user_id)
+        if not userwatchlist:
+            return []
+
         # print('user',user)
         if not user:
             return
         user["_id"] = str(user["_id"])
+        user['watchlist']=userwatchlist
+
         user.pop("password")
         return user
     # def get_watchlist_by_id(self,user_id):
