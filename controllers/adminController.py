@@ -6,9 +6,9 @@ import os
 
 def adminController(server):  #Admin controller
     @server.route("/admin/users", methods=["GET"])  #Route for admin to get all users
-    @verifyRole([os.getenv('ADMIN_ROLE')])
+    # @verifyRole([os.getenv('ADMIN_ROLE')])
     @verifyJWT
-    def get_all_users():  
+    def get_all_users(current_user):  
         try:
             skip=request.args.get('skip')
             take=request.args.get('take')

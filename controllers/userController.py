@@ -5,6 +5,7 @@ from models.user import User
 from middlewares.verifyRoles import verifyRole
 from io import BufferedReader
 from werkzeug.security import generate_password_hash, check_password_hash
+from models.watchlist import Watchlist
 
 def userController(server):
     @server.route("/api/user/<id>", methods=["GET"])
@@ -14,6 +15,11 @@ def userController(server):
         try:
             user=User().get_by_id(id)
             if(user):
+                user_watchlist = Watchlist().getwatchlist(id)
+                if not(user_watchlist):
+                    user_watchlist = []
+                user['watchlist'] = user_watchlist
+                print("user watchlist", user)
                 return jsonify({
                 "message": "successfully retrieved user profile",
                 "data": user

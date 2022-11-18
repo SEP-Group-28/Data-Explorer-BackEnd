@@ -1,4 +1,5 @@
 
+import json
 from flask import jsonify
 from flask import request,abort
 import jwt
@@ -14,12 +15,14 @@ def verifyRole(*allowedRoles):
         def decorated(f):
             @wraps(f)
             def wrapper(*args,**kwargs):
-                if not(request['user_id']):
+                request1 = request.data 
+                print("request1",request1)
+                if not(request1['user_id']):
                     return jsonify({
                         
                     "message": "User id is missing."
                     }),401
-                userRole = request['role']
+                userRole = request1['role']
                 isAllow=False
                 if(userRole in allowedRoles):
                     isAllow=True
