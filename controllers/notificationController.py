@@ -1,5 +1,5 @@
+from pubsub.pubsubservices import historical_nots
 
-from pubsub.pubsubservices import subscribe_to_socket_for_real_time_notifications,historical_nots
 from middlewares.verifyJWT import verifyJWT
 from flask import jsonify,request,Response
 from models.user import User
