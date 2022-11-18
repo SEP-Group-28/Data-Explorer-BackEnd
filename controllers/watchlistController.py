@@ -109,10 +109,6 @@ def watchlistController(server):
                         "error":str(e)
                     },400
 
-
-        
-
-    
         # return remove_from_watch_list(current_user['email'], data['brands'])
 
     @server.route('/add-market', methods=['POST'])

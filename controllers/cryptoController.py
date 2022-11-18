@@ -1,13 +1,7 @@
-
-from email import message
-import queue
 from middlewares.verifyJWT import verifyJWT
-from flask import jsonify,request,Response
-from models.user import User
+from flask import jsonify,Response
 from middlewares.verifyRoles import verifyRole
-# from dotenv import load_dotenv
 from pubsub.pubsubservices import subscribe_to_socket_for_real_time_crypto,get_history_for_crypto,get_history_for_crypto_timestamp
-# load_dotenv()
 import os
 from models.market import Crypto
 

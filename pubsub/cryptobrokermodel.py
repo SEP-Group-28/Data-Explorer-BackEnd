@@ -244,26 +244,26 @@ class Crypto_Broker:
         return(history_data)
 
     
-class NotificationAnnouncer:
+# class NotificationAnnouncer:
 
-    def __init__(self):
-        self.listener_set = []
+#     def __init__(self):
+#         self.listener_set = []
 
-    def listen_nots(self,id):
-        qu = queue.Queue(maxsize=100)
-        self.listener_set.append([id,qu])
-        return (qu)
+#     def listen_nots(self,id):
+#         qu = queue.Queue(maxsize=100)
+#         self.listener_set.append([id,qu])
+#         return (qu)
 
-    def announce_nots(self, msg,id):
+#     def announce_nots(self, msg,id):
 
-        msg = convert_to_sse_format(data=msg)
+#         msg = convert_to_sse_format(data=msg)
 
-        for i in reversed(range(len(self.listener_set))):
-            if self.listener_set[i][0]==id:
-                try:
-                    self.listener_set[i][1].put_nowait(msg)
-                except queue.Full:
-                    del self.listener_set[i]
+#         for i in reversed(range(len(self.listener_set))):
+#             if self.listener_set[i][0]==id:
+#                 try:
+#                     self.listener_set[i][1].put_nowait(msg)
+#                 except queue.Full:
+#                     del self.listener_set[i]
 
 def convert_to_sse_format(data: str, event=None) -> str:  ##Format dataset message in to exchangeble message as a server sent event
     msg = f'data: {data}\n\n'

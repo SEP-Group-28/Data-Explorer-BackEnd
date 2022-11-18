@@ -1,18 +1,9 @@
-from audioop import add
-from flask import request,jsonify,make_response
-from bson.objectid  import ObjectId
-import bcrypt
-import jwt
+from flask import jsonify
 from middlewares.verifyJWT import verifyJWT
-import os
-import utils.token as token
 from models.alert import Alert
 from models.alertusertoken import Add_TOKEN
-from models.user import User
-from utils.validate import validate_user,validate_email_and_password
 
 def alertController(server): #Alert Controller
-
 
     @server.route('/alert/add-alert/<crypto_name>/<crypto_price>',methods=['POST']) #Route to add an alert using crypto name and crypto price
     @verifyJWT
@@ -28,7 +19,6 @@ def alertController(server): #Alert Controller
                 "data": None
         }), 400
     
-
     @server.route('/alert/remove-alert/<crypto_name>/<crypto_price>',methods=['DELETE'])#Route to delete an alert using crypto name and crypto price
     @verifyJWT
     def remove_alert(current_user,crypto_name,crypto_price):    
@@ -46,7 +36,6 @@ def alertController(server): #Alert Controller
                 "error": str(e),
                 "data": None
         }), 400
-
 
 
     @server.route('/alert/add-token/<token>',methods=['POST'])#Route to add an firebase token for alerts
@@ -72,19 +61,18 @@ def alertController(server): #Alert Controller
                 "tokenlist":tokenlist },200
         except Exception as e:
             return jsonify({
-                "message": "failed to remove token",
+                "message": "failed  to remove token",
                 "error": str(e),
                 "data": None
         }), 400
         
 
-
     @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])#Route to get alerts for each crypto for each user
     @verifyJWT
     def get_all_alerts_for_user(current_user,crypto_name):
-        crypto_name=crypto_name+'/USDT'
-        user_id=current_user['_id']
         try:
+            crypto_name=crypto_name+'/USDT'
+            user_id=current_user['_id']
             fetched_alerts=Alert().take_previous_alerts_for_price(crypto_name)
             previous_alert_prices=[]
             if fetched_alerts is None:
@@ -98,13 +86,11 @@ def alertController(server): #Alert Controller
         except Exception as e:
             return {"message":"Fetching all alerts for crypto failed"},404
 
-
-
-    @server.route('/alert/get-all-alerts',methods=['GET'])
+    @server.route('/alert/get-all-alerts',methods=['GET']) #Route to get all alerts for all crypto for one user
     @verifyJWT
     def get_all_alerts(current_user):
-        user_id=current_user['_id']
         try:
+            user_id=current_user['_id']
             fetched_alerts=Alert().take_previous_all_alerts()
             data=[]
             for i in fetched_alerts:

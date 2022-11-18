@@ -13,8 +13,6 @@ import re
 print(db)
 user_collection=db().user
 
-
-
 class User:
     """User Model"""
     def __init__(self):

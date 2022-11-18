@@ -18,7 +18,6 @@ class Alert:
             self.update_alerts_for_price(crypto_name+'/USDT',alert_list)
         return self.take_previous_alerts_for_price(crypto_name+'/USDT')
     
-    
     def remove_alert_for_price(self,crypto_name,crypto_price,user_id):
         previous_alerts=self.take_previous_alerts_for_price(crypto_name+'/USDT')
         # print('previous alerts printing',previous_alerts)
@@ -34,7 +33,6 @@ class Alert:
             # print('printing',alert_list)
             self.update_alerts_for_price(crypto_name+'/USDT',alert_list)
         return self.take_previous_alerts_for_price(crypto_name+'/USDT')
-    
 
     def take_previous_alerts_for_price(self,crypto_name):
         try:
