@@ -68,7 +68,7 @@ def authController(server):
                         
                     },200)
                     print(response)
-                    response.set_cookie('jwt',refresh_token, httponly=True,max_age= 24 * 60 * 60 * 1000 ,secure=True)
+                    response.set_cookie('jwt',refresh_token, httponly=True,max_age= 24 * 60 * 60 * 1000,secure=True, samesite='None')
 
                     return response
                 except Exception as e:
@@ -129,6 +129,7 @@ def authController(server):
     def newaccesstoken():
         try:
             cookies = request.cookies
+            print("here is my cookie bro",cookies)
 
             if not(cookies['jwt']) :
 
@@ -137,6 +138,7 @@ def authController(server):
             
 
             refresh_token = cookies['jwt']
+            print("hey hey here is the refresh token",refresh_token)
             auth= User().get_by_refreshtoken(refresh_token)
 
             if not(auth) :
@@ -144,15 +146,17 @@ def authController(server):
 
             authObject= {
                 "id": str(auth['_id']),
-                "role":os.environ.get('USER_ROLE'),
+                "role":auth['role'],
             }
-            
-            decoded=jwt.decode(
-                refresh_token,
-                os.environ.get('REFRESH_TOKEN_SECRET') ,algorithms=['HS256'])
-            if(auth['_id'] != decoded['user_id']):
+            try:
+                decoded=jwt.decode(
+                    refresh_token,
+                    os.environ.get('REFRESH_TOKEN_SECRET') ,algorithms=['HS256'])
+                if(auth['_id'] != decoded['user_id']):
+                    return jsonify({ "message": "Invalid token" ,"status":403})
+                access_token=token.getAccessToken(authObject)
+            except jwt.exceptions.ExpiredSignatureError:
                 return jsonify({ "message": "Invalid token" ,"status":403})
-            access_token=token.getAccessToken(authObject)
         
 
             return jsonify({

@@ -24,7 +24,7 @@ from pubsub.pubsubservices import start_publisher_subscriber_model
 from pubsub.pubsubservices import look_for_nots
 def server_intialize():
     server = Flask(__name__)
-    CORS(server,supports_credentials=True,origins=allowedOrigins)
+    CORS(server, supports_credentials=True,origins=allowedOrigins, allow_headers=['Content-Type', 'Authorization'])
     scheduler = BackgroundScheduler()
 
     @server.before_first_request
