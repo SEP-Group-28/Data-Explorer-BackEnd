@@ -1,30 +1,13 @@
-from audioop import add
-from flask import request,jsonify,make_response
-from bson.objectid  import ObjectId
-import bcrypt
-# from dotenv import load_dotenv
-# load_dotenv()
-import jwt
+from flask import jsonify
 from middlewares.verifyJWT import verifyJWT
-import os
-import utils.token as token
 from models.alert import Alert
 from models.alertusertoken import Add_TOKEN
-from models.user import User
-from utils.validate import validate_user,validate_email_and_password
-# from pubsub.pubsubservices import add_firebase_alert
 
+def alertController(server): #Alert Controller
 
-def alertController(server):
-    @server.route('/alert/add-alert/<crypto_name>/<crypto_price>',methods=['POST'])
+    @server.route('/alert/add-alert/<crypto_name>/<crypto_price>',methods=['POST']) #Route to add an alert using crypto name and crypto price
     @verifyJWT
-    def add_alert(current_user,crypto_name,crypto_price):
-        # print("currentuser............",current_user)
-        # print("crypto",crypto_name)
-
-        # print('crypto_price',crypto_price)
-        # print('token',token)
-         
+    def add_alert(current_user,crypto_name,crypto_price): 
         try:
             alert_list=Alert().add_alert_for_price(crypto_name,float(crypto_price),current_user["_id"])
             return {"message": "Successfully added alert",
@@ -36,18 +19,11 @@ def alertController(server):
                 "data": None
         }), 400
     
-    @server.route('/alert/remove-alert/<crypto_name>/<crypto_price>',methods=['DELETE'])
+    @server.route('/alert/remove-alert/<crypto_name>/<crypto_price>',methods=['DELETE'])#Route to delete an alert using crypto name and crypto price
     @verifyJWT
-    def remove_alert(current_user,crypto_name,crypto_price):
-        # print("currentuser............",current_user)
-        # print("crypto",crypto_name)
-
-        # print('crypto_price',crypto_price)
-        # print('token',token)
-         
+    def remove_alert(current_user,crypto_name,crypto_price):    
         try:
             alert = Alert().remove_alert_for_price(crypto_name,float(crypto_price),current_user["_id"])
-            # print(alert)
             if not(alert):
                 return{"message": "Already removed"},202
             else :
@@ -61,15 +37,10 @@ def alertController(server):
                 "data": None
         }), 400
 
-        # return alertsdict
 
-    @server.route('/alert/add-token/<token>',methods=['POST'])
+    @server.route('/alert/add-token/<token>',methods=['POST'])#Route to add an firebase token for alerts
     @verifyJWT
     def add_token(current_user,token):
-        # print("currentuser............",current_user)
-        # # print("crypto",crypto_name)
-        # # print('crypto_price',crypto_price)
-        # print('token',token)
         try:
              tokenlist=Add_TOKEN().add_token_for_user(current_user['_id'],token)
              return {"message": "Successfully added token",
@@ -80,46 +51,29 @@ def alertController(server):
                 "error": str(e),
                 "data": None
         }), 400
-        
-       
-        # alertsdict=add_firebase_alert(crypto_name,float(crypto_price),token)
-        # return alertsdict
-    @server.route('/alert/remove-token/<token>',methods=['DELETE'])
+ 
+    @server.route('/alert/remove-token/<token>',methods=['DELETE']) #Route to remove firebase token for alerts
     @verifyJWT
     def remove_token(current_user,token):
-        # print("currentuser............",current_user)
-        # print("crypto",crypto_name)
-        # print('crypto_price',crypto_price)
-        # print('token',token)
-        # print("currentuser............",current_user)
-        # # print("crypto",crypto_name)
-        # # print('crypto_price',crypto_price)
-        # print('token',token)
         try:
              tokenlist=Add_TOKEN().remove_token_for_user(current_user['_id'],token)
              return {"message": "Successfully removed token",
                 "tokenlist":tokenlist },200
         except Exception as e:
             return jsonify({
-                "message": "failed to remove token",
+                "message": "failed  to remove token",
                 "error": str(e),
                 "data": None
         }), 400
         
 
-    @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])
+    @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])#Route to get alerts for each crypto for each user
     @verifyJWT
     def get_all_alerts_for_user(current_user,crypto_name):
-        # print("currentuser............",current_user)
-        # print("currentuser............",current_user)
-        # print("crypto",crypto_name)
-        # print('crypto_price',crypto_price)
-        # print('token',token)
-        crypto_name=crypto_name+'/USDT'
-        user_id=current_user['_id']
         try:
+            crypto_name=crypto_name+'/USDT'
+            user_id=current_user['_id']
             fetched_alerts=Alert().take_previous_alerts_for_price(crypto_name)
-            # print('fetched.................',fetched_alerts)
             previous_alert_prices=[]
             if fetched_alerts is None:
                 return previous_alert_prices
@@ -127,57 +81,24 @@ def alertController(server):
             for i in alertlist:
                 if (i[1]==user_id):
                     previous_alert_prices.append(i[0])
-            print('passing.......')
             return {"message":"Successfully fetched all alerts for crypto",'allalertlistcrypto':previous_alert_prices},200
             
         except Exception as e:
             return {"message":"Fetching all alerts for crypto failed"},404
 
-    @server.route('/alert/get-all-alerts',methods=['GET'])
+    @server.route('/alert/get-all-alerts',methods=['GET']) #Route to get all alerts for all crypto for one user
     @verifyJWT
     def get_all_alerts(current_user):
-        # print("currentuser............",current_user)
-        # print("currentuser............",current_user)
-        # print("crypto",crypto_name)
-        # print('crypto_price',crypto_price)
-        # print('token',token)
-        # print("current user is ", current_user)
-        user_id=current_user['_id']
-        # print("user id is ", user_id)
         try:
+            user_id=current_user['_id']
             fetched_alerts=Alert().take_previous_all_alerts()
-            # print("fetched_alerts, ", fetched_alerts)
             data=[]
-            # print('printing the data',data)
-            
             for i in fetched_alerts:
-                # print('printing',i)
-                # data.append([i['name'],i['al']])
-                # print('printing i',i)
-                # dat=[]
-                # print("printing data",data)
                 for j in i['alertlist']:
                     if j[1]==user_id:
                         data.append({'crypto_name':i['name'], 'crypto_price':j[0]})
 
-            # print('fetched.................',data)
             return {'message':'Successfully fetched all alerts',"allalertlist":data},200
             
-            # previous_alert_prices=[]
-            # if fetched_alerts is None:
-            #     return previous_alert_prices
-            # alertlist=fetched_alerts['alertlist']
-            # for i in alertlist:
-            #     if (i[1]==user_id):
-            #         previous_alert_prices.append(i[0])
-            # return previous_alert_prices
         except Exception as e:
             return {"message":"Fetching all alerts failed"},404
-            
-
-
-        # print(user_id)
-        # alertsdict=add_firebase_alert(crypto_name,float(crypto_price),token)
-
-        
-        # return alertsdict

@@ -10,20 +10,21 @@ def login(client):
     cred_json = json.dumps(cred_obj)
     login_res = test_login.login(client, cred_json)
     login_data =json.loads(login_res.data) 
+    print(login_data)
     token = login_data['access_token']
     return token
 
 
-# @pytest.mark.usefixtures("client")
-# def test_view_alert_list_success(client):
-#     token = login(client)
-#     response = client.get('/view-watchlist', headers={'Authorization': "Bearer "+ token}, follow_redirects=False)
-#     data =json.loads(response.data) 
-#     print('data...',data)
-#     assert response.status_code == 200
-#     print(data['data'])
-#     assert type(data['data'])==list and len(data['data'])>0
-#     assert 'Successfully get watchlist' in data.values()
+@pytest.mark.usefixtures("client")
+def test_view_alert_list_success(client):
+    token = login(client)
+    response = client.get('/view-watchlist', headers={'Authorization': "Bearer "+ token}, follow_redirects=False)
+    data =json.loads(response.data) 
+    print('data...',data)
+    assert response.status_code == 200
+    print(data['data'])
+    assert type(data['data'])==list and len(data['data'])>0
+    assert 'Successfully get watchlist' in data.values()
 
 
 
