@@ -1,31 +1,40 @@
 
 from middlewares.verifyJWT import verifyJWT
-from flask import jsonify,request
-from models.user import User
+from flask import jsonify
 from middlewares.verifyRoles import verifyRole
-# from dotenv import load_dotenv
 from models.market import Stock
 import json
-
-# load_dotenv()
-import os
 
 
 def stockController(server):
     @server.route('/stockhistory/<stock>/<interval>',methods=['GET'])
     def seed_history(stock,interval):
-        print("Arrived............",stock)
-        stockdata = Stock().getStockDataList(stock, interval)
-        print("hellllllo")
-        json_format_stock_data = json.dumps(stockdata)
-        return json_format_stock_data
+        try:
+            print("Arrived............",stock)
+            stockdata = Stock().getStockDataList(stock, interval)
+            print("hellllllo")
+            json_format_stock_data = json.dumps(stockdata)
+            return json_format_stock_data
+        except Exception as e:
+            return {
+                "message": "Something went wrong!",
+                "error": str(e),
+                "data": str(e)
+        }, 500
 
     @server.route('/stockhistory/<stock>/<interval>/<timestamp>/<datalimit>',methods=['GET'])
     def take_stock_history_data_timestamp(stock,interval,timestamp,datalimit):
-        stockdata = Stock().getStockDataListTimestamp(stock, interval,timestamp,datalimit)
-        # print(stockdata)
-        json_format_stock_data = json.dumps(stockdata)
-        return json_format_stock_data
+        try:
+            stockdata = Stock().getStockDataListTimestamp(stock, interval,timestamp,datalimit)
+            # print(stockdata)
+            json_format_stock_data = json.dumps(stockdata)
+            return json_format_stock_data
+        except Exception as e:
+            return {
+                "message": "Something went wrong!",
+                "error": str(e),
+                "data": str(e)
+        }, 500
 
     @server.route('/getstocklist',methods=['GET'])
     def get_stock_list():
