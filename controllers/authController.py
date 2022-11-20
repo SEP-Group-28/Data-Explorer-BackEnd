@@ -39,12 +39,12 @@ def authController(server):
                     if user['role'] == '1':
                         authObject= {
                         "id": user['_id'],
-                        "role":os.environ.get('USER_ROLE'),
+                        "role":str(os.environ.get('USER_ROLE')),
                         }
                     elif user['role'] == '2':
                         authObject= {
                         "id": user['_id'],
-                        "role":os.environ.get('ADMIN_ROLE'),
+                        "role":str(os.environ.get('ADMIN_ROLE')),
                         }
                     access_token=token.getAccessToken(authObject)
                     refresh_token=token.getRefreshToken(authObject)
