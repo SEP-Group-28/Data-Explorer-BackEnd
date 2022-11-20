@@ -34,6 +34,7 @@ def cryptoController(server):
     @server.route('/present/<market>/<interval>',methods=['GET']) #ROUTE TO GET CURRENT REAL TIME DATA FROM SOCKET
     def take_present_data(market,interval):
         try: 
+            print('present')
             market=market+'/USDT'
             cryptoname= market
             interval=interval
@@ -41,6 +42,7 @@ def cryptoController(server):
                 messages = subscribe_to_socket_for_real_time_crypto(cryptoname,interval) 
                 while True:   
                     msg = messages.get()
+                    print("messeage", msg)
                     yield msg
             
             return Response(stream(cryptoname,interval), mimetype='text/event-stream') #sending multipurpose internet mail extension with a type and subtype   
@@ -71,6 +73,11 @@ def cryptoController(server):
                 "error": str(e),
                 "data": None
         }), 400
+    
+    @server.route('/',methods=['GET'])
+    def home():
+        return "Welcome to Crypto API"
+
 
     @server.route('/history/<market>/<interval>/<timestamp>/<datalimit>',methods=['GET']) #ROUTE TO GET HISTORICAL DATA USING TIME STAMP
     def take_history_data_timestamp(market,interval,timestamp,datalimit):

@@ -15,6 +15,7 @@ def start_streaming():
     twm = ThreadedWebsocketManager(api_key='E4qXXp67zhZevj0Um2AQ83OPvDEjysaRVdfHRPvNXR2EXWjIW9dyjZPY4ep574CC', api_secret='pYiSC30hGJqqOBFlmNcaLgojSx5scRf2xEBCp3feuc9CIq7T1wKpCQwdI7H5EUaW')
 
     twm.start()
+    print("Connected to binance websocket")
     #Take all crypto markets from database 
     fetched_crypto_list_from_market=Crypto.getCryptoListFromMarket({"type":"crypto"})
     for crypto in  fetched_crypto_list_from_market['list']:
@@ -38,7 +39,7 @@ def start_listen_for_each_crypto_interval(twm, crypto):
     twm.start_kline_socket(callback=handle_socket_message, symbol=crypto, interval=KLINE_INTERVAL_1HOUR)
     twm.start_kline_socket(callback=handle_socket_message, symbol=crypto, interval=KLINE_INTERVAL_1DAY)
 
-def checkInternetSocket(host="8.8.8.8", port=53, timeout=60):  #check internet socket is working or not
+def checkInternetSocket(host="8.8.8.8", port=53, timeout=3):  #check internet socket is working or not
     try:
         socket.setdefaulttimeout(timeout)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))

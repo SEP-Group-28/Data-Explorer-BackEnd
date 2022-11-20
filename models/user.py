@@ -75,7 +75,8 @@ class User:
             print(e)
     def get_total_count(self):
         try:
-            items=user_collection.estimated_document_count({'role':'1'})
+            # get user count
+            items = user_collection.find({'role':'1'}).count()
             return items
         except Exception as e:
             print(e)

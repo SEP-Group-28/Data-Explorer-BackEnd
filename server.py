@@ -42,4 +42,5 @@ def server_intialize():
     alertController(server)
     return server
 
-
+if __name__== "__main__":
+    server_intialize().run(debug=True,use_reloader=True, host='0.0.0.0')
