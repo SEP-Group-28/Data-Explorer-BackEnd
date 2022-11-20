@@ -9,7 +9,7 @@ from models.watchlist import Watchlist
 def userController(server):
     @server.route("/api/user/<id>", methods=["GET"]) #ROUTE TO GET THE DETAILS OF USER INCLUDING WATCHLIST
     @verifyJWT
-    def get_current_user(id):
+    def get_current_user(current_user, id):
         try:
             user=User().get_by_id(id)
             if(user):
@@ -36,7 +36,7 @@ def userController(server):
 
     @server.route("/api/user/update-profile/<id>", methods=["POST"]) #ROUTE TO UPDATE THE PROFILE OF USER
     @verifyJWT
-    def update_user(id):
+    def update_user(current_user, id):
         try:
             data = request.json
             userdata = User().update(id, data)
@@ -59,7 +59,6 @@ def userController(server):
     
    
     @server.route("/api/user/update-photo/<id>", methods=["POST"]) #ROUTE TO UPDATE THE PROFILE PHOTO OF USER USING CLODUINARY
-    @verifyJWT
     def update_user_photo(id):
         try:
             rquest=request
@@ -105,7 +104,7 @@ def userController(server):
             userdetails=User().get_by_id(userid)
             if not(userdetails):
                  return {
-                    'message':"failed to change activation",
+                    'message':"Failed to change activation",
                     'data':None
                 },404
             result=User().changeactivation(userid,userdetails)
@@ -123,7 +122,8 @@ def userController(server):
 
 
     @server.route('/api/user/update-password-by-user',methods=['POST']) #ROUTE TO UPDATE THE PASSWORD OF THE USER
-    def updatpasswordbyuser():
+    @verifyJWT
+    def updatpasswordbyuser(current_user):
         try:
             data=request.json
             new_password=data['new_password']

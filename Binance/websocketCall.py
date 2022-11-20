@@ -39,7 +39,7 @@ def start_listen_for_each_crypto_interval(twm, crypto):
     twm.start_kline_socket(callback=handle_socket_message, symbol=crypto, interval=KLINE_INTERVAL_1HOUR)
     twm.start_kline_socket(callback=handle_socket_message, symbol=crypto, interval=KLINE_INTERVAL_1DAY)
 
-def checkInternetSocket(host="8.8.8.8", port=53, timeout=60):  #check internet socket is working or not
+def checkInternetSocket(host="8.8.8.8", port=53, timeout=3):  #check internet socket is working or not
     try:
         socket.setdefaulttimeout(timeout)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))

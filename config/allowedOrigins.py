@@ -1,6 +1,7 @@
 #ALLOWED ORIGINS THAT CAN ALLOW FROM FRONTEND
 
 allowedOrigins = {
+    'https://crypstoxplorer.netlify.app',
     'http://localhost:5173',
     'https://localhost:5173',
     'https://127.0.0.1:5173',
