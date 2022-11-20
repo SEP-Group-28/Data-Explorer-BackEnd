@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta
 import jwt
-# from dotenv import load_dotenv
-# load_dotenv()
 import os
 
-#print(os.getenv('ACCESS_TOKEN_SECRET'))
+#SET ACCESSTOKEN TO ONE HOUR
 def getAccessToken(auth):
     return jwt.encode(
         payload={    
@@ -13,11 +11,9 @@ def getAccessToken(auth):
             "exp":datetime.utcnow()+timedelta(seconds=60*60)
         },
          key=os.environ.get('ACCESS_TOKEN_SECRET'),
-
-
     )
 
-
+#SET REFRESH TOKEN TO ONE DAY
 def getRefreshToken(auth):
     return jwt.encode(
         payload={ "user_id": auth['id'],

@@ -12,23 +12,18 @@ from dbconnection import connectdb as db
 user_collection=db().user
 
 
-def authController(server):
-    @server.route("/auth/login",methods=["POST"])
+def authController(server): 
+    @server.route("/auth/login",methods=["POST"])#ROUTE TO LOGIN USERS
     def login():
         try:
-            print('helllo')
             data = json.loads(request.data) 
             try:
                 if not data or not data['email'] or not data['password']:
                     return make_response(jsonify({'message': 'All fields are required for logging in'}), 400)
             except:
                 return make_response(jsonify({'message': 'All fields are required for logging in'}), 400)
-            print(data)
             is_validated = validate_email_and_password(data.get('email'), data.get('password'))
-            print(is_validated)
-            print('hi.......')
             if is_validated is not True:
-                print('validating')
                 return dict(message='Invalid data', data=None, error=is_validated), 400
             user = User().login(
                 data["email"],
@@ -46,28 +41,19 @@ def authController(server):
                         "id": user['_id'],
                         "role":os.environ.get('USER_ROLE'),
                         }
-                        print('1 is okay')
                     elif user['role'] == '2':
                         authObject= {
                         "id": user['_id'],
                         "role":os.environ.get('ADMIN_ROLE'),
                         }
-                    print(os.environ)
-                    print(user['role'])
-                    print(authObject)
                     access_token=token.getAccessToken(authObject)
-                    print('access')
                     refresh_token=token.getRefreshToken(authObject)
-                    
-                    print('check')
                     result=User().update(ObjectId(user['_id']),{'refresh_token':refresh_token})
-                    print('result')
                     response= make_response({
                         "message": "Login successful",
                         "access_token": access_token,
                         
                     },200)
-                    print(response)
                     response.set_cookie('jwt',refresh_token, httponly=True,max_age= 24 * 60 * 60 * 1000,secure=True, samesite='None')
 
                     return response
@@ -90,13 +76,10 @@ def authController(server):
 
         
 
-    @server.route("/auth/register",methods=["POST"])
+    @server.route("/auth/register",methods=["POST"]) #ROUTE TO REGISTER USERS
     def register():
         try:
             user=json.loads(request.data)
-            print(user)
-            
-           
             if not user:
                 return {
                     "message": "Please provide user details",
@@ -105,14 +88,11 @@ def authController(server):
                 }, 400
             
             is_validated = validate_user(**user)
-            print(is_validated)
             if is_validated is not True:
                
                 return jsonify(message='Invalid data', data=None, error=is_validated), 400
             user['role'] = '1'  # 1 for normal user
             userModel = User().create(**user)
-            print(userModel)
-            print("userModel",userModel)
 
             if(userModel=='duplicateuser'):
                 return {"message": "Email already exists...".format(email=user['email'])},409
@@ -125,12 +105,10 @@ def authController(server):
             return jsonify({ "message": "Internal server error","status":500 })
             
 
-    @server.route('/auth/new-token',methods=['GET','POST'])
+    @server.route('/auth/new-token',methods=['GET','POST']) #ROUTE TO GET NEW ACCESS TOKEN USING REFRESH TOKEN
     def newaccesstoken():
         try:
             cookies = request.cookies
-            print("here is my cookie bro",cookies)
-
             if not(cookies['jwt']) :
 
 
@@ -138,7 +116,6 @@ def authController(server):
             
 
             refresh_token = cookies['jwt']
-            print("hey hey here is the refresh token",refresh_token)
             auth= User().get_by_refreshtoken(refresh_token)
 
             if not(auth) :
@@ -170,7 +147,7 @@ def authController(server):
         }),404)
         
 
-    @server.route("/auth/logout",methods=['GET',"POST"])
+    @server.route("/auth/logout",methods=['GET',"POST"]) #LOGOUT ROUTE
     def logout():
 
         try:
@@ -210,7 +187,6 @@ def authController(server):
     @verifyJWT
     def get_test(current_user):
         try:
-            print(current_user)
             return make_response(jsonify({'message': 'OK'}), 200)
         except Exception as e:
             return make_response(jsonify({

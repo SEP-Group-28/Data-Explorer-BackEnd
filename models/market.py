@@ -1,18 +1,13 @@
-
 from dbconnection import connectdb as database
 from datetime import timezone, datetime
-
-import flask
 db = database()
+
 market_collection=db.market
 
-
+#MARKET MODEL
 class Market:
     def __init__(self,brand):
-        
         self.brand=brand
-       
-    
     def readHistory():
         raise NotImplementedError
     def saveRealTimeData():
@@ -34,7 +29,6 @@ class Stock(Market):
         pass
 
     def getStockDataList(self,stock,interval):
-        print("gfttcghcghcgh",stock,interval)
         stock_collection=stock
         stock_data=db[stock_collection].find_one({'interval':interval})
         if not stock_data["data"]:
@@ -43,14 +37,12 @@ class Stock(Market):
     
     def getStockDataListTimestamp(self,stock, interval,timestamp,datalimit):
         stock_collection=stock
-        print("Timestamp , limit",timestamp,datalimit,interval)
         stock_data = db[stock_collection].aggregate([
             {'$match' :{"interval":interval}},
             {'$unwind':'$data'},
             {'$sort':{'data':-1}},
             {"$skip":int(timestamp)},
             {'$limit':int(datalimit)},
-            # {'$sort':{'data':1}},
         ])
         
         list1 = list(stock_data)
@@ -70,7 +62,6 @@ class Stock(Market):
             {'$sort':{'data':-1}},
             {"$skip":int(timestamp)},
             {'$limit':int(datalimit)+indicator},
-            # {'$sort':{'data':1}},
         ])
         
         list1 = list(stock_data)
@@ -80,11 +71,6 @@ class Stock(Market):
         if not stock_list:
             return
         return stock_list
-    # def getStock(self):
-    #     stock_data=market_collection.find_one({'type':'stock'})
-    #     if not stock_data:
-    #         return
-    #     return stock_data
 
     def getStockListFromMarket(self):
         stock_list_data=market_collection.find_one({'type':'stock'})
@@ -99,8 +85,6 @@ class Stock(Market):
             filepath = path + filename
             file = open(filepath, "r")
             candledata = []
-            # print(len(file.readlines()))
-
             candlelines=file.readlines()
             for index in range(1,len(candlelines)):
                 data = candlelines[index].split(',')
@@ -113,7 +97,6 @@ class Stock(Market):
                 "interval": "1d",
                 "data": candledata
             })
-            print(candledata)
 
 
     def insert_1hour_interval_stock_data_to_database(self,stock_text_list,path):
@@ -136,7 +119,6 @@ class Stock(Market):
                 "interval": "1h",
                 "data": candledata
             })
-            print(candledata)
 
 
     def insert_5min_interval_stock_data_to_database(self,stock_text_list,path):
@@ -159,7 +141,6 @@ class Stock(Market):
                 "interval": "5m",
                 "data": candledata
             })
-            print(candledata)
         
 
     def delete_each_stock_collection_in_database(stock_text_list):
@@ -179,77 +160,21 @@ class Crypto(Market):
     
     def __init__(self):
         super().__init__('Crypto')
-        
-
-    # def readHistory(self,data):
-    #     cryptoname= data['cryptoname']
-    #     interval=data['interval']
-    #     historical_data=data_center.get_history(cryptoname,interval)
-    #     if not historical_data:
-    #         return
-    #     return historical_data
-
-    # def takeData(self,data):
-    #     cryptoname= data['cryptoname']
-    #     interval=data['interval']
-        # collection_name=cryptoname+'/'+'USDT_'+interval
-        # def stream(cryptoname,interval):
-        #     messages = listen_socket(cryptoname,interval)  
-        #     while True:                        
-        #         msg = messages.get()  
-        #         yield msg
-
-        # return flask.Response(stream(cryptoname,interval), mimetype='text/event-stream')
-
-    #market collection calls
-    # def getCrypto(self):
-    #     crypto=market_collection.find_one({'type':'crypto'})
-    #     if not crypto:
-    #         return
-    #     return crypto
     
     def getCryptoListFromMarket(self):
-        
         crypto_list=market_collection.find_one({'type':'crypto'})
         
         if not crypto_list:
             return
         return crypto_list
         
-        # crypto_collection=db.collection_name
-        # crypto_data=crypto_collection.find()
-
-        # if not crypto_data:
-        #     return
-        # return crypto_data
-
-    #Crypto collection calls
     def getCryptoDataList(interval,collection):
-        # print(data)
         crypto_collection=collection
-        # print("Crypto list", interval,collection)
-#print('collect',crypto_data_collection)
-# print('int',interval)
         crypto_data_list=db[crypto_collection].find_one({"interval":interval})
-        # print('data list',crypto_data_list)
         if not crypto_data_list:
             return
         return crypto_data_list
-    
-    # def removeCryptoDataList(interval,collection):
-    #     crypto_collection=collection
-    #     result=db[crypto_collection].delete_one({'interval':interval})
-    #     if not result:
-    #         return
-    #     return result
 
-    # def insertCryptoDataList(interval,collection,new_data):
-    #     crypto_collection=collection
-    #     result=db[crypto_collection].insert_one({'interval':interval,'data':new_data})
-    #     print('inserted db',result)
-    #     if not result:
-    #         return
-    #     return result
     def updateCryptoDataList(interval,collection,new_data):
             crypto_collection=collection
             result=db[crypto_collection].update_one(
@@ -258,72 +183,45 @@ class Crypto(Market):
                     "$set":{"data":new_data}
                 }
             )
-            # result=db[crypto_collection].insert_one({'interval':interval,'data':new_data})
-            print('inserted db',result)
             if not result:
                 return
             return result
 
     def getCryptoDataListForTimeStamp(interval,collection,timestamp,datalimit):
         crypto_collection=collection
-#print('collect',crypto_data_collection)
-#print('int',interval)
         crypto_data_list=db[crypto_collection].aggregate([
             {'$match' :{"interval":interval}},
             {'$unwind':'$data'},
             {'$sort':{'data':-1}},
             {"$skip":int(timestamp)},
             {'$limit':int(datalimit)},
-            # {'$sort':{'$data':1}}
-    
+
            ] )
         list1=list(crypto_data_list)
-    # list1=
         list1.reverse()
         crypto_list=[i['data'] for i in list1]
-        # crypto_list=list(crypto_data_list)[::-1]
-        
-#print('data list',crypto_data_list)
+
         if not crypto_list:
             return
         return crypto_list
 
     def getCryptoDataListForTimeStampForIndicator(interval,collection,timestamp,datalimit,indicator):
-        print('datalimit+indicator',datalimit,indicator,'plus=',int(datalimit)+indicator)
         crypto_collection=collection
-#print('collect',crypto_data_collection)
-#print('int',interval)
         crypto_data_list=db[crypto_collection].aggregate([
             {'$match' :{"interval":interval}},
             {'$unwind':'$data'},
             {'$sort':{'data':-1}},
             {"$skip":int(timestamp)},
             {'$limit':int(datalimit)+indicator},
-            # {'$sort':{'$data':1}}
     
            ] )
         list1=list(crypto_data_list)
-    # list1=
         list1.reverse()
         crypto_list=[i['data'] for i in list1]
         if not crypto_list:
             return
         return crypto_list
-    
-    # def removeCryptoDataList(interval,collection):
-    #     crypto_collection=collection
-    #     result=db[crypto_collection].delete_one({'interval':interval})
-    #     if not result:
-    #         return
-    #     return result
 
-    # def insertCryptoDataList(interval,collection,new_data):
-    #     crypto_collection=collection
-    #     result=db[crypto_collection].insert_one({'interval':interval,'data':new_data})
-    #     print('inserted db',result)
-    #     if not result:
-    #         return
-    #     return result
 
   
 

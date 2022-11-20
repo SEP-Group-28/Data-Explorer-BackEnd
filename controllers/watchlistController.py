@@ -1,16 +1,12 @@
-from urllib.request import Request
-from flask import Blueprint, request
+from flask import request
 import json
 from models.watchlist import Watchlist
 from middlewares.verifyJWT import verifyJWT
-from flask import jsonify,request
-from middlewares.verifyRoles import verifyRole
-# from dotenv import load_dotenv
-# load_dotenv()
-import os
+from flask import request
+
 
 def watchlistController(server):
-    @server.route('/remove-market', methods=['DELETE'])
+    @server.route('/remove-market', methods=['DELETE']) #ROUTE TO REMOVE RELAVANT CRYPTO FROM WATCHLIST
     @verifyJWT
     def removemarket(current_user):
         try:
@@ -58,9 +54,7 @@ def watchlistController(server):
                         "error":str(e)
                     },400
 
-    # @server.route('/remove-market', methods=['DELETE'])
-    # @verifyJWT
-    # def removemarket(current_user):
+
         try:
             data=json.loads(request.data)
             print("data remove market", data)
@@ -111,7 +105,7 @@ def watchlistController(server):
 
         # return remove_from_watch_list(current_user['email'], data['brands'])
 
-    @server.route('/add-market', methods=['POST'])
+    @server.route('/add-market', methods=['POST']) #ROUTE TO ADD RELEVANT CRYPTO MARKET
     @verifyJWT
     def addmarket(current_user):
         try:
@@ -165,7 +159,7 @@ def watchlistController(server):
                     },400
 
 
-    @server.route('/view-watchlist', methods=['GET'])
+    @server.route('/view-watchlist', methods=['GET']) #ROUTE TO VIEW WATCHLIST
     @verifyJWT
     def viewwatchlist(current_user):
         try:

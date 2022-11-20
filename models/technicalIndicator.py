@@ -1,30 +1,18 @@
-#  from crypt import crypt
 import talib
-import bson, os
-# from dotenv import load_dotenv
 import json
-# load_dotenv()
-from pymongo import MongoClient
-from flask import jsonify
-from dbconnection import connectdb as db
 from pubsub.pubsubservices import get_history_for_crypto_timestamp_for_indicators
 from .market import Stock
 import numpy as np
 
-# notification_collection=db.notifications
-
-
+#TECHNICAL INDICATOR MODEL
 class TechnicalIndicator:
     def __init__(self):
         return
     def get_close_values(self,market_type, market_name, interval,timestamp,datalimit,indicator):
-        print("inside close values")
         if market_type == 'crypto':
             klines = get_history_for_crypto_timestamp_for_indicators(market_name+"/USDT", interval,timestamp,datalimit,indicator)
         elif market_type=='stock':
             klines=Stock().getStockDataListTimestampForIndicators(market_name,interval,timestamp,datalimit,indicator)
-            # klines = get_historical_stock_data(name, interval)
-        # print("klinesss", klines)
         close_prices = np.array([i[4] for i in klines], dtype=float)
         close_times = [i[0] for i in klines]
         return close_times, close_prices
@@ -51,16 +39,6 @@ class TechnicalIndicator:
         close_times = [i[0] for i in klines]
         return high_prices, low_prices, close_prices, close_times
 
-    # def insertnotifications(self,data):
-    #     result=db[notification_collection].insert_one(data)
-    #     # watchlist=db[crypt].find_one({'userid':id})
-    #     # if not watchlist:
-    #     #     return False
-    #     # # print("getwatchlist", watchlist)
-    #     # if 'list' in watchlist:
-    #     #     return watchlist['list']
-    #     # return False
-    #     return result
     def calculate_rsi(self,market_type, market_name, interval,timestamp,datalimit):
     
         close_times, close_prices = self.get_close_values(market_type, market_name, interval,timestamp,datalimit,15)
@@ -141,42 +119,8 @@ class TechnicalIndicator:
         dict_macdhist = dict(zip(close_times[33:], macdhist[33:]))
         dict_indicator = {'macd': dict_macd, 'macdsignal': dict_macdsignal, 'macdhist': dict_macdhist}
         json_dict = json.dumps(dict_indicator)
-        # print(json_dict)
         return json_dict
 
-
-
-
-
-
-
-        
-
-        
-    # def gethistoricnotifications(self,time_period):
-    #     coll = db[notification_collection]
-    #     result = []
-    #     for read in coll.find(time_period): # returns a cursor instance of the documents related
-    #         result.append(read)
-    #     return(result) 
-        # watchlist=notification_collection.insert_one(
-        #     {
-        #         'userid':id,
-        #         'list':[]
-        #     }
-        # )
-        # return watchlist
-
-        
-    # def updatewatchlist(self,id,watchlist):
-    #     notification_collection.update_one({'userid':id},{"$set":{'list':watchlist}})
-    #     # print("updatedwatchlist function", watchlist)
-    #     # if 'list' in watchlist:
-    #     #     print('list in watchlist')
-    #     # print("updated watchlist", [watchlist])
-    #     if not watchlist:
-    #         return False
-    #     return watchlist
 
 
 

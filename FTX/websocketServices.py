@@ -1,9 +1,8 @@
-import hmac, json, time, zlib
-import threading
+#THIS IS THE CODE TO USE FTX WEBSOCKET SERVICE, BUT FTX GOT BANKRUPTCY
+
 from collections  import defaultdict, deque
 from itertools    import zip_longest
 from typing       import DefaultDict, Deque, List, Dict, Tuple, Optional
-# from gevent.event import Event
 from threading    import Thread, Lock,enumerate
 import websocket
 import datetime
@@ -12,6 +11,7 @@ import time
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
+
 
 class WebsocketManager:
     _CONNECT_TIMEOUT_S = 5
@@ -174,35 +174,22 @@ class FtxClientWs(WebsocketManager):
         channel = message['channel']
 
         if channel == 'trades':
-            # print('ooooooo')
             self._handle_trades_message(message)
         if channel == 'ticker':
             self._handle_ticker_message(message)
     
     ##Convert ticker data to OHLC data
-
-
-
-
-
     def start_interval_socket(self,crypto,interval,trades):
         def process_tick(trades1):
             data=Datadict[crypto][interval]
             tick=trades1[-1]
             
-            # global flag
             flag=Flagdict[crypto][interval]
-            # global frontier
-            # print(flag)
-            # print('kkkkkkkk')
-            # print('sss')
-            # print('crypto',crypto,interval,end='\r')
             if (flag==True):
                 trades1.clear()
                 trades1.append(tick)
-                # print('aaawa')
                 start_time = datetime.utcnow().isoformat() #"almost"
-                # time_      = time.time() #* 1000  with higher precision
+   
                 op         = tick['price']
                 hi         = tick['price']
                 lo         = tick['price']
@@ -218,15 +205,12 @@ class FtxClientWs(WebsocketManager):
                 if crypto not in Datadict:
                     Datadict[crypto]={}
                 Datadict[crypto][interval]=data=pd.concat([data,pd.DataFrame.from_records([row])])
-                # print('id init 2',threading.current_thread().ident,id(data))
                 if crypto not in Flagdict:
                     Flagdict[crypto]={}
                 flag = False
                 Flagdict[crypto][interval]=flag
             else:
-                # print('False')
-                # print('id put data',threading.current_thread().ident,id(data))
-                # print(data['high'].iloc)
+    
                 if   (tick['price'] > data['high'].iloc[-1]):
                     data['high'].iloc[-1] = tick['price']
                 elif (tick['price'] < data['low' ].iloc[-1]):
@@ -234,119 +218,63 @@ class FtxClientWs(WebsocketManager):
 
                 data['close' ].iloc[-1]  = tick['price']
                 data['volume'].iloc[-1] += tick['size' ]*tick['price']
-                # print(tick)
-            
+
         def on_tick():
-            # print('startinggggg')
-            # client._subscribe({'channel': 'ticker', 'market': crypto})
             while True:
 
                 try:
 
                     try:
-                        # print(trades[-1])
-                        # print('trades',trades)
-                        # print(trades[-1])
                         process_tick(trades)
-                        # print('trades[-1]  ',trades[-1])
-                        # print('trade',trades)
-                        # trades.pop()
                     except IndexError:
                         pass
 
                     time.sleep(0.001)
                 except KeyboardInterrupt:
-                    # client_ws._reset_data()
                     scheduler.remove_job('onClose')
                     scheduler.shutdown()
-#print('Shutdown')
                     break
             
         def candle_close(interval,crypto,RES):
-            print("candle close")
-            # global flag
-            # global frontier
             if crypto not in Flagdict:
                 Flagdict[crypto]={}
             flag     = True
             Flagdict[crypto][interval]=flag
-            # print(flag,crypto,interval)
-            # frontier = pd.Timestamp.utcnow().floor(RES).isoformat()
-            # # print('onclose :-',data)
-            # print('empty',data.empty) 
-            # print('RESOLI+UTION............',RES)
-            # data['time'].iloc[-1]=time.time()
-            data=Datadict[crypto][interval]
-            # data['time'].iloc[-1]=time.time()   
-            if not(data.empty):
-                # print('queue value 2',[crypto,interval,data])
-                publish_to_socket_for_real_time_crypto(crypto,interval,data,True)
-#print('Closed')
-            # print(frontier)
-            # print('close0',threading.enumerate())
-            
-            # print(threading.current_thread())
-        def on_calc_candle(interval,crypto,RES):
-            # global flag
-            # global frontier
-            # flag     = False
-            # Flagdict[crypto]=flag
-            # print('RESOLI+UTION............',RES)
-            # frontier = pd.Timestamp.utcnow().floor(RES).isoformat()
-         
-            # # print('onclose :-',data)
-            # print('empty',data.empty)
-                  
-            data=Datadict[crypto][interval]
-            # data['time'].iloc[-1]=time.time()   
-            if not(data.empty):
 
-                # print('queue value 1',[crypto,interval,data])
+            data=Datadict[crypto][interval]
+
+            if not(data.empty):
+ 
+                publish_to_socket_for_real_time_crypto(crypto,interval,data,True)
+
+
+        def on_calc_candle(interval,crypto,RES):
+   
+            data=Datadict[crypto][interval]
+            if not(data.empty):
                 publish_to_socket_for_real_time_crypto(crypto,interval,data,False)
-            # print(frontier)
-            # print('close0',threading.enumerate())
-            
-            # print(threading.current_thread())
 
         ASSET = crypto
         RES   = interval
-        # print(interval)
-       
 
-        # global flag   
         if crypto not in Flagdict:
             Flagdict[crypto]={}
         flag= True
         Flagdict[crypto][interval]=flag
-        # global frontier
-        # if(interval[-1]=='m'):
-        #     RES=interval[:-1]+'T'
-        # elif(interval[-1]=='d')
-        # frontier  = pd.Timestamp.utcnow().floor(RES
-        # ).isoformat() 
         cols      = [ 'time', 'open', 'high', 'low', 'close', 'volume']
         
         data      = pd.DataFrame(columns=cols)
         if crypto not in Datadict:
             Datadict[crypto]={}
         Datadict[crypto][interval]=data
-        # print('id init',threading.current_thread().ident,id(data))
-        # trades   = trades
-
         scheduler = BackgroundScheduler()
-
         scheduler.configure(timezone='utc')
-#print(interval)
         interval=interval
-
         scheduler.add_job(on_calc_candle, trigger='cron', second='*/2',args=[interval,ASSET,RES])
         if(interval=='1m'):
-#print('printing 1m')
             scheduler.add_job(candle_close, trigger='cron', minute='0-59',args=['1m',ASSET,RES])
         elif(interval=='5m'):
             scheduler.add_job(candle_close, trigger='cron', minute='*/5',args=['5m',ASSET,RES])
-        # elif(interval=='15m'):
-        #     scheduler.add_job(candle_close, trigger='cron', minute='0, 15, 30, 45',args=['15m',ASSET,RES])
         elif(interval=='30m'):
             scheduler.add_job(candle_close, trigger='cron', minute='0, 30',args=['30m',ASSET,RES])
         elif(interval=='1h'):
@@ -354,35 +282,5 @@ class FtxClientWs(WebsocketManager):
         elif(interval=='1d'):
             scheduler.add_job(candle_close, trigger='cron', day='1-31',args=['1d',ASSET,RES])
         scheduler.start()
-        # print(threading.enumerate())
-        # on_tic = Thread(target=on_tick())
-        # on_tic.daemon = True
-        # on_tic.start()
-#print('ontick.................')
         on_tick()
 
-# print(threading.enumerate())
-
-
-
-
-
-#Exmaple use
-
-# client = FtxClientWs()
-
-# # print(client.get_ticker(market='BTC/USDT'))
-# # print('first',enumerate())
-# print(client.get_trades('BTC-PERP'))
-
-# dt = datetime.datetime.fromtimestamp(1663665996.4405653)
-# dt1=datetime.datetime.fromtimestamp(1663665996.4088287)
-# print(dt)
-# print(dt1)
-# while True:
-#     print('second',enumerate())
-#     time.sleep(60*60*24)
- 
-
-# # client.get_ticker("BTC-PERP")
-# client._trades

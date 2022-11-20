@@ -3,9 +3,8 @@ from middlewares.verifyJWT import verifyJWT
 from models.alert import Alert
 from models.alertusertoken import Add_TOKEN
 
-def alertController(server): #Alert Controller
-
-    @server.route('/alert/add-alert/<crypto_name>/<crypto_price>',methods=['POST']) #Route to add an alert using crypto name and crypto price
+def alertController(server): #ALERT CONTROLLER
+    @server.route('/alert/add-alert/<crypto_name>/<crypto_price>',methods=['POST']) #ROUTE TO ADD AN ALERT USING CRYPTO NAME AND CRYPTO PRICE
     @verifyJWT
     def add_alert(current_user,crypto_name,crypto_price): 
         try:
@@ -19,7 +18,7 @@ def alertController(server): #Alert Controller
                 "data": None
         }), 400
     
-    @server.route('/alert/remove-alert/<crypto_name>/<crypto_price>',methods=['DELETE'])#Route to delete an alert using crypto name and crypto price
+    @server.route('/alert/remove-alert/<crypto_name>/<crypto_price>',methods=['DELETE'])#ROUTE TO DELETE AN ALERT USING CRYPTO NAME AND CRYPTO PRICE
     @verifyJWT
     def remove_alert(current_user,crypto_name,crypto_price):    
         try:
@@ -37,8 +36,8 @@ def alertController(server): #Alert Controller
                 "data": None
         }), 400
 
-
-    @server.route('/alert/add-token/<token>',methods=['POST'])#Route to add an firebase token for alerts
+    
+    @server.route('/alert/add-token/<token>',methods=['POST'])#ROUTE TO ADD AN FIREBASE TOKEN FOR ALERTS
     @verifyJWT
     def add_token(current_user,token):
         try:
@@ -52,7 +51,7 @@ def alertController(server): #Alert Controller
                 "data": None
         }), 400
  
-    @server.route('/alert/remove-token/<token>',methods=['DELETE']) #Route to remove firebase token for alerts
+    @server.route('/alert/remove-token/<token>',methods=['DELETE']) #ROUTE TO REMOVE FIREBASE TOKEN FOR ALERTS
     @verifyJWT
     def remove_token(current_user,token):
         try:
@@ -67,7 +66,7 @@ def alertController(server): #Alert Controller
         }), 400
         
 
-    @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])#Route to get alerts for each crypto for each user
+    @server.route('/alert/get-alerts/<crypto_name>',methods=['GET'])#ROUTE TO GET ALERTS FOR EACH CRYPTO FOR EACH USER
     @verifyJWT
     def get_all_alerts_for_user(current_user,crypto_name):
         try:
@@ -86,7 +85,7 @@ def alertController(server): #Alert Controller
         except Exception as e:
             return {"message":"Fetching all alerts for crypto failed"},404
 
-    @server.route('/alert/get-all-alerts',methods=['GET']) #Route to get all alerts for all crypto for one user
+    @server.route('/alert/get-all-alerts',methods=['GET']) #ROUTE TO GET ALL ALERTS FOR ALL CRYPTO FOR ONE USER
     @verifyJWT
     def get_all_alerts(current_user):
         try:
