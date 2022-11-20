@@ -159,6 +159,11 @@ def cryptoController(server):
                 "error": str(e),
                 "data": None
         }), 400
+    
+    @server.route('/',methods=['GET'])
+    def home():
+        return "Welcome to Crypto API"
+
 
     @server.route('/history/<market>/<interval>/<timestamp>/<datalimit>',methods=['GET'])
     def take_history_data_timestamp(market,interval,timestamp,datalimit):

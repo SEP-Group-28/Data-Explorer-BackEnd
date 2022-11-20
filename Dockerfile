@@ -16,6 +16,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-EXPOSE 80
+ENTRYPOINT ["python3"]
 
-CMD [ "python3", "-m" , "start", "run", "--host=0.0.0.0"]
+CMD ["server.py"]
