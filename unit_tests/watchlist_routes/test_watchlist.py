@@ -1,11 +1,9 @@
 import json
-
 import pytest
-
 from unit_tests.auth_routes import test_login
 
 def login(client):
-    cred_obj = {"email": "thu@gmail.com", "password": "Thush123@"}
+    cred_obj = {"email": "thu@gmail.com", "password": "Testing123@"}
     cred_json = json.dumps(cred_obj)
     login_res = test_login.login(client, cred_json)
     login_data =json.loads(login_res.data) 
@@ -18,9 +16,7 @@ def test_view_watchlist_success(client):
     token = login(client)
     response = client.get('/view-watchlist', headers={'Authorization': "Bearer "+ token}, follow_redirects=False)
     data =json.loads(response.data) 
-    print('data...',data)
     assert response.status_code == 200
-    print(data['data'])
     assert type(data['data'])==list and len(data['data'])>0
     assert 'Successfully get watchlist' in data.values()
 
@@ -51,7 +47,7 @@ def test_already_exist_in_watchlist(client):
 @pytest.mark.usefixtures("client")
 def test_remove_watchlist_success(client):
     token = login(client)
-    market_name = 'SOL/USDT'
+    market_name = 'ETH/USDT'
     brands_obj = json.dumps({"crypto": market_name})
     response = client.delete('/remove-market', data=brands_obj, headers={'Authorization': "Bearer "+ token}, follow_redirects=False)
     data = json.loads(response.data)
@@ -74,7 +70,6 @@ def test_remove_watchlist_empty(client):
     response = client.delete('/remove-market', data=brands_obj,headers={'Authorization': "Bearer "+ token}, follow_redirects=False)
     data = json.loads(response.data)
     assert response.status_code == 400
-    print(data)
     assert "No watchlist for this user" in data.values()
     assert False in data.values()
 
