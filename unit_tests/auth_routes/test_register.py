@@ -7,8 +7,6 @@ user_collection=db().user
 def register(client, user_json):
     return client.post('/auth/register', data=user_json, follow_redirects=False)
 
-
-
 def register_success(client,firstname,lastname,email,password):
     user_obj = {"firstname": firstname, "lastname": lastname, "email": email, "password":password}
     user_json = json.dumps(user_obj)
@@ -24,7 +22,6 @@ def register_email_exists(client,firstname,lastname,email,password):
     user_json = json.dumps(user_obj)
     response = register(client, user_json)
     data=json.loads(response.data)
-    print(data)
     assert response.status_code == 409
     assert 'Email already exists...' in data.values()
 
@@ -38,7 +35,7 @@ def test_register_success(client):
 
 @pytest.mark.usefixtures("client")
 def test_register_email_exists(client):
-    register_email_exists(client,'Janaki','Wijewickarama','thu@gmail.com','Thush@123')
+    register_email_exists(client,'Janaki','Wijewickarama','thu@gmail.com','Testing@123')
     register_email_exists(client,'Jagath','Weerasuriya','thur@gmail.com','Thush@123')
 
 

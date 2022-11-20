@@ -87,7 +87,7 @@ def test_login_incorrect_email(client):
 
 @pytest.mark.usefixtures("client")
 def test_login_success(client):
-    login_success(client,'thu@gmail.com','Thush123@')
+    login_success(client,'thu@gmail.com','Testing123@')
     login_success(client,'thur@gmail.com','Thush123@')
     login_success(client,'thura@gmail.com','Thush123@')
     login_success(client,'thula@gmail.com','Thush123@')

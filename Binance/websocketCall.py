@@ -10,8 +10,8 @@ crypto_list= []
 
 #Function to continue streaming after connecting to binance websocket
 def start_streaming():
-    # if (checkInternetSocket()):
-        #Connect to binance websocket 
+
+    #Connect to binance websocket 
     twm = ThreadedWebsocketManager(api_key='E4qXXp67zhZevj0Um2AQ83OPvDEjysaRVdfHRPvNXR2EXWjIW9dyjZPY4ep574CC', api_secret='pYiSC30hGJqqOBFlmNcaLgojSx5scRf2xEBCp3feuc9CIq7T1wKpCQwdI7H5EUaW')
 
     twm.start()

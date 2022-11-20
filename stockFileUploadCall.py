@@ -1,8 +1,6 @@
+#FILE TO UPLOAD STOCK DATA
 
 from models.market import Stock
-
-
-
 stockmodel=Stock()
 stock_list=['fb.us.txt', 'tsla.us.txt','baba.us.txt','aapl.us.txt','nke.us.txt','amzn.us.txt','nvda.us.txt','msft.us.txt','nflx.us.txt','amd.us.txt','googl.us.txt']
 

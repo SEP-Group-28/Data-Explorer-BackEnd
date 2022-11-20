@@ -1,15 +1,11 @@
 
 import json
 from flask import jsonify
-from flask import request,abort
-import jwt
+from flask import request
 from functools import wraps
-# from dotenv import load_dotenv
-# load_dotenv()
-import os
-import models
-import utils.token as token
 
+
+#GIVE AUTHENTICATION FOR USER TO RELAVANT ROUTES
 def verifyRole(*allowedRoles):
     try:
         def decorated(f):
@@ -26,11 +22,7 @@ def verifyRole(*allowedRoles):
                 isAllow=False
                 if(userRole in allowedRoles):
                     isAllow=True
-
-    #print("allowedRoles", allowedRoles)
-    #print("user role", userRole)
                 if not(isAllow):
-    #print("not allowed role")
                     return jsonify({
                     "message": "Unauthorized request user not allowed"
                 }),401

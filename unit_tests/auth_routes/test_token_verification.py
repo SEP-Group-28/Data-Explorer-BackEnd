@@ -1,20 +1,15 @@
 import json
-
 import pytest
-
-# from unit_tests.user_routes import test_login
 import test_login
 
 def login(client):
-    cred_obj = {"email": "thu@gmail.com", "password": "Thush123@"}
+    cred_obj = {"email": "thu@gmail.com", "password": "Testing123@"}
     cred_json = json.dumps(cred_obj)
     login_res = test_login.login(client, cred_json)
     login_data = json.loads(login_res.data) 
-    print(login_data)
     token = login_data['access_token']
     return token
 
-#  headers: {Authorization: `Bearer ${token.getAccessToken()}`}
 @pytest.mark.usefixtures("client")
 def test_verification_success(client):
     token = login(client)
